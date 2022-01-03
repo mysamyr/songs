@@ -1,0 +1,44 @@
+{{#if err}}
+    <p class="msg alert">{{err}}</p>
+{{/if}}
+
+<h1>Редагувати пісню</h1>
+
+<form action="/song/edit/{{id}}" method="POST">
+    <div class="input-field">
+        <label for="categories">Виберіть категорію:</label>
+        <select id="categories"
+                name="categories"
+                required
+                multiple>
+            {{#each currents}}
+                <option class="capitalize" selected>{{name}}</option>
+            {{/each}}
+            {{#each categories}}
+                <option class="capitalize">{{name}}</option>
+            {{/each}}
+        </select>
+    </div>
+
+    <div class="input-field">
+        <label for="name">Назва пісні:</label>
+        <input id="name"
+               name="name"
+               type="text"
+               maxlength="30"
+               required
+               value="{{name}}">
+    </div>
+
+    <div class="input-field">
+        <label for="text">Текст пісні:</label>
+        <textarea id="text"
+                  name="text"
+                  required>{{text}}</textarea>
+    </div>
+
+    <div class="buttons_container">
+        <button class="btn">Зберегти</button>
+        <a href="/category" class="btn red">Скасувати</a>
+    </div>
+</form>

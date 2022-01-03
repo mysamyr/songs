@@ -1,0 +1,51 @@
+{
+  "name": "songs_text_app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run setup && node index.js",
+    "dev": "nodemon index.js",
+    "setup": "webpack --config webpack.prod.js",
+    "setup:dev": "webpack --config webpack.dev.js",
+    "check-formatting": "npx prettier -l \"src/**/*.{js,md,json,css}\"",
+    "format": "prettier --write \"src/**/*.js\" \"public/app.js\"",
+    "check-quality": "eslint src/"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "browserslist": [
+    ">1%"
+  ],
+  "dependencies": {
+    "@sendgrid/mail": "^7.7.0",
+    "bcryptjs": "^2.4.3",
+    "compression": "^1.7.4",
+    "connect-flash": "^0.1.1",
+    "connect-mongodb-session": "^3.1.1",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "express-handlebars": "^6.0.7",
+    "express-session": "^1.17.3",
+    "helmet": "^5.1.1",
+    "joi": "^17.9.2",
+    "mongoose": "^6.11.4",
+    "winston": "^3.10.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.46.0",
+    "eslint-config-prettier": "^8.9.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "husky": "^4.3.8",
+    "nodemon": "^3.0.1",
+    "prettier": "^2.8.8",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^4.10.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run setup && npm run format && npm run check-quality && git add ."
+    }
+  }
+}

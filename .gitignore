@@ -1,0 +1,6 @@
+/node_modules
+.idea
+.vscode
+/logs
+/src/config/keys-dev.js
+/public/dist

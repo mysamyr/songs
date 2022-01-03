@@ -1,0 +1,81 @@
+{{#if err}}
+    <p class="msg alert">{{err}}</p>
+{{/if}}
+{{#if msg}}
+    <p class="msg">{{msg}}</p>
+{{/if}}
+
+<h1>Персональний кабінет</h1>
+
+<div class="input-field">
+    <h4>Ім'я</h4>
+    <input type="text"
+           disabled
+           title="Щоб змінити ім'я зверніться до адміністрації"
+           value="{{user.name}}">
+</div>
+<div class="input-field">
+    <h4>Електронна пошта</h4>
+    <form action="/cabinet/email" method="POST" id="email-form">
+        <label for="email">Змінити електронну пошту:</label>
+        <input type="email"
+               name="email"
+               id="email"
+               required
+               value={{user.email}}>
+        {{#unless isValidated}}
+            <p>Електронна пошта не підтвердженя. <a href="/cabinet/resend">Надіслати інструкцію на електронну пошту</a>.
+            </p>
+        {{/unless}}
+        <div class="buttons_container">
+            <button class="btn">Зберегти</button>
+            <button id="email-reset" class="btn red">Відмінити</button>
+        </div>
+    </form>
+</div>
+<div class="input-field" id="change-password">
+    <h4>Пароль</h4>
+    <form action="/cabinet/password" method="POST" id="password-form">
+        <label for="password">Теперішній пароль:</label>
+        <input type="password"
+               name="password"
+               id="password"
+               minlength="8"
+               maxlength="30"
+               required>
+        <label for="newPassword">Новий пароль:</label>
+        <input type="password"
+               name="newPassword"
+               id="newPassword"
+               minlength="8"
+               maxlength="30"
+               required>
+        <label for="confirmPassword">Підтвердження паролю:</label>
+        <input type="password"
+               name="confirm"
+               id="confirmPassword"
+               minlength="8"
+               maxlength="30"
+               required>
+        <div class="buttons_container">
+            <button class="btn">Зберегти</button>
+            <button id="password-reset" class="btn red">Відмінити</button>
+        </div>
+    </form>
+</div>
+<div class="input-field">
+    <h4>Видалення профілю</h4>
+    <p>Якщо Ви хочете видалити профіль, будь ласка, ознайомтеся з наслідками. Тоді натисніть кнопку 'Видалити профіль'.</p>
+    <details>
+        <summary>Наслідки</summary>
+        <ol>
+            <li>Видалення профілю миттєве та безповоротнє</li>
+            <li>Ви втратите можливість створювати нові пісні та категорії чи змінювати пісні, створені Вами</li>
+            <li>Проте ваші електронна пошта та імʼя будуть вільні, якщо Ви вирішите знову зареєструватися</li>
+        </ol>
+    </details>
+
+        <div class="buttons_container">
+            <a href="/cabinet/delete" class="btn red">Видалити профіль</a>
+        </div>
+</div>

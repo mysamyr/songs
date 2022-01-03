@@ -1,0 +1,68 @@
+<div class="tab_headers">
+    <div class="tab" data-ref="login"><a href="#login">Увійти</a></div>
+    <div class="tab" data-ref="register"><a href="#register">Зареєструватися</a></div>
+</div>
+{{#if err}}
+    <p class="msg alert">{{err}}</p>
+{{/if}}
+<div id="login" class="tab_content">
+    {{#if msg}}
+        <p class="msg">{{msg}}</p>
+    {{/if}}
+    <form action="/auth/login" method="POST">
+        <div class="input-field">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" required>
+        </div>
+        <div class="input-field">
+            <label for="password">Пароль</label>
+            <input id="password" name="password" type="password" required>
+        </div>
+
+        <div class="buttons_container">
+            <button class="btn" type="submit">Увійти</button>
+        </div>
+    </form>
+</div>
+<div id="register" class="tab_content">
+    <form action="/auth/register" method="POST" id="register-form">
+        <div class="input-field">
+            <label for="name">Введіть ім'я:</label>
+            <input id="name"
+                   name="name"
+                   type="text"
+                   minlength="3"
+                   maxlength="30"
+                   required>
+        </div>
+        <div class="input-field">
+            <label for="remail">Введіть email:</label>
+            <input id="remail"
+                   name="email"
+                   type="email"
+                   required>
+        </div>
+        <div class="input-field">
+            <label for="rpassword">Введіть пароль:</label>
+            <input id="rpassword"
+                   name="password"
+                   type="password"
+                   minlength="8"
+                   maxlength="30"
+                   required>
+        </div>
+        <div class="input-field">
+            <label for="confirm">Повторіть пароль:</label>
+            <input id="confirm"
+                   name="confirm"
+                   type="password"
+                   minlength="8"
+                   maxlength="30"
+                   required>
+        </div>
+
+        <div class="buttons_container">
+            <button class="btn" type="submit">Зареєструватися</button>
+        </div>
+    </form>
+</div>

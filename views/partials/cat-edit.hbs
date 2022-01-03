@@ -1,0 +1,20 @@
+<form action="/category/edit/{{categoryId}}"
+			method="POST"
+			class="category-edit hide">
+	<input name="newValue"
+				 type="text"
+				 minlength="5"
+				 maxlength="20"
+				 value={{categoryName}}>
+	<input name="prevValue"
+				 type="text"
+				 minlength="5"
+				 maxlength="20"
+				 hidden
+				 value={{categoryName}}>
+
+	<div class="category_edit_btns">
+		<button class="btn"><span class="material-icons">done</span></button>
+		<button id="edit-close" class="btn red" type="button"><span class="material-icons">close</span></button>
+	</div>
+	</form>
