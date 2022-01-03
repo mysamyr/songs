@@ -13,7 +13,6 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  console.log(req.body);
   const song = await new Songs({
     name: req.body.name,
     text: req.body.text,

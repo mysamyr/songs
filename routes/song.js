@@ -4,7 +4,6 @@ const router = Router();
 
 router.get("/:id", async (req, res) => {
   const song = await Songs.findOne({_id: req.params.id});
-  console.log("Пісня", song);
   res.render('song', {
     title: 'Home page',
     name: song.name,
@@ -16,7 +15,6 @@ router.get("/:id", async (req, res) => {
 
 router.post("/:id", async (req, res) => {
   const song = await Songs.findOne({_id: req.params.id});
-  console.log("Пісня", song);
   song.deleteOne();
   res.redirect("/");
 });
