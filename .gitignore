@@ -1,0 +1,4 @@
+node_modules
+.idea
+keys/keys-dev.js
+public/dist/bundle.js.map
