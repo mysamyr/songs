@@ -1,0 +1,23 @@
+<h1>Додати нову пісню</h1>
+
+<form action="/add" method="POST" novalidate>
+  <div class="input-field">
+    <input id="name" name="name" type="text" class="validate" required>
+    <label for="name">Назва пісні</label>
+    <span class="helper-text" data-error="Назва пісні"></span>
+  </div>
+
+  <div class="input-field">
+      <textarea id="text" name="text" class="materialize-textarea validate" required></textarea>
+    <label for="text">Назва пісні</label>
+    <span class="helper-text" data-error="Введіть назву пісні"></span>
+  </div>
+
+  <div class="input-field">
+    <input id="author" name="author" type="text" class="validate" required>
+    <label for="author">Автор</label>
+    <span class="helper-text" data-error="Введіть автора"></span>
+  </div>
+
+    <button class="btn btn-primary">Додати пісню</button>
+</form>

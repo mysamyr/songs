@@ -1,0 +1,14 @@
+<h1>Пісні</h1>
+
+{{#if songs.length}}
+    {{#each songs}}
+        <div class="card">
+            <div class="card-content">
+                <a href="/song/{{id}}">{{name}}</a>
+            </div>
+        </div>
+    {{/each}}
+{{else}}
+    <p>Поки пісень не додали</p>
+{{/if}}
+<a href="/add">Додати нову пісню</a>
