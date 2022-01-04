@@ -3,8 +3,12 @@
 <div>
     <pre>{{text}}</pre>
     <p class="author">{{author}}</p>
-    <a href="/">На головну</a>
-    <form action="{{id}}" method="POST">
+    <a href="/" class="backHome">На головну</a>
+    <br>
+    <form action="{{id}}" method="POST" class="right">
         <button>Видалити пісню</button>
+    </form>
+    <form action="edit/{{id}}" method="GET" class="right">
+        <button>Редагувати пісню</button>
     </form>
 </div>
