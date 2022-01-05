@@ -1,13 +1,20 @@
 const {Router} = require('express');
 const Songs = require("../models/songs");
 const router = Router();
+const {
+  CATEGORIES
+} = require("../constants");
 
 router.get('/', async (req, res) => {
-  const songs = await Songs.find().select("name id");
+  const categories = await Songs.find().select("category");
+
   res.render('index', {
     title: "Збірник пісень",
-    songs: songs.map(i => i.toObject())
-  })
+    categories: categories.map(i => {
+      i.toObject();
+      return {category: i.category, cat: CATEGORIES[i.category]};
+    })
+  });
 });
 
 module.exports = router;

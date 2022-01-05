@@ -22,6 +22,10 @@ const homeSchema = new Schema({
     type: String,
     required: true
   },
+  category : {
+    type: String,
+    required: true
+  }
 }, opts);
 
 homeSchema.method("toClient", function () {

@@ -1,23 +1,34 @@
 <h1>Додати нову пісню</h1>
 
 <form action="/add" method="POST" novalidate>
-  <div class="input-field">
-    <input id="name" name="name" type="text" class="validate" required>
-    <label for="name">Назва пісні</label>
-    <span class="helper-text" data-error="Назва пісні"></span>
-  </div>
+    <div>
+        <select class="browser-default" id="category" name="category" required>
+            <option value="" disabled selected>Виберіть категорію</option>
+            {{#each categories}}
+                <option>{{value}}</option>
+            {{/each}}
+        </select>
+        <label for="category">Виберіть категорію</label>
+    </div>
 
-  <div class="input-field">
-      <textarea id="text" name="text" class="materialize-textarea validate" required></textarea>
-    <label for="text">Текст пісні</label>
-    <span class="helper-text" data-error="Введіть текст пісні"></span>
-  </div>
+    <div class="input-field">
+        <input id="name" name="name" type="text" class="validate" required>
+        <label for="name">Назва пісні</label>
+        <span class="helper-text" data-error="Назва пісні"></span>
+    </div>
 
-  <div class="input-field">
-    <input id="author" name="author" type="text" class="validate" required>
-    <label for="author">Автор</label>
-    <span class="helper-text" data-error="Введіть автора"></span>
-  </div>
+    <div class="input-field">
+        <textarea id="text" name="text" class="materialize-textarea validate" required></textarea>
+        <label for="text">Текст пісні</label>
+        <span class="helper-text" data-error="Введіть текст пісні"></span>
+    </div>
+
+    <div class="input-field">
+        <input id="author" name="author" type="text" class="validate" required>
+        <label for="author">Автор</label>
+        <span class="helper-text" data-error="Введіть автора"></span>
+    </div>
 
     <button class="btn btn-primary">Додати пісню</button>
+    <a href="/" class="btn red">Назад на головну</a>
 </form>
