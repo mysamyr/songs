@@ -4,11 +4,11 @@
     {{#each categories}}
         <div class="card">
             <div class="card-content">
-                <a href="/category/{{category}}">{{cat}}</a>
+                <a href="/{{short}}">{{name}}</a>
             </div>
         </div>
     {{/each}}
 {{else}}
     <p>Поки пісень не додали</p>
 {{/if}}
-<a href="/add" class="btn btn-primary">Додати нову пісню</a>
+<a href="/song/add">Додати нову пісню</a>

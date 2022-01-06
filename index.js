@@ -5,15 +5,14 @@ const helmet = require("helmet");
 const compression = require("compression");
 const expHbs = require('express-handlebars');
 const homeRoute = require("./routes/home");
-const categoryRoute = require("./routes/category");
 const songRoute = require("./routes/song");
-const addRoute = require("./routes/add");
 const keys = require("./keys");
 
 const app = express();
 const hbs = expHbs.create({
   defaultLayout: 'main',
   extname: 'hbs',
+  helpers: require("./utils/hbs.helpers"),
   allowProtoMethodsByDefault: true,
 });
 
@@ -35,9 +34,7 @@ app.use(helmet({
 app.use(compression());
 
 app.use("/", homeRoute);
-app.use("/category", categoryRoute);
 app.use("/song", songRoute);
-app.use("/add", addRoute);
 
 const start = async () => {
   try {

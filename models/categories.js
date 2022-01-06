@@ -9,23 +9,15 @@ const opts = {
   },
 };
 
-const homeSchema = new Schema({
+const categoriesSchema = new Schema({
   name: {
     type: String,
     required: true,
   },
-  author: {
+  short: {
     type: String,
     required: true
   },
-  text: {
-    type: String,
-    required: true
-  },
-  category : {
-    type: String,
-    required: true
-  }
 }, opts);
 
-module.exports = model("Songs", homeSchema);
+module.exports = model("Categories", categoriesSchema);
