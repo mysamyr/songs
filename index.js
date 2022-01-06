@@ -3,24 +3,24 @@ const path = require("path");
 const mongoose = require("mongoose");
 const helmet = require("helmet");
 const compression = require("compression");
-const expHbs = require('express-handlebars');
+const expHbs = require("express-handlebars");
 const homeRoute = require("./routes/home");
 const songRoute = require("./routes/song");
 const keys = require("./keys");
 
 const app = express();
 const hbs = expHbs.create({
-  defaultLayout: 'main',
-  extname: 'hbs',
+  defaultLayout: "main",
+  extname: "hbs",
   helpers: require("./utils/hbs.helpers"),
   allowProtoMethodsByDefault: true,
 });
 
-app.engine('hbs', hbs.engine);
-app.set('views', 'views');
-app.set('view engine', 'hbs');
+app.engine("hbs", hbs.engine);
+app.set("views", "views");
+app.set("view engine", "hbs");
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({extended: true}));
 app.use(helmet({
   contentSecurityPolicy: {

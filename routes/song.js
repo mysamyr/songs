@@ -1,13 +1,13 @@
-const {Router} = require('express');
+const {Router} = require("express");
 const Songs = require("../models/songs");
 const Categories = require("../models/categories");
 const router = Router();
 
-router.get('/add', async (req, res) => {
+router.get("/add", async (req, res) => {
   try {
     const categories = await Categories.find();
-    res.render('add', {
-      title: 'Додати пісню',
+    res.render("add", {
+      title: "Додати пісню",
       categories: categories.map(i => i.toObject())
     });
   } catch (e) {
@@ -15,12 +15,12 @@ router.get('/add', async (req, res) => {
   }
 });
 
-router.post('/add', async (req, res) => {
+router.post("/add", async (req, res) => {
   try {
     if (!req.body.category) {
       const categories = await Categories.find();
-      res.render('add', {
-        title: 'Додати пісню',
+      res.render("add", {
+        title: "Додати пісню",
         name: req.body.name,
         text: req.body.text,
         author: req.body.author,
@@ -35,7 +35,7 @@ router.post('/add', async (req, res) => {
         category: category.short
       });
       await song.save();
-      res.redirect('/');
+      res.redirect("/");
     }
   } catch (e) {
     console.log(e);
@@ -81,7 +81,7 @@ router.post("/delete/:id", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const song = await Songs.findOne({_id: req.params.id});
-    res.render('song', {
+    res.render("song", {
       title: song.name,
       name: song.name,
       author: song.author,
