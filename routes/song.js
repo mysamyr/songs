@@ -6,9 +6,11 @@ const router = Router();
 router.get("/add", async (req, res) => {
   try {
     const categories = await Categories.find();
+    const current = req.query.name;
     res.render("add", {
       title: "Додати пісню",
-      categories: categories.map(i => i.toObject())
+      current,
+      categories: categories.map(i => i.toObject()),
     });
   } catch (e) {
     console.log(e);
@@ -47,13 +49,13 @@ router.get("/edit/:id", async (req, res) => {
   const categories = await Categories.find();
   const current = categories.find(c => c.short === song.category);
   res.render("edit", {
-    title: "Редагування",
+    title: "Редагувати",
     name: song.name,
-    author: song.author,
     text: song.text,
+    author: song.author,
     id: song.id,
     current: current.name,
-    categories: categories.map(i => i.toObject())
+    categories: categories.map(i => i.toObject()),
   });
 });
 

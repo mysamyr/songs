@@ -21,10 +21,18 @@ router.get("/:category", async (req, res) => {
   const category = await Categories.findOne({short: req.params.category}).select("name");
 
   await res.render("category", {
-    title: `${req.params.category} пісні`,
+    title: category.name,
     category: category.name,
-    songs: songs.map(i => i.toObject())
-  })
+    songs: songs.map(i => i.toObject()).sort((x, y) => {
+      if (x.name < y.name) {
+        return -1;
+      }
+      if (x.name > y.name) {
+        return 1;
+      }
+      return 0;
+    }),
+  });
 });
 
 router.post("/:category", async (req, res) => {

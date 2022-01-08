@@ -2,10 +2,9 @@
     text-align: right;
 }
 
-.backHome {
-    text-align: center;
-}
-
-.right {
-    text-align: right;
+.buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    max-width: 30%;
 }

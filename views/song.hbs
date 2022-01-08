@@ -3,12 +3,15 @@
 <div>
     <pre>{{text}}</pre>
     <p class="author">{{author}}</p>
-    <a href="/" class="btn">На головну</a>
-    <br>
-    <form action="/song/delete/{{id}}" method="POST" class="right">
-        <button>Видалити пісню</button>
+    <form action="/" method="GET">
+        <button class="btn">На головну</button>
     </form>
-    <form action="/song/edit/{{id}}" method="GET" class="right">
-        <button>Редагувати пісню</button>
-    </form>
+    <div>
+        <form action="/song/delete/{{id}}" method="POST" class="right">
+            <button>Видалити пісню</button>
+        </form>
+        <form action="/song/edit/{{id}}" method="GET" class="right">
+            <button>Редагувати пісню</button>
+        </form>
+    </div>
 </div>

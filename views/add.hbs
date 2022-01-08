@@ -3,9 +3,11 @@
 <form action="/song/add" method="POST" novalidate>
     <div>
         <select class="browser-default" id="category" name="category" required>
-            <option value="" disabled selected>Виберіть категорію</option>
+            <option value="{{current}}" selected>{{current}}</option>
             {{#each categories}}
-                <option>{{name}}</option>
+                {{#ifneq @root.current name}}
+                    <option>{{name}}</option>
+                {{/ifneq}}
             {{/each}}
         </select>
         <label for="category">Виберіть категорію</label>

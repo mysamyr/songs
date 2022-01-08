@@ -12,5 +12,13 @@
     <p>Поки пісень для даної категорії не додали</p>
 {{/if}}
 
-<a class="btn btn-primary" href="/song/add">Додати нову пісню</a>
-<a class="btn red" href="/">До списку категорій</a>
+<div class="buttons">
+    <form action="/song/add" method="GET">
+        <input id="name" name="name" type="hidden" required  value="{{category}}">
+        <button class="waves-effect waves-light btn-small">Додати нову пісню</button>
+    </form>
+
+    <form action="/" method="GET">
+        <button class="waves-effect waves-light btn-small">До списку категорій</button>
+    </form>
+</div>
