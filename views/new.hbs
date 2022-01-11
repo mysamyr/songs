@@ -1,6 +1,6 @@
 <h1>Додати нову пісню</h1>
 
-<form action="/song/add" method="POST" novalidate>
+<form action="/song/new" method="POST">
     <div>
         <select class="browser-default" id="category" name="category" required>
             <option value="{{current}}" selected>{{current}}</option>
@@ -31,6 +31,8 @@
         <span class="helper-text" data-error="Введіть автора"></span>
     </div>
 
-    <button class="btn btn-primary">Додати пісню</button>
-    <a href="/" class="btn red">Назад на головну</a>
+    <div class="buttons">
+        <button class="btn">Додати пісню</button>
+        <a href="/" class="btn red">Назад на головну</a>
+    </div>
 </form>

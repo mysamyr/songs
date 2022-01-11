@@ -3,11 +3,11 @@ const Songs = require("../models/songs");
 const Categories = require("../models/categories");
 const router = Router();
 
-router.get("/add", async (req, res) => {
+router.get("/new", async (req, res) => {
   try {
     const categories = await Categories.find();
     const current = req.query.name;
-    res.render("add", {
+    res.render("new", {
       title: "Додати пісню",
       current,
       categories: categories.map(i => i.toObject()),
@@ -17,11 +17,11 @@ router.get("/add", async (req, res) => {
   }
 });
 
-router.post("/add", async (req, res) => {
+router.post("/new", async (req, res) => {
   try {
     if (!req.body.category) {
       const categories = await Categories.find();
-      res.render("add", {
+      res.render("new", {
         title: "Додати пісню",
         name: req.body.name,
         text: req.body.text,
@@ -76,7 +76,7 @@ router.post("/edit/:id", async (req, res) => {
 
 router.post("/delete/:id", async (req, res) => {
   const song = await Songs.findOne({_id: req.params.id});
-  song.deleteOne();
+  await song.deleteOne();
   res.redirect("/");
 });
 

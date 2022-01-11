@@ -1,10 +1,42 @@
+h1 {
+    font-size: 3.5rem;
+}
+
+pre {
+    text-align: center;
+}
+
 .author {
     text-align: right;
+    margin-right: 10%;
 }
 
 .buttons {
     display: flex;
-    flex-direction: row;
     justify-content: space-around;
-    max-width: 30%;
+    margin-bottom: 10px;
+}
+
+.btn:first-child {
+    margin: 10px;
+}
+
+.btn:last-child {
+    margin: 10px;
+}
+
+.goHome {
+    background-color: #147ab2;
+}
+
+.red {
+    background-color: #f44336;
+}
+
+@media (max-width: 614px) {
+    .buttons {
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+    }
 }

@@ -13,12 +13,16 @@
 {{/if}}
 
 <div class="buttons">
-    <form action="/song/add" method="GET">
+    <form action="/song/new" method="GET">
         <input id="name" name="name" type="hidden" required  value="{{category}}">
-        <button class="waves-effect waves-light btn-small">Додати нову пісню</button>
+        <button class="btn">Додати нову пісню</button>
     </form>
 
     <form action="/" method="GET">
-        <button class="waves-effect waves-light btn-small">До списку категорій</button>
+        <button class="btn goHome">До списку категорій</button>
     </form>
+
+<!--    <form action="/category/new" method="GET">-->
+<!--        <button class="btn">Додати нову категорію</button>-->
+<!--    </form>-->
 </div>
