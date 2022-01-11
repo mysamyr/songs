@@ -19,7 +19,7 @@ router.get("/category/new", async (req, res) => {
   const categories = await Categories.find();
 
   const shorts = SHORTS.reduce((acc, c) => {
-    if (!categories.find(i => i.name === c)) {
+    if (!categories.find(i => i.short === c)) {
       acc.push({
         name: c
       });
