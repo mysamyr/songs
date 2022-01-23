@@ -4,8 +4,13 @@ const mongoose = require("mongoose");
 const helmet = require("helmet");
 const compression = require("compression");
 const expHbs = require("express-handlebars");
+const session = require("express-session");
+const MongoStore = require("connect-mongodb-session")(session);
 const homeRoute = require("./routes/home");
 const songRoute = require("./routes/song");
+const authRoute = require("./routes/auth");
+const errorHandler = require("./utils/errorHandler");
+const varMiddleware = require("./middleware/variables");
 const keys = require("./keys");
 
 const app = express();
@@ -15,6 +20,10 @@ const hbs = expHbs.create({
   helpers: require("./utils/hbs.helpers"),
   allowProtoMethodsByDefault: true,
 });
+const store = new MongoStore({
+  collection: "sessions",
+  uri: keys.MONGODB_URI,
+});
 
 app.engine("hbs", hbs.engine);
 app.set("views", "views");
@@ -22,6 +31,13 @@ app.set("view engine", "hbs");
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({extended: true}));
+app.use(session({
+  secret: keys.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  store,
+}));
+app.use(varMiddleware);
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
@@ -35,6 +51,9 @@ app.use(compression());
 
 app.use("/", homeRoute);
 app.use("/song", songRoute);
+app.use("/auth", authRoute);
+
+app.use(errorHandler);
 
 const start = async () => {
   try {

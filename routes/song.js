@@ -1,94 +1,109 @@
-const { Router } = require("express");
+const {Router} = require("express");
 const Songs = require("../models/songs");
 const Categories = require("../models/categories");
 const router = Router();
 
+// Add new song
 router.get("/new", async (req, res) => {
   try {
     const categories = await Categories.find();
-    const current = req.query.name;
+
     res.render("new", {
       title: "Додати пісню",
-      current,
       categories: categories.map(i => i.toObject()),
     });
   } catch (e) {
     console.log(e);
   }
 });
-
 router.post("/new", async (req, res) => {
   try {
-    if (!req.body.category) {
-      const categories = await Categories.find();
-      res.render("new", {
-        title: "Додати пісню",
-        name: req.body.name,
-        text: req.body.text,
-        author: req.body.author,
-        categories: categories.map(i => i.toObject())
-      });
-    } else {
-      const category = await Categories.findOne({name: [req.body.category]}).select("short");
-      const song = await new Songs({
-        name: req.body.name,
-        text: req.body.text,
-        author: req.body.author,
-        category: category.short
-      });
-      await song.save();
-      res.redirect(`/category/${category.short}`);
-    }
+    const categories = await Categories.find({name: req.body.categories}).select("short");
+    const song = await new Songs({
+      name: req.body.name,
+      text: req.body.text,
+      author: req.session.user.login,
+      categories: categories.map(i => i.short),
+    });
+    await song.save();
+
+    res.redirect("/");
   } catch (e) {
     console.log(e);
   }
 });
 
+// Edit existing song
 router.get("/edit/:id", async (req, res) => {
-  const song = await Songs.findOne({_id: req.params.id});
-  const categories = await Categories.find();
-  const current = categories.find(c => c.short === song.category);
-  res.render("edit", {
-    title: "Редагувати",
-    name: song.name,
-    text: song.text,
-    author: song.author,
-    id: song.id,
-    current: current.name,
-    categories: categories.map(i => i.toObject()),
-  });
-});
+  try {
+    const song = await Songs.findOne({_id: req.params.id});
+    const allCategories = await Categories.find();
 
+    const {currents, categories} = allCategories.reduce((acc, c) => {
+      if (song.categories.includes(c.short)) {
+        acc.currents.push({name: c.name});
+      } else {
+        acc.categories.push({name: c.name})
+      }
+      return acc;
+    }, {
+      currents: [],
+      categories: []
+    });
+
+    res.render("edit", {
+      title: "Редагувати пісню",
+      id: req.params.id,
+      name: song.name,
+      text: song.text,
+      currents,
+      categories,
+    });
+  } catch (e) {
+    console.log(e);
+  }
+});
 router.post("/edit/:id", async (req, res) => {
   try {
-    const category = await Categories.findOne({name: req.body.category}).select("short");
+    const categories = await Categories.find({name: req.body.categories}).select("short");
     await Songs.findOneAndUpdate({_id: req.params.id}, {
       name: req.body.name,
       text: req.body.text,
-      author: req.body.author,
-      category: category.short,
+      author: req.session.user.login,
+      categories: categories.map(c => c.short),
     });
+
     res.redirect(`/song/${req.params.id}`)
   } catch (e) {
     console.log(e);
   }
 });
 
+// Delete song
 router.post("/delete/:id", async (req, res) => {
-  const song = await Songs.findOne({_id: req.params.id});
-  await song.deleteOne();
-  res.redirect(`/category/${song.category}`);
+  try {
+    const song = await Songs.findOne({_id: req.params.id});
+    await song.deleteOne();
+
+    res.redirect("/");
+  } catch (e) {
+    console.log(e);
+  }
 });
 
+// Get song
 router.get("/:id", async (req, res) => {
   try {
     const song = await Songs.findOne({_id: req.params.id});
+    const isAuthor = req.session.user?.login === song.author;
+
     res.render("song", {
       title: song.name,
       name: song.name,
       author: song.author,
       text: song.text,
-      id: song.id
+      id: song.id,
+      isAuthor
     });
   } catch (e) {
     console.log(e);
