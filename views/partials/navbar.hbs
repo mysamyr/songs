@@ -1,7 +1,8 @@
 <nav>
     <div class="nav-wrapper">
         <a href="/" class="brand-logo">Пісенник</a>
-        <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        <ul class="right hide-on-med-and-down">
             <li {{#if isHome}} class="active" {{/if}}><a href="/">Головна</a></li>
             {{#if isAuth}}
                 <li><a href="/auth/logout">Вийти</a></li>
@@ -11,3 +12,12 @@
         </ul>
     </div>
 </nav>
+
+<ul id="mobile-demo" class="sidenav">
+    <li {{#if isHome}} class="active" {{/if}}><a href="/">Головна</a></li>
+    {{#if isAuth}}
+        <li><a href="/auth/logout">Вийти</a></li>
+    {{else}}
+        <li><a href="/auth/login#login">Увійти</a></li>
+    {{/if}}
+</ul>
