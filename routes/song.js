@@ -1,4 +1,4 @@
-const {Router} = require("express");
+const { Router } = require("express");
 const Songs = require("../models/songs");
 const Categories = require("../models/categories");
 const router = Router();
@@ -37,7 +37,7 @@ router.post("/new", async (req, res) => {
         category: category.short
       });
       await song.save();
-      res.redirect("/");
+      res.redirect(`/category/${category.short}`);
     }
   } catch (e) {
     console.log(e);
@@ -77,7 +77,7 @@ router.post("/edit/:id", async (req, res) => {
 router.post("/delete/:id", async (req, res) => {
   const song = await Songs.findOne({_id: req.params.id});
   await song.deleteOne();
-  res.redirect("/");
+  res.redirect(`/category/${song.category}`);
 });
 
 router.get("/:id", async (req, res) => {

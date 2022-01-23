@@ -51,9 +51,15 @@ router.post("/category/new", async (req, res) => {
 
 router.get("/category/delete/:short", async (req, res) => {
   if (!req.params.short) {
-    res.redirect("/");
+    return res.redirect("/");
   }
   try {
+    const categorySongs = await Songs.find({
+      category: req.params.short,
+    });
+    if (categorySongs.length) {
+      return res.redirect(`/category/${req.params.short}`);
+    }
     const category = await Categories.findOne({short: req.params.short});
     await category.deleteOne();
     res.redirect("/");
@@ -64,11 +70,12 @@ router.get("/category/delete/:short", async (req, res) => {
 
 router.get("/category/:category", async (req, res) => {
   const songs = await Songs.find({category: req.params.category}).select("name id");
-  const category = await Categories.findOne({short: req.params.category}).select("name");
+  const category = await Categories.findOne({short: req.params.category});
 
   await res.render("category", {
     title: category.name,
-    category: category.name,
+    categoryName: category.name,
+    categoryShort: category.short,
     songs: songs.map(i => i.toObject()).sort((x, y) => {
       if (x.name < y.name) {
         return -1;
