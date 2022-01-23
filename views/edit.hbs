@@ -1,16 +1,16 @@
 <h1>Редагувати пісню</h1>
 
-<form action="/song/edit/{{id}}" method="POST" novalidate>
-    <div>
-        <select class="browser-default" id="category" name="category" required>
-            <option value="{{current}}" selected>{{current}}</option>
+<form action="/song/edit/{{id}}" method="POST">
+    <div class="input-field col s12">
+        <select id="categories" name="categories" required multiple>
+            {{#each currents}}
+                <option value="{{name}}" selected>{{name}}</option>
+            {{/each}}
             {{#each categories}}
-                {{#ifneq @root.current name}}
-                    <option>{{name}}</option>
-                {{/ifneq}}
+                <option>{{name}}</option>
             {{/each}}
         </select>
-        <label for="category">Виберіть категорію</label>
+        <label for="categories">Виберіть категорію</label>
     </div>
 
     <div class="input-field">
@@ -25,12 +25,8 @@
         <span class="helper-text" data-error="Введіть текст пісні"></span>
     </div>
 
-    <div class="input-field">
-        <input id="author" name="author" type="text" class="validate" required value="{{author}}">
-        <label for="author">Автор</label>
-        <span class="helper-text" data-error="Введіть автора"></span>
+    <div class="buttons">
+        <button id="sendSong" class="btn btn-primary">Зберегти</button>
+        <a href="/" class="btn red">Скасувати</a>
     </div>
-
-    <button class="btn btn-primary">Зберегти</button>
-    <a href="/" class="btn red">Скасувати</a>
 </form>

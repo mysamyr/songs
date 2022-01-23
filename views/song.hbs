@@ -9,12 +9,16 @@
             <button class="btn goHome">На головну</button>
         </form>
 
-        <form action="/song/edit/{{id}}" method="GET">
-            <button class="btn">Редагувати пісню</button>
-        </form>
+        {{#if isAuth}}
+        {{#if isAuthor}}
+            <form action="/song/edit/{{id}}" method="GET">
+                <button class="btn">Редагувати</button>
+            </form>
 
-        <form action="/song/delete/{{id}}" method="POST">
-            <button class="btn red">Видалити пісню</button>
-        </form>
+            <form action="/song/delete/{{id}}" method="POST">
+                <button class="btn red">Видалити</button>
+            </form>
+        {{/if}}
+        {{/if}}
     </div>
 </div>

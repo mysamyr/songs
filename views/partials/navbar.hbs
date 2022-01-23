@@ -1,0 +1,13 @@
+<nav>
+    <div class="nav-wrapper">
+        <a href="/" class="brand-logo">Пісенник</a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li {{#if isHome}} class="active" {{/if}}><a href="/">Головна</a></li>
+            {{#if isAuth}}
+                <li><a href="/auth/logout">Вийти</a></li>
+            {{else}}
+                <li><a href="/auth/login#login">Увійти</a></li>
+            {{/if}}
+        </ul>
+    </div>
+</nav>

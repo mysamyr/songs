@@ -9,24 +9,15 @@ const opts = {
   },
 };
 
-const songSchema = new Schema({
-  name: {
+const userSchema = new Schema({
+  login: {
     type: String,
     required: true,
   },
-  author: {
+  password: {
     type: String,
     required: true,
-  },
-  text: {
-    type: String,
-    required: true,
-  },
-  categories: {
-    type: [String],
-    required: true,
-    default: [],
   }
 }, opts);
 
-module.exports = model("Songs", songSchema);
+module.exports = model("User", userSchema);
