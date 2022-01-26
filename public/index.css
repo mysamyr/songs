@@ -1,3 +1,7 @@
+h1 {
+    font-size: 3rem;
+}
+
 nav {
     background-color: #1D7D74FF;
     padding: 0 2rem;
@@ -31,10 +35,6 @@ nav {
 
 .auth {
     padding: 1rem;
-}
-
-#login h1, #register h1 {
-    padding-bottom: 20px;
 }
 
 @media only screen and (max-width: 992px) {

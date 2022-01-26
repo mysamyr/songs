@@ -28,6 +28,11 @@
             <h1>Зареєструватися</h1>
             <form action="/auth/register" method="POST">
                 <div class="input-field">
+                    <input id="name" name="name" type="text" class="validate" required>
+                    <label for="name">Введіть ім'я</label>
+                    <span class="helper-text" data-error="Введіть ім'я"></span>
+                </div>
+                <div class="input-field">
                     <input id="rlogin" name="login" type="text" class="validate" required>
                     <label for="rlogin">Введіть логін</label>
                     <span class="helper-text" data-error="Введіть логін"></span>
