@@ -6,7 +6,9 @@ const router = Router();
 
 router.get("/login", (req, res) => {
   res.render("auth", {
-    title: "Увійти"
+    title: "Увійти",
+    loginErr: req.flash("loginErr"),
+    registerErr: req.flash("registerErr"),
   });
 });
 router.post("/login", promisify(async (req, res) => {
@@ -26,11 +28,11 @@ router.post("/login", promisify(async (req, res) => {
         return res.redirect("/");
       })
     } else {
-      // req.flash("loginErr", "Password is not correct");
+      req.flash("loginErr", "Неправильний логін чи пароль");
       return res.redirect("/auth/login#login");
     }
   } else {
-    // req.flash("loginErr", "Not existing user");
+    req.flash("loginErr", "Такого користувача не існує");
     return res.redirect("/auth/login#login");
   }
 }));
@@ -47,7 +49,8 @@ router.post("/register", promisify(async (req, res) => {
   // todo validation
   const candidate = await User.findOne({login});
   if (candidate) {
-    throw new Error("Existing user");
+    req.flash("registerErr", "Користувач вже існує");
+    res.status(422).redirect("/auth/login#register");
   } else {
     const hashPassword = await bcrypt.hash(password, 10);
     const user = await new User({

@@ -6,6 +6,7 @@ const compression = require("compression");
 const expHbs = require("express-handlebars");
 const session = require("express-session");
 const MongoStore = require("connect-mongodb-session")(session);
+const flash = require("connect-flash");
 const homeRoute = require("./features/categories");
 const songRoute = require("./features/songs");
 const authRoute = require("./features/auth");
@@ -48,6 +49,7 @@ app.use(helmet({
   }
 }));
 app.use(compression());
+app.use(flash());
 
 app.use("/", homeRoute);
 app.use("/song", songRoute);

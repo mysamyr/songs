@@ -6,7 +6,13 @@
                 <li class="tab col s6"><a href="#register">Зареєструватися</a></li>
             </ul>
         </div>
+
         <div id="login" class="col s6 offset-s3">
+
+            {{#if loginErr}}
+                <p class="alert">{{loginErr}}</p>
+            {{/if}}
+
             <h1>Увійти</h1>
             <form action="/auth/login" method="POST">
                 <div class="input-field">
@@ -25,6 +31,11 @@
         </div>
 
         <div id="register" class="col s6 offset-s3">
+
+            {{#if registerErr}}
+                <p class="alert">{{registerErr}}</p>
+            {{/if}}
+
             <h1>Зареєструватися</h1>
             <form action="/auth/register" method="POST">
                 <div class="input-field">
