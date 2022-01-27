@@ -1,6 +1,7 @@
 const {Router} = require("express");
 const Songs = require("../models/songs");
 const Categories = require("../models/categories");
+const User = require("../models/user");
 const promisify = require("../middleware/promisify");
 const router = Router();
 
@@ -18,10 +19,11 @@ router.post("/new", promisify(async (req, res) => {
   const { login } = req.session.user;
 
   const cat = await Categories.find({name: categories}).select("short");
+  const user = await User.findOne({login}).select("name");
   const song = await new Songs({
     name,
     text,
-    author: login,
+    author: user.name,
     categories: cat.map(i => i.short),
   });
   await song.save();
@@ -58,13 +60,16 @@ router.get("/edit/:id", promisify(async (req, res) => {
   });
 }));
 router.post("/edit/:id", promisify(async (req, res) => {
+  const {name, text, categories} = req.body;
+  const {id} = req.params;
   try {
-    const categories = await Categories.find({name: req.body.categories}).select("short");
-    await Songs.findOneAndUpdate({_id: req.params.id}, {
-      name: req.body.name,
-      text: req.body.text,
-      author: req.session.user.login,
-      categories: categories.map(c => c.short),
+    const ctgs = await Categories.find({name: categories}).select("short");
+    const user = await User.findOne({login: req.session.user.login}).select("name");
+    await Songs.findOneAndUpdate({_id: id}, {
+      name: name,
+      text: text,
+      author: user.name,
+      categories: ctgs.map(c => c.short),
     });
 
     res.redirect(`/song/${req.params.id}`)
@@ -87,9 +92,11 @@ router.post("/delete/:id", promisify(async (req, res) => {
 
 // Get song
 router.get("/:id", promisify(async (req, res) => {
+  const {id} = req.params;
   try {
-    const song = await Songs.findOne({_id: req.params.id});
-    const isAuthor = req.session.user?.login === song.author;
+    const song = await Songs.findOne({_id: id});
+    const user = await User.findOne({login: req.session.user?.login});
+    const isAuthor = user.name === song.author;
 
     res.render("song", {
       title: song.name,
