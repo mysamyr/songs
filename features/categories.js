@@ -1,4 +1,5 @@
 const {Router} = require("express");
+const auth = require("../middleware/auth");
 const promisify = require("../middleware/promisify");
 const {SHORTS} = require("../constants");
 const Categories = require("../models/categories");
@@ -23,7 +24,7 @@ router.get("/", promisify(async (req, res) => {
 }));
 
 // Add new category
-router.get("/category/new", promisify((req, res) => {
+router.get("/category/new", auth, promisify((req, res) => {
   res.render("new_category", {
     title: "Додати нову категорію",
     err: req.flash("err"),
@@ -51,7 +52,7 @@ router.post("/category/new", promisify(async (req, res) => {
 }));
 
 // Delete category
-router.get("/category/delete/:short", promisify(async (req, res) => {
+router.get("/category/delete/:short", auth, promisify(async (req, res) => {
   const {short} = req.params;
 
   const categorySongs = await Songs.find({

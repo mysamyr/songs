@@ -1,12 +1,13 @@
 const {Router} = require("express");
+const auth = require("../middleware/auth");
+const promisify = require("../middleware/promisify");
 const Songs = require("../models/songs");
 const Categories = require("../models/categories");
 const User = require("../models/user");
-const promisify = require("../middleware/promisify");
 const router = Router();
 
 // Add new song
-router.get("/new", promisify(async (req, res) => {
+router.get("/new", auth, promisify(async (req, res) => {
   const categories = await Categories.find();
 
   res.render("new", {
@@ -28,11 +29,11 @@ router.post("/new", promisify(async (req, res) => {
   });
   await song.save();
 
-  res.redirect("/");
+  res.redirect(`/song/${song._id}`);
 }));
 
 // Edit existing song
-router.get("/edit/:id", promisify(async (req, res) => {
+router.get("/edit/:id", auth, promisify(async (req, res) => {
   const { id } = req.params;
 
   const song = await Songs.findOne({_id: id});
@@ -79,11 +80,12 @@ router.post("/edit/:id", promisify(async (req, res) => {
 }));
 
 // Delete song
-router.post("/delete/:id", promisify(async (req, res) => {
+router.post("/delete/:id", auth, promisify(async (req, res) => {
   try {
     const song = await Songs.findOne({_id: req.params.id});
     await song.deleteOne();
 
+    req.flash("msg", `Пісня ${song.name} успішно видалена`);
     res.redirect("/");
   } catch (e) {
     console.log(e);

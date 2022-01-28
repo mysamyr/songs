@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const bcrypt = require("bcryptjs");
+const auth = require("../middleware/auth");
 const promisify = require("../middleware/promisify");
 const User = require("../models/user");
 const router = Router();
@@ -39,7 +40,7 @@ router.post("/login", promisify(async (req, res) => {
 }));
 
 // logout
-router.get("/logout", promisify(async (req, res) => {
+router.get("/logout", auth, promisify(async (req, res) => {
   const { session } = req;
 
   session.destroy(() => res.redirect("/"));
