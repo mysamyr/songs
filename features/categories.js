@@ -18,6 +18,7 @@ router.get("/", promisify(async (req, res) => {
     title: "Збірник пісень",
     categories: categories.map(i => i.toObject()),
     isHome: true,
+    msg: req.flash("msg"),
   });
 }));
 
@@ -25,12 +26,18 @@ router.get("/", promisify(async (req, res) => {
 router.get("/category/new", promisify((req, res) => {
   res.render("new_category", {
     title: "Додати нову категорію",
+    err: req.flash("err"),
   });
 }));
 router.post("/category/new", promisify(async (req, res) => {
   const {name} = req.body;
 
-  const categories = await Categories.find().select("short");
+  const categories = await Categories.find();
+  if (categories.find(c => c.name === name)) {
+    req.flash("err", "Категорія вже існує");
+    return res.redirect("/category/new");
+  }
+
   const short = generateUniqueShort(categories);
 
   const newCategory = await new Categories({
@@ -39,6 +46,7 @@ router.post("/category/new", promisify(async (req, res) => {
   });
   await newCategory.save();
 
+  req.flash("msg", "Категорія успішно створена");
   res.redirect("/");
 }));
 
@@ -56,6 +64,7 @@ router.get("/category/delete/:short", promisify(async (req, res) => {
 
     res.redirect("/");
   } else {
+    req.flash("err", "В категорії ще є пісні")
     return res.redirect(`/category/${short}`);
   }
 }));
@@ -86,6 +95,7 @@ router.get("/category/:category", promisify(async (req, res) => {
       }
       return 0;
     }),
+    err: req.flash("err"),
   });
 }));
 

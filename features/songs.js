@@ -96,7 +96,7 @@ router.get("/:id", promisify(async (req, res) => {
   try {
     const song = await Songs.findOne({_id: id});
     const user = await User.findOne({login: req.session.user?.login});
-    const isAuthor = user.name === song.author;
+    const isAuthor = user?.name === song.author;
 
     res.render("song", {
       title: song.name,

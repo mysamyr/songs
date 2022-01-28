@@ -4,6 +4,7 @@ const promisify = require("../middleware/promisify");
 const User = require("../models/user");
 const router = Router();
 
+// login
 router.get("/login", (req, res) => {
   res.render("auth", {
     title: "Увійти",
@@ -37,12 +38,14 @@ router.post("/login", promisify(async (req, res) => {
   }
 }));
 
+// logout
 router.get("/logout", promisify(async (req, res) => {
   const { session } = req;
 
   session.destroy(() => res.redirect("/"));
 }));
 
+// register
 router.post("/register", promisify(async (req, res) => {
   const {name, login, password} = req.body;
 

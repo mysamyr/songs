@@ -1,5 +1,5 @@
 h1 {
-    font-size: 3rem;
+    font-size: 2.5rem;
 }
 
 nav {
@@ -20,17 +20,23 @@ nav {
 }
 
 .goHome {
-    background-color: #147ab2;
+    background-color: #147ab2 !important;
 }
 .goHome:hover {
-    background-color: #1a98dc;
+    background-color: #1a98dc !important;
 }
 .goHome:active {
-    background-color: #10608c;
+    background-color: #10608c !important;
 }
 
 .red {
-    background-color: #f44336;
+    background-color: #c02418 !important;
+}
+.red:hover {
+    background-color: #dc2929 !important;
+}
+.red:active {
+    background-color: #8f0f0f !important;
 }
 
 .auth {
@@ -46,13 +52,18 @@ nav {
     color: red;
 }
 
+.msg {
+    padding: .5rem 1rem;
+    border-radius: 10px;
+    text-align: center;
+    margin-bottom: 1rem;
+    background: rgba(0, 255, 0, .3);
+    color: green;
+}
+
 @media only screen and (max-width: 992px) {
     nav {
         padding: 0;
-    }
-
-    pre {
-        text-align: left;
     }
 
     .buttons {
