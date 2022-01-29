@@ -13,19 +13,26 @@ router.get("/new", auth, promisify(async (req, res) => {
   res.render("new", {
     title: "Додати пісню",
     categories: categories.map(i => i.toObject()),
+    err: req.flash("err")
   });
 }));
 router.post("/new", promisify(async (req, res) => {
-  const { categories, name, text } = req.body;
-  const { login } = req.session.user;
+  const {categories, name, text} = req.body;
+  const {login} = req.session.user;
 
-  const cat = await Categories.find({name: categories}).select("short");
+  const dbCategories = await Categories.find({name: categories}).select("short");
+
+  if (categories.length !== dbCategories.length) {
+    req.flash("err", "Категорія була видалена. Виберіть нову");
+    res.redirect("/song/new");
+  }
+
   const user = await User.findOne({login}).select("name");
   const song = await new Songs({
     name,
     text,
     author: user.name,
-    categories: cat.map(i => i.short),
+    categories: dbCategories.map(i => i.short),
   });
   await song.save();
 
@@ -34,7 +41,7 @@ router.post("/new", promisify(async (req, res) => {
 
 // Edit existing song
 router.get("/edit/:id", auth, promisify(async (req, res) => {
-  const { id } = req.params;
+  const {id} = req.params;
 
   const song = await Songs.findOne({_id: id});
   const allCategories = await Categories.find();
@@ -53,7 +60,7 @@ router.get("/edit/:id", auth, promisify(async (req, res) => {
 
   res.render("edit", {
     title: "Редагувати пісню",
-    id: req.params.id,
+    id,
     name: song.name,
     text: song.text,
     currents,
@@ -63,54 +70,48 @@ router.get("/edit/:id", auth, promisify(async (req, res) => {
 router.post("/edit/:id", promisify(async (req, res) => {
   const {name, text, categories} = req.body;
   const {id} = req.params;
-  try {
-    const ctgs = await Categories.find({name: categories}).select("short");
-    const user = await User.findOne({login: req.session.user.login}).select("name");
-    await Songs.findOneAndUpdate({_id: id}, {
-      name: name,
-      text: text,
-      author: user.name,
-      categories: ctgs.map(c => c.short),
-    });
+  const {user} = req.session;
 
-    res.redirect(`/song/${req.params.id}`)
-  } catch (e) {
-    console.log(e);
-  }
+  const dbCategories = await Categories.find({name: categories}).select("short");
+  const dbUser = await User.findOne({login: user?.login}).select("name");
+  await Songs.findOneAndUpdate({_id: id}, {
+    name: name,
+    text: text,
+    author: dbUser.name,
+    categories: dbCategories.map(c => c.short),
+  });
+
+  res.redirect(`/song/${req.params.id}`);
 }));
 
 // Delete song
 router.post("/delete/:id", auth, promisify(async (req, res) => {
-  try {
-    const song = await Songs.findOne({_id: req.params.id});
-    await song.deleteOne();
+  const {id} = req.params;
 
-    req.flash("msg", `Пісня ${song.name} успішно видалена`);
-    res.redirect("/");
-  } catch (e) {
-    console.log(e);
-  }
+  const song = await Songs.findOne({_id: id});
+  await song.deleteOne();
+
+  req.flash("msg", `Пісня ${song.name} успішно видалена`);
+  res.redirect("/");
 }));
 
 // Get song
 router.get("/:id", promisify(async (req, res) => {
   const {id} = req.params;
-  try {
-    const song = await Songs.findOne({_id: id});
-    const user = await User.findOne({login: req.session.user?.login});
-    const isAuthor = user?.name === song.author;
+  const {user} = req.session;
 
-    res.render("song", {
-      title: song.name,
-      name: song.name,
-      author: song.author,
-      text: song.text,
-      id: song.id,
-      isAuthor
-    });
-  } catch (e) {
-    console.log(e);
-  }
+  const song = await Songs.findOne({_id: id});
+  const dbUser = await User.findOne({login: user?.login});
+  const isAuthor = dbUser?.name === song.author;
+
+  res.render("song", {
+    title: song.name,
+    name: song.name,
+    author: song.author,
+    text: song.text,
+    id: song.id,
+    isAuthor
+  });
 }));
 
 module.exports = router;

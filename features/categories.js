@@ -47,7 +47,7 @@ router.post("/category/new", promisify(async (req, res) => {
   });
   await newCategory.save();
 
-  req.flash("msg", "Категорія успішно створена");
+  req.flash("msg", `Категорія ${name} успішно створена`);
   res.redirect("/");
 }));
 
@@ -56,37 +56,36 @@ router.get("/category/delete/:short", auth, promisify(async (req, res) => {
   const {short} = req.params;
 
   const categorySongs = await Songs.find({
-    categories: [short],
+    categories: short,
   });
 
   if (!categorySongs.length) {
     const category = await Categories.findOneAndDelete({short});
     await category.deleteOne();
 
+    req.flash("msg", `Категорія ${category.name} видалена`);
     res.redirect("/");
   } else {
-    req.flash("err", "В категорії ще є пісні")
-    return res.redirect(`/category/${short}`);
+    req.flash("err", "В категорії ще є пісні");
+    res.redirect(`/category/${short}`);
   }
 }));
 
 // Show songs from category
-router.get("/category/:category", promisify(async (req, res) => {
+router.get("/category/:category", promisify(async (req, res, next) => {
   const {category} = req.params;
 
   const songs = await Songs.find({categories: category}).select("name id");
-  const ctgr = await Categories.findOne({short: category});
+  const dbCategories = await Categories.findOne({short: category});
 
-  if (!ctgr) {
-    throw new Error("No such category");
+  if (!dbCategories) {
+    return next();
   }
 
-  const {name, short} = ctgr;
-
   res.render("category", {
-    title: name,
-    categoryName: name,
-    categoryShort: short,
+    title: dbCategories.name,
+    categoryName: dbCategories.name,
+    categoryShort: dbCategories.short,
     songs: songs.map(i => i.toObject()).sort((x, y) => {
       if (x.name < y.name) {
         return -1;

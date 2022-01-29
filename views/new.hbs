@@ -1,3 +1,7 @@
+{{#if err}}
+    <p class="alert">{{err}}</p>
+{{/if}}
+
 <h1>Додати нову пісню</h1>
 
 <form action="/song/new" method="POST">
@@ -13,13 +17,13 @@
     </div>
 
     <div class="input-field">
-        <input id="name" name="name" type="text" class="validate" required value="{{name}}">
+        <input id="name" name="name" type="text" class="validate" required>
         <label for="name">Назва пісні</label>
         <span class="helper-text" data-error="Назва пісні"></span>
     </div>
 
     <div class="input-field">
-        <textarea id="text" name="text" class="materialize-textarea validate" required>{{text}}</textarea>
+        <textarea id="text" name="text" class="materialize-textarea validate" required></textarea>
         <label for="text">Текст пісні</label>
         <span class="helper-text" data-error="Введіть текст пісні"></span>
     </div>

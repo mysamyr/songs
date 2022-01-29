@@ -1,4 +1,4 @@
-const { Router } = require("express");
+const {Router} = require("express");
 const bcrypt = require("bcryptjs");
 const auth = require("../middleware/auth");
 const promisify = require("../middleware/promisify");
@@ -14,8 +14,8 @@ router.get("/login", (req, res) => {
   });
 });
 router.post("/login", promisify(async (req, res) => {
-  const { login, password } = req.body;
-  const { session } = req;
+  const {login, password} = req.body;
+  const {session} = req;
 
   const candidate = await User.findOne({login});
   if (candidate) {
@@ -25,10 +25,10 @@ router.post("/login", promisify(async (req, res) => {
       session.isAuthenticated = true;
       session.save(err => {
         if (err) {
-          throw err;
+          console.log(err);
         }
         return res.redirect("/");
-      })
+      });
     } else {
       req.flash("loginErr", "Неправильний логін чи пароль");
       return res.redirect("/auth/login#login");
@@ -41,16 +41,17 @@ router.post("/login", promisify(async (req, res) => {
 
 // logout
 router.get("/logout", auth, promisify(async (req, res) => {
-  const { session } = req;
-
-  session.destroy(() => res.redirect("/"));
+  req.session.destroy(() => res.redirect("/"));
 }));
 
 // register
 router.post("/register", promisify(async (req, res) => {
-  const {name, login, password} = req.body;
+  const {name, login, password, confirm} = req.body;
 
-  // todo validation
+  if (password !== confirm) {
+    req.flash("registerErr", "Паролі мають співпадати");
+    return res.status(422).redirect("/auth/login#register");
+  }
   const candidate = await User.findOne({login});
   if (candidate) {
     req.flash("registerErr", "Користувач вже існує");
