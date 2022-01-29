@@ -44,6 +44,7 @@ router.post("/category/new", promisify(async (req, res) => {
   const newCategory = await new Categories({
     name,
     short,
+    created_by: req.session.user.name,
   });
   await newCategory.save();
 

@@ -22,7 +22,10 @@ router.post("/new", promisify(async (req, res) => {
 
   const dbCategories = await Categories.find({name: categories}).select("short");
 
-  if (categories.length !== dbCategories.length) {
+  if (
+    Array.isArray(categories) && categories.length !== dbCategories.length
+    || !dbCategories.length
+  ) {
     req.flash("err", "Категорія була видалена. Виберіть нову");
     res.redirect("/song/new");
   }
