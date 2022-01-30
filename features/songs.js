@@ -3,7 +3,7 @@ const auth = require("../middleware/auth");
 const promisify = require("../middleware/promisify");
 const Songs = require("../models/songs");
 const Categories = require("../models/categories");
-const User = require("../models/user");
+const Users = require("../models/users");
 const router = Router();
 
 // Add new song
@@ -30,7 +30,7 @@ router.post("/new", promisify(async (req, res) => {
     res.redirect("/song/new");
   }
 
-  const user = await User.findOne({login}).select("name");
+  const user = await Users.findOne({login}).select("name");
   const song = await new Songs({
     name,
     text,
@@ -76,7 +76,7 @@ router.post("/edit/:id", promisify(async (req, res) => {
   const {user} = req.session;
 
   const dbCategories = await Categories.find({name: categories}).select("short");
-  const dbUser = await User.findOne({login: user?.login}).select("name");
+  const dbUser = await Users.findOne({login: user?.login}).select("name");
   await Songs.findOneAndUpdate({_id: id}, {
     name: name,
     text: text,
@@ -92,10 +92,11 @@ router.post("/delete/:id", auth, promisify(async (req, res) => {
   const {id} = req.params;
 
   const song = await Songs.findOne({_id: id});
+  // todo if no song found
   await song.deleteOne();
 
   req.flash("msg", `Пісня ${song.name} успішно видалена`);
-  res.redirect("/");
+  res.redirect("/categories");
 }));
 
 // Get song
@@ -104,7 +105,7 @@ router.get("/:id", promisify(async (req, res) => {
   const {user} = req.session;
 
   const song = await Songs.findOne({_id: id});
-  const dbUser = await User.findOne({login: user?.login});
+  const dbUser = await Users.findOne({login: user?.login});
   const isAuthor = dbUser?.name === song.author;
 
   res.render("song", {

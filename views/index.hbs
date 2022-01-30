@@ -1,25 +1,21 @@
-{{#if msg}}
-    <p class="msg">{{msg}}</p>
-{{/if}}
+<h1>Вітаємо Вас на сайті!</h1>
+<p>Тут Ви можете знайти різні пісні, розділені по категоріях та текст Літургії св. Івана Золотоустого.</p>
+<p>Також Ви можете докластися до спільної справи, додаючи свої пісні та категорії в пісенник. <br>
+    Для цього Вам обов'язково потрібно пройти реєстрацію.
+</p>
+<p>Гарного перебування на сайті!</p>
+<br>
 
-<h1>Категорії пісень</h1>
-
-{{#if categories.length}}
-    {{#each categories}}
-        <div class="card">
-            <div class="card-content">
-                <a href="/category/{{short}}">{{name}}</a>
-            </div>
-        </div>
-    {{/each}}
-{{else}}
-    <p>Поки немає категорій</p>
-{{/if}}
-
-{{#if isAuth}}
-    <div class="buttons">
-        <form action="/category/new" method="GET">
-            <button class="btn">Додати нову категорію</button>
-        </form>
+<div class="card">
+    <div class="card-content">
+        <a href="/categories">Пісенник</a>
     </div>
-{{/if}}
+</div>
+
+<div class="card">
+    <div class="card-content">
+        <a href="/liturgy">Літургія</a>
+    </div>
+</div>
+
+<i>З пропозиціями, запитаннями чи якщо Ви знайшли помилку - <a href="mailto:lubomirmisak@live.com">напишіть мені</a></i>

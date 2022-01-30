@@ -17,7 +17,7 @@
 {{/if}}
 
 <div class="buttons">
-    <form action="/" method="GET">
+    <form action="/categories" method="GET">
         <button class="btn goHome">До списку категорій</button>
     </form>
     {{#if isAuth}}
@@ -26,7 +26,7 @@
             <button class="btn">Додати нову пісню</button>
         </form>
 
-        <form action="/category/delete/{{categoryShort}}" method="GET">
+        <form action="/categories/delete/{{categoryShort}}" method="GET">
             <button class="btn red">Видалити категорію</button>
         </form>
     {{/if}}

@@ -1,0 +1,25 @@
+{{#if msg}}
+    <p class="msg">{{msg}}</p>
+{{/if}}
+
+<h1>Пісенник</h1>
+
+{{#if categories.length}}
+    {{#each categories}}
+        <div class="card">
+            <div class="card-content">
+                <a href="/categories/{{short}}">{{name}}</a>
+            </div>
+        </div>
+    {{/each}}
+{{else}}
+    <p>Поки немає категорій</p>
+{{/if}}
+
+{{#if isAuth}}
+    <div class="buttons">
+        <form action="/categories/new" method="GET">
+            <button class="btn">Додати нову категорію</button>
+        </form>
+    </div>
+{{/if}}

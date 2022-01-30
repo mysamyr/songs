@@ -7,6 +7,7 @@ const opts = {
   toJSON: {
     virtuals: true,
   },
+  collection: "songs"
 };
 
 const songSchema = new Schema({

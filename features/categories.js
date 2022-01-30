@@ -15,7 +15,7 @@ const generateUniqueShort = (categories) => {
 router.get("/", promisify(async (req, res) => {
   const categories = await Categories.find();
 
-  res.render("index", {
+  res.render("categories", {
     title: "Збірник пісень",
     categories: categories.map(i => i.toObject()),
     isHome: true,
@@ -24,19 +24,19 @@ router.get("/", promisify(async (req, res) => {
 }));
 
 // Add new category
-router.get("/category/new", auth, promisify((req, res) => {
+router.get("/new", auth, promisify((req, res) => {
   res.render("new_category", {
     title: "Додати нову категорію",
     err: req.flash("err"),
   });
 }));
-router.post("/category/new", promisify(async (req, res) => {
+router.post("/new", promisify(async (req, res) => {
   const {name} = req.body;
 
   const categories = await Categories.find();
   if (categories.find(c => c.name === name)) {
     req.flash("err", "Категорія вже існує");
-    return res.redirect("/category/new");
+    return res.redirect("/categories/new");
   }
 
   const short = generateUniqueShort(categories);
@@ -49,11 +49,11 @@ router.post("/category/new", promisify(async (req, res) => {
   await newCategory.save();
 
   req.flash("msg", `Категорія ${name} успішно створена`);
-  res.redirect("/");
+  res.redirect("/categories");
 }));
 
 // Delete category
-router.get("/category/delete/:short", auth, promisify(async (req, res) => {
+router.get("/delete/:short", auth, promisify(async (req, res) => {
   const {short} = req.params;
 
   const categorySongs = await Songs.find({
@@ -65,15 +65,15 @@ router.get("/category/delete/:short", auth, promisify(async (req, res) => {
     await category.deleteOne();
 
     req.flash("msg", `Категорія ${category.name} видалена`);
-    res.redirect("/");
+    res.redirect("/categories");
   } else {
     req.flash("err", "В категорії ще є пісні");
-    res.redirect(`/category/${short}`);
+    res.redirect(`/categories/${short}`);
   }
 }));
 
 // Show songs from category
-router.get("/category/:category", promisify(async (req, res, next) => {
+router.get("/:category", promisify(async (req, res, next) => {
   const {category} = req.params;
 
   const songs = await Songs.find({categories: category}).select("name id");

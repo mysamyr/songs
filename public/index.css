@@ -2,8 +2,24 @@ h1 {
     font-size: 2.5rem;
 }
 
+h2 {
+    text-indent: 20px;
+    font-size: 2rem;
+}
+
+h3 {
+    text-indent: 20px;
+    font-size: 1.5rem;
+}
+
+i {
+    display: block;
+    margin-top: 100px;
+    text-align: center;
+}
+
 nav {
-    background-color: #1D7D74FF;
+    background-color: #7EB5A6;
     padding: 0 2rem;
 }
 
@@ -59,6 +75,14 @@ nav {
     margin-bottom: 1rem;
     background: rgba(0, 255, 0, .3);
     color: green;
+}
+
+.choir {
+    font-weight: bold;
+}
+
+.priest {
+
 }
 
 @media only screen and (max-width: 992px) {
