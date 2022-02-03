@@ -80,9 +80,11 @@ nav {
 .choir {
     font-weight: bold;
 }
-
 .priest {
-
+    font-style: normal;
+}
+.rubric {
+    font-style: italic;
 }
 
 @media only screen and (max-width: 992px) {
