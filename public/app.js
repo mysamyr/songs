@@ -1,9 +1,16 @@
-M.Tabs.init(document.querySelectorAll(".tabs"));
+document.addEventListener('DOMContentLoaded', function () {
+  // tabs for auth
+  M.Tabs.init(document.querySelectorAll(".tabs"));
 
-document.addEventListener('DOMContentLoaded', function() {
+  // beauty select view
+  M.FormSelect.init(document.querySelectorAll('select'));
+
+  // sidebar for mobile
+  M.Sidenav.init(document.querySelectorAll('.sidenav'));
+
   // flash events
-  const flashAlert = document.querySelector(".alert");
-  const flashMsg = document.querySelector(".msg");
+  const flashAlert = document.querySelector(".alert"),
+    flashMsg = document.querySelector(".msg");
   if (flashAlert) {
     setTimeout(() => {
       flashAlert.remove();
@@ -14,28 +21,24 @@ document.addEventListener('DOMContentLoaded', function() {
       flashMsg.remove();
     }, 3000);
   }
-  // liturgy
+
+  // liturgy view
   const liturgyText = document.querySelector("#lit");
-   if (liturgyText) {
-     const container = document.querySelector(".container");
+  if (liturgyText) {
+    const container = document.querySelector(".container");
 
-     container.innerHTML = liturgyText.getAttribute("data-text");
+    container.innerHTML = liturgyText.getAttribute("data-text");
 
-     liturgyText.remove();
+    liturgyText.remove();
 
-     const button = document.createElement("div");
-     button.className = "buttons";
-     button.innerHTML = `<form action="/" method="GET">
-        <button class="btn goHome">На головну</button>
-    </form>`;
+    const buttonWrapper = document.createElement("div");
+    buttonWrapper.className = "buttons";
+    buttonWrapper.innerHTML = `
+        <form action="/" method="GET">
+            <button class="btn goHome">На головну</button>
+        </form>
+    `;
 
-     container.append(button)
-   }
-  // beauty select view
-  const elems = document.querySelectorAll('select');
-  M.FormSelect.init(elems);
-
-  // sidebar for mobile
-  const sidebar = document.querySelectorAll('.sidenav');
-  M.Sidenav.init(sidebar);
+    container.append(buttonWrapper)
+  }
 });
