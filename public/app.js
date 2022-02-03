@@ -1,3 +1,5 @@
+import M from "./mat"
+
 document.addEventListener('DOMContentLoaded', function () {
   try {
     // tabs for auth
