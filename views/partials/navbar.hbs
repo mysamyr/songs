@@ -4,6 +4,8 @@
         <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
         <ul class="right hide-on-med-and-down">
             <li {{#if isHome}} class="active" {{/if}}><a href="/">Головна</a></li>
+            <li><a href="/categories">Пісенник</a></li>
+            <li><a href="/liturgy">Літургія</a></li>
             {{#if isAuth}}
                 <li><a href="/auth/logout">Вийти</a></li>
             {{else}}
@@ -14,7 +16,9 @@
 </nav>
 
 <ul id="mobile-demo" class="sidenav">
-    <li {{#if isHome}} class="active" {{/if}}><a href="/">Головна</a></li>
+    <li><a href="/">Головна</a></li>
+    <li><a href="/categories">Пісенник</a></li>
+    <li><a href="/liturgy">Літургія</a></li>
     {{#if isAuth}}
         <li><a href="/auth/logout">Вийти</a></li>
     {{else}}
