@@ -9,16 +9,16 @@ document.addEventListener('DOMContentLoaded', function () {
     // sidebar for mobile
     M.Sidenav.init(document.querySelectorAll('.sidenav'));
 
-    // flash events
+    // // flash events
     const flashAlert = document.querySelector(".alert"),
       flashMsg = document.querySelector(".msg");
     if (flashAlert) {
-      setTimeout(() => {
+      setTimeout(function() {
         flashAlert.remove();
       }, 3000);
     }
     if (flashMsg) {
-      setTimeout(() => {
+      setTimeout(function() {
         flashMsg.remove();
       }, 3000);
     }
@@ -34,11 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       const buttonWrapper = document.createElement("div");
       buttonWrapper.className = "buttons";
-      buttonWrapper.innerHTML = `
-        <form action="/" method="GET">
-            <button class="btn goHome">На головну</button>
-        </form>
-    `;
+      buttonWrapper.innerHTML = '<form action="/" method="GET"><button class="btn goHome">На головну</button></form>';
 
       container.append(buttonWrapper)
     }
