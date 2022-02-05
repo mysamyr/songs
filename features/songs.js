@@ -1,41 +1,42 @@
 const {Router} = require("express");
 const auth = require("../middleware/auth");
 const promisify = require("../middleware/promisify");
-const Songs = require("../models/songs");
-const Categories = require("../models/categories");
-const Users = require("../models/users");
+const Song = require("../models/song");
+const Category = require("../models/category");
+const User = require("../models/user");
 const router = Router();
 
 // Add new song
-router.get("/new", auth, promisify(async (req, res) => {
-  const categories = await Categories.find();
+router.get("/add", auth, promisify(async (req, res) => {
+  const categories = await Category.find();
 
-  res.render("new", {
+  res.render("new_song", {
     title: "Додати пісню",
     categories: categories.map(i => i.toObject()),
+    isSong: true,
     err: req.flash("err")
   });
 }));
-router.post("/new", promisify(async (req, res) => {
+router.post("/add", promisify(async (req, res) => {
   const {categories, name, text} = req.body;
   const {login} = req.session.user;
 
-  const dbCategories = await Categories.find({name: categories}).select("short");
+  const dbCategories = await Category.find({name: categories}).select("short");
 
   if (
     Array.isArray(categories) && categories.length !== dbCategories.length
     || !dbCategories.length
   ) {
     req.flash("err", "Категорія була видалена. Виберіть нову");
-    res.redirect("/song/new");
+    res.redirect("/song/add");
   }
 
-  const user = await Users.findOne({login}).select("name");
-  const song = await new Songs({
+  const user = await User.findOne({login});
+  const song = await new Song({
     name,
     text,
-    author: user.name,
-    categories: dbCategories.map(i => i.short),
+    author: user._id,
+    categories: dbCategories.map(i => i._id),
   });
   await song.save();
 
@@ -46,11 +47,11 @@ router.post("/new", promisify(async (req, res) => {
 router.get("/edit/:id", auth, promisify(async (req, res) => {
   const {id} = req.params;
 
-  const song = await Songs.findOne({_id: id});
-  const allCategories = await Categories.find();
+  const song = await Song.findOne({_id: id});
+  const allCategories = await Category.find();
 
   const {currents, categories} = allCategories.reduce((acc, c) => {
-    if (song.categories.includes(c.short)) {
+    if (song.categories.includes(c._id)) {
       acc.currents.push({name: c.name});
     } else {
       acc.categories.push({name: c.name})
@@ -61,13 +62,14 @@ router.get("/edit/:id", auth, promisify(async (req, res) => {
     categories: []
   });
 
-  res.render("edit", {
+  res.render("edit_song", {
     title: "Редагувати пісню",
     id,
     name: song.name,
     text: song.text,
     currents,
     categories,
+    isSong: true,
   });
 }));
 router.post("/edit/:id", promisify(async (req, res) => {
@@ -75,13 +77,19 @@ router.post("/edit/:id", promisify(async (req, res) => {
   const {id} = req.params;
   const {user} = req.session;
 
-  const dbCategories = await Categories.find({name: categories}).select("short");
-  const dbUser = await Users.findOne({login: user?.login}).select("name");
-  await Songs.findOneAndUpdate({_id: id}, {
+  const dbCategories = await Category.find({name: categories});
+  const dbUser = await User.findOne({_id: user?._id});
+
+  if (!dbUser) {
+    req.flash("err", "Зареєструйтеся, будь ласка");
+    res.redirect(`/song/edit/${req.params.id}`);
+  }
+
+  await Song.findOneAndUpdate({_id: id}, {
     name: name,
     text: text,
-    author: dbUser.name,
-    categories: dbCategories.map(c => c.short),
+    author: dbUser.id,
+    categories: dbCategories.map(c => c._id),
   });
 
   res.redirect(`/song/${req.params.id}`);
@@ -91,12 +99,10 @@ router.post("/edit/:id", promisify(async (req, res) => {
 router.post("/delete/:id", auth, promisify(async (req, res) => {
   const {id} = req.params;
 
-  const song = await Songs.findOne({_id: id});
-  // todo if no song found
-  await song.deleteOne();
+  const song = await Song.findOneAndDelete({_id: id});
 
   req.flash("msg", `Пісня ${song.name} успішно видалена`);
-  res.redirect("/categories");
+  res.redirect("/category");
 }));
 
 // Get song
@@ -104,17 +110,18 @@ router.get("/:id", promisify(async (req, res) => {
   const {id} = req.params;
   const {user} = req.session;
 
-  const song = await Songs.findOne({_id: id});
-  const dbUser = await Users.findOne({login: user?.login});
-  const isAuthor = dbUser?.name === song.author;
+  const song = await Song.findOne({_id: id});
+  const dbUser = await User.findOne({_id: user?._id});
+  const isAuthor = dbUser?.id === song.author;
 
   res.render("song", {
     title: song.name,
     name: song.name,
-    author: song.author,
+    author: dbUser.name,
     text: song.text,
     id: song.id,
-    isAuthor
+    isAuthor,
+    isSong: true,
   });
 }));
 

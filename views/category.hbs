@@ -1,5 +1,5 @@
 {{#if err}}
-    <p class="alert">{{err}}</p>
+    <p class="msg alert">{{err}}</p>
 {{/if}}
 
 <h1>{{categoryName}}</h1>
@@ -17,16 +17,16 @@
 {{/if}}
 
 <div class="buttons">
-    <form action="/categories" method="GET">
+    <form action="/category" method="GET">
         <button class="btn goHome">До списку категорій</button>
     </form>
     {{#if isAuth}}
-        <form action="/song/new" method="GET">
+        <form action="/song/add" method="GET">
             <input id="name" name="name" type="hidden" required  value="{{categoryName}}">
             <button class="btn">Додати нову пісню</button>
         </form>
 
-        <form action="/categories/delete/{{categoryShort}}" method="GET">
+        <form action="/categories/delete/{{categoryId}}" method="GET">
             <button class="btn red">Видалити категорію</button>
         </form>
     {{/if}}

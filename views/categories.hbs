@@ -8,7 +8,7 @@
     {{#each categories}}
         <div class="card">
             <div class="card-content">
-                <a href="/categories/{{short}}">{{name}}</a>
+                <a href="/category/{{id}}">{{name}}</a>
             </div>
         </div>
     {{/each}}
@@ -18,7 +18,7 @@
 
 {{#if isAuth}}
     <div class="buttons">
-        <form action="/categories/new" method="GET">
+        <form action="/category/add" method="GET">
             <button class="btn">Додати нову категорію</button>
         </form>
     </div>

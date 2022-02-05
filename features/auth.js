@@ -2,7 +2,7 @@ const {Router} = require("express");
 const bcrypt = require("bcryptjs");
 const auth = require("../middleware/auth");
 const promisify = require("../middleware/promisify");
-const Users = require("../models/users");
+const User = require("../models/user");
 const router = Router();
 
 // login
@@ -11,13 +11,14 @@ router.get("/login", (req, res) => {
     title: "Увійти",
     loginErr: req.flash("loginErr"),
     registerErr: req.flash("registerErr"),
+    msg: req.flash("msg"),
   });
 });
 router.post("/login", promisify(async (req, res) => {
   const {login, password} = req.body;
   const {session} = req;
 
-  const candidate = await Users.findOne({login});
+  const candidate = await User.findOne({login});
   if (candidate) {
     const isSame = await bcrypt.compare(password, candidate.password);
     if (isSame) {
@@ -52,19 +53,20 @@ router.post("/register", promisify(async (req, res) => {
     req.flash("registerErr", "Паролі мають співпадати");
     return res.status(422).redirect("/auth/login#register");
   }
-  const candidate = await Users.findOne({login});
+  const candidate = await User.findOne({login});
   if (candidate) {
     req.flash("registerErr", "Користувач вже існує");
     res.status(422).redirect("/auth/login#register");
   } else {
     const hashPassword = await bcrypt.hash(password, 10);
-    const user = await new Users({
+    const user = await new User({
       login,
       name,
       password: hashPassword,
     });
     await user.save();
 
+    req.flash("msg", "Ви успішно зареєструвалися");
     res.redirect("/auth/login#login");
   }
 }));

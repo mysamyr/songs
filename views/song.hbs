@@ -5,11 +5,10 @@
     <p class="author">{{author}}</p>
 
     <div class="buttons">
-        <form action="/categories" method="GET">
+        <form action="/category" method="GET">
             <button class="btn goHome">До категорій</button>
         </form>
 
-        {{#if isAuth}}
         {{#if isAuthor}}
             <form action="/song/edit/{{id}}" method="GET">
                 <button class="btn">Редагувати</button>
@@ -18,7 +17,6 @@
             <form action="/song/delete/{{id}}" method="POST">
                 <button class="btn red">Видалити</button>
             </form>
-        {{/if}}
         {{/if}}
     </div>
 </div>

@@ -7,20 +7,16 @@ const opts = {
   toJSON: {
     virtuals: true,
   },
-  collection: "categories"
+  collection: "category"
 };
 
-const categoriesSchema = new Schema({
+const categorySchema = new Schema({
   name: {
     type: String,
     required: true,
   },
-  short: {
-    type: String,
-    required: true
-  },
   created_by: {
-    type: String,
+    type: Object,
     required: true
   },
   created_at: {
@@ -30,4 +26,4 @@ const categoriesSchema = new Schema({
   }
 }, opts);
 
-module.exports = model("Categories", categoriesSchema);
+module.exports = model("Category", categorySchema);

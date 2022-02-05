@@ -7,18 +7,22 @@ const opts = {
   toJSON: {
     virtuals: true,
   },
-  collection: "liturgy"
+  collection: "user"
 };
 
-const liturgySchema = new Schema({
+const userSchema = new Schema({
   name: {
     type: String,
     required: true,
   },
-  text: {
+  login: {
     type: String,
     required: true,
   },
+  password: {
+    type: String,
+    required: true,
+  }
 }, opts);
 
-module.exports = model("Liturgy", liturgySchema);
+module.exports = model("User", userSchema);

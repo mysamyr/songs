@@ -10,7 +10,10 @@
         <div id="login" class="col s6 offset-s3">
 
             {{#if loginErr}}
-                <p class="alert">{{loginErr}}</p>
+                <p class="msg alert">{{loginErr}}</p>
+            {{/if}}
+            {{#if msg}}
+                <p class="msg">{{msg}}</p>
             {{/if}}
 
             <form action="/auth/login" method="POST">
@@ -32,7 +35,7 @@
         <div id="register" class="col s6 offset-s3">
 
             {{#if registerErr}}
-                <p class="alert">{{registerErr}}</p>
+                <p class="msg alert">{{registerErr}}</p>
             {{/if}}
 
             <form action="/auth/register" method="POST">

@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // liturgy view
-    const liturgyText = document.querySelector("#lit");
+    const liturgyText = document.querySelector("#template");
     if (liturgyText) {
       const container = document.querySelector(".container");
 

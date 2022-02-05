@@ -4,8 +4,9 @@
         <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
         <ul class="right hide-on-med-and-down">
             <li {{#if isHome}} class="active" {{/if}}><a href="/">Головна</a></li>
-            <li><a href="/categories">Пісенник</a></li>
-            <li><a href="/liturgy">Літургія</a></li>
+            <li {{#if isSong}} class="active" {{/if}}><a href="/category">Пісенник</a></li>
+            <li {{#if isLit}} class="active" {{/if}}><a href="/lit">Літургія</a></li>
+            <li {{#if isPan}} class="active" {{/if}}><a href="/pan">Панахида</a></li>
             {{#if isAuth}}
                 <li><a href="/auth/logout">Вийти</a></li>
             {{else}}
@@ -17,8 +18,9 @@
 
 <ul id="mobile-demo" class="sidenav">
     <li><a href="/">Головна</a></li>
-    <li><a href="/categories">Пісенник</a></li>
-    <li><a href="/liturgy">Літургія</a></li>
+    <li><a href="/category">Пісенник</a></li>
+    <li><a href="/lit">Літургія</a></li>
+    <li><a href="/pan">Панахида</a></li>
     {{#if isAuth}}
         <li><a href="/auth/logout">Вийти</a></li>
     {{else}}

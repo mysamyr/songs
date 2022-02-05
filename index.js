@@ -8,8 +8,7 @@ const session = require("express-session");
 const MongoStore = require("connect-mongodb-session")(session);
 const flash = require("connect-flash");
 const homeRoute = require("./features/home");
-const categoriesRoute = require("./features/categories");
-const liturgyRoute = require("./features/liturgy");
+const categoryRoute = require("./features/category");
 const songRoute = require("./features/songs");
 const authRoute = require("./features/auth");
 const errorHandler = require("./utils/errorHandler");
@@ -54,8 +53,7 @@ app.use(compression());
 app.use(flash());
 
 app.use("/", homeRoute);
-app.use("/categories", categoriesRoute);
-app.use("/liturgy", liturgyRoute);
+app.use("/category", categoryRoute);
 app.use("/song", songRoute);
 app.use("/auth", authRoute);
 

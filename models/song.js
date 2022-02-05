@@ -7,22 +7,32 @@ const opts = {
   toJSON: {
     virtuals: true,
   },
-  collection: "users"
+  collection: "song",
 };
 
-const usersSchema = new Schema({
+const songSchema = new Schema({
   name: {
     type: String,
     required: true,
   },
-  login: {
+  author: {
     type: String,
     required: true,
   },
-  password: {
+  text: {
     type: String,
     required: true,
-  }
+  },
+  categories: {
+    type: [String],
+    required: true,
+    default: [],
+  },
+  created_at: {
+    type: Date,
+    required: true,
+    default: new Date()
+  },
 }, opts);
 
-module.exports = model("Users", usersSchema);
+module.exports = model("Song", songSchema);
