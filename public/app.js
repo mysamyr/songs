@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // sidebar for mobile
     M.Sidenav.init(document.querySelectorAll('.sidenav'));
 
-    // // flash events
+    // flash events
     const flashAlert = document.querySelector(".alert"),
       flashMsg = document.querySelector(".msg");
     if (flashAlert) {
@@ -25,13 +25,11 @@ document.addEventListener('DOMContentLoaded', function () {
       }, 3000);
     }
 
-    // liturgy view
+    // Templates view
     const liturgyText = document.querySelector("#template");
     if (liturgyText) {
       const container = document.querySelector(".container");
-
       container.innerHTML = liturgyText.getAttribute("data-text");
-
       liturgyText.remove();
 
       const buttonWrapper = document.createElement("div");
@@ -40,6 +38,30 @@ document.addEventListener('DOMContentLoaded', function () {
 
       container.append(buttonWrapper)
     }
+
+    // Modal
+    const modalTrigger = document.querySelector("[data-modal]"),
+      modal = document.querySelector(".mod"),
+      modalClose = document.querySelectorAll("[data-close]");
+
+    modalTrigger.addEventListener("click", () => {
+      modal.classList.toggle("show");
+      document.body.style.overflow = "hidden";
+    });
+
+    modalClose.forEach(c => {
+      c.addEventListener("click", () => {
+        modal.classList.toggle("show");
+        document.body.style.overflow = "";
+      });
+    });
+
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        modal.classList.toggle("show");
+        document.body.style.overflow = "";
+      }
+    });
   } catch (e) {
     console.log(e);
   }

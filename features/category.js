@@ -35,8 +35,6 @@ router.post("/add", promisify(async (req, res) => {
     return res.redirect("/category/add");
   }
 
-  console.log(user);
-
   const newCategory = await new Category({
     name,
     created_by: user._id,

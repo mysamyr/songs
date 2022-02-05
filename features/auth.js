@@ -5,15 +5,23 @@ const promisify = require("../middleware/promisify");
 const User = require("../models/user");
 const router = Router();
 
+const noAuth = (req, res, next) => {
+  if(req.session.isAuthenticated) {
+    req.flash("msg", "Ви вже зареєстровані");
+    return res.redirect("/");
+  }
+  next();
+};
+
 // login
-router.get("/login", (req, res) => {
+router.get("/login", noAuth, promisify((req, res) => {
   res.render("auth", {
     title: "Увійти",
     loginErr: req.flash("loginErr"),
     registerErr: req.flash("registerErr"),
     msg: req.flash("msg"),
   });
-});
+}));
 router.post("/login", promisify(async (req, res) => {
   const {login, password} = req.body;
   const {session} = req;
@@ -46,7 +54,7 @@ router.get("/logout", auth, promisify(async (req, res) => {
 }));
 
 // register
-router.post("/register", promisify(async (req, res) => {
+router.post("/register", noAuth, promisify(async (req, res) => {
   const {name, login, password, confirm} = req.body;
 
   if (password !== confirm) {

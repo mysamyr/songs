@@ -6149,7 +6149,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     _mat__WEBPACK_IMPORTED_MODULE_0___default().FormSelect.init(document.querySelectorAll('select')); // sidebar for mobile
 
-    _mat__WEBPACK_IMPORTED_MODULE_0___default().Sidenav.init(document.querySelectorAll('.sidenav')); // // flash events
+    _mat__WEBPACK_IMPORTED_MODULE_0___default().Sidenav.init(document.querySelectorAll('.sidenav')); // flash events
 
     const flashAlert = document.querySelector(".alert"),
           flashMsg = document.querySelector(".msg");
@@ -6164,7 +6164,7 @@ document.addEventListener('DOMContentLoaded', function () {
       setTimeout(function () {
         flashMsg.remove();
       }, 3000);
-    } // liturgy view
+    } // Templates view
 
 
     const liturgyText = document.querySelector("#template");
@@ -6177,7 +6177,28 @@ document.addEventListener('DOMContentLoaded', function () {
       buttonWrapper.className = "buttons";
       buttonWrapper.innerHTML = '<form action="/" method="GET"><button class="btn goHome">На головну</button></form>';
       container.append(buttonWrapper);
-    }
+    } // Modal
+
+
+    const modalTrigger = document.querySelector("[data-modal]"),
+          modal = document.querySelector(".mod"),
+          modalClose = document.querySelectorAll("[data-close]");
+    modalTrigger.addEventListener("click", () => {
+      modal.classList.toggle("show");
+      document.body.style.overflow = "hidden";
+    });
+    modalClose.forEach(c => {
+      c.addEventListener("click", () => {
+        modal.classList.toggle("show");
+        document.body.style.overflow = "";
+      });
+    });
+    modal.addEventListener("click", e => {
+      if (e.target === modal) {
+        modal.classList.toggle("show");
+        document.body.style.overflow = "";
+      }
+    });
   } catch (e) {
     console.log(e);
   }

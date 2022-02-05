@@ -8,6 +8,7 @@ router.get("/", promisify(async (req, res) => {
   res.render("index", {
     title: "Головна",
     isHome: true,
+    msg: req.flash("msg"),
   });
 }));
 
