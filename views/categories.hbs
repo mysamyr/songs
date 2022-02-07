@@ -16,10 +16,11 @@
     <p>Поки немає категорій</p>
 {{/if}}
 
-{{#if isAuth}}
-    <div class="buttons">
+<div class="buttons">
+    <a href="/" class="btn goHome">На головну</a>
+    {{#if isAuth}}
         <form action="/category/add" method="GET">
             <button class="btn">Додати нову категорію</button>
         </form>
-    </div>
-{{/if}}
+    {{/if}}
+</div>

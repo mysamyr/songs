@@ -124,6 +124,10 @@ nav {
 .mod_content h3 {
     text-align: center;
 }
+.mod_content button {
+    display: block;
+    margin: 0 auto;
+}
 .mod_content i {
     position: sticky;
     top: 5px;

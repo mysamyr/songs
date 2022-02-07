@@ -1,4 +1,4 @@
-import M from "./mat"
+import M from "materialize-css"
 
 document.addEventListener('DOMContentLoaded', function () {
   try {
@@ -44,19 +44,19 @@ document.addEventListener('DOMContentLoaded', function () {
       modal = document.querySelector(".mod"),
       modalClose = document.querySelectorAll("[data-close]");
 
-    modalTrigger.addEventListener("click", () => {
+    modalTrigger.addEventListener("click", function() {
       modal.classList.toggle("show");
       document.body.style.overflow = "hidden";
     });
 
-    modalClose.forEach(c => {
-      c.addEventListener("click", () => {
+    modalClose.forEach(function(c) {
+      c.addEventListener("click", function() {
         modal.classList.toggle("show");
         document.body.style.overflow = "";
       });
     });
 
-    modal.addEventListener("click", (e) => {
+    modal.addEventListener("click", function(e) {
       if (e.target === modal) {
         modal.classList.toggle("show");
         document.body.style.overflow = "";

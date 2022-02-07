@@ -20,6 +20,7 @@ router.get("/login", noAuth, promisify((req, res) => {
     loginErr: req.flash("loginErr"),
     registerErr: req.flash("registerErr"),
     msg: req.flash("msg"),
+    isLogin: true,
   });
 }));
 router.post("/login", promisify(async (req, res) => {
