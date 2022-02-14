@@ -426,7 +426,4 @@ const pan = `
 </div>
 `;
 
-module.exports = {
-  lit,
-  pan,
-}
+export {lit, pan};

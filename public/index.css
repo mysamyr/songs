@@ -38,11 +38,9 @@ nav {
 .goHome {
     background-color: #147ab2 !important;
 }
-
 .goHome:hover {
     background-color: #1a98dc !important;
 }
-
 .goHome:active {
     background-color: #10608c !important;
 }
@@ -50,17 +48,18 @@ nav {
 .red {
     background-color: #c02418 !important;
 }
-
 .red:hover {
     background-color: #dc2929 !important;
 }
-
 .red:active {
     background-color: #8f0f0f !important;
 }
 
 .auth {
     padding: 1rem;
+}
+#login, #register {
+    padding-top: 1rem;
 }
 
 .msg {
@@ -71,7 +70,6 @@ nav {
     background: rgba(0, 255, 0, .3);
     color: green;
 }
-
 .alert {
     background: rgba(255, 0, 0, .3);
     color: red;
@@ -80,17 +78,11 @@ nav {
 .choir {
     font-weight: bold;
 }
-
 .priest {
     font-style: normal;
 }
-
 .rubric {
     font-style: italic;
-}
-
-#login, #register {
-    padding-top: 1rem;
 }
 
 .mod {
@@ -104,17 +96,11 @@ nav {
     overflow: hidden;
     background-color: rgba(0, 0, 0, .5);
 }
-
-.mod_dialog {
-    max-width: 800px;
-    margin: 40px auto;
-}
-
 .mod_content {
     width: 100%;
     max-width: 800px;
     margin: 40px auto;
-    padding: 0 1rem 3rem;
+    padding: 1rem;
     background-color: #fff;
     border: 1px solid rgba(0, 0, 0, .2);
     border-radius: 4px;
@@ -124,21 +110,33 @@ nav {
 .mod_content h3 {
     text-align: center;
 }
-.mod_content button {
-    display: block;
-    margin: 0 auto;
-}
 .mod_content i {
     position: sticky;
     top: 5px;
     left: 100%;
+    float: left;
     cursor: pointer;
+}
+
+.arr_top {
+    display: none;
+    position: sticky;
+    top: 95%;
+    cursor: pointer;
+    text-align: right;
+    padding-right: 1rem;
+}
+.screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
 }
 
 .show {
     display: block;
 }
-
 .hide {
     display: none;
 }
