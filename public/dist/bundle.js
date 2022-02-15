@@ -12721,12 +12721,7 @@ const lit = `
         помилує і спасе нас, як благий і чоловіколюбець.</p>
     <p class="choir">Амі́нь.</p>
   </div>
-  <div class="buttons">
-    <form action="/" method="GET">
-      <button class="btn goHome">На головну</button>
-    </form>
-    </div>
-  <div class="mod">
+  <div id="modal1" class="mod">
     <div class="mod_content">
       <i class="material-icons" data-close>clear</i>
       <h3>Причасні</h3>
@@ -12942,15 +12937,13 @@ document.addEventListener('DOMContentLoaded', function () {
         break;
     }
 
-    const over = document.createElement("div");
-    over.classList.add("screen");
+    // Arrow
     const btn = document.createElement("i");
     btn.classList.add("material-icons", "arr_top");
     btn.innerHTML = "arrow_upward";
-    over.append(btn);
     window.addEventListener("scroll", function () {
       if (document.documentElement.scrollTop > 1) {
-        document.body.prepend(over);
+        document.body.prepend(btn);
         btn.classList.add("show");
       } else {
         btn.classList.remove("show");
@@ -12964,17 +12957,15 @@ document.addEventListener('DOMContentLoaded', function () {
   // Modal
   const modalTrigger = document.querySelector("[data-modal]"),
     modal = document.querySelector(".mod"),
-    modalClose = document.querySelectorAll("[data-close]");
+    modalClose = document.querySelector("[data-close]");
 
   modalTrigger.addEventListener("click", function () {
     modal.classList.toggle("show");
     document.body.style.overflow = "hidden";
   });
-  modalClose.forEach(function (c) {
-    c.addEventListener("click", function () {
-      modal.classList.toggle("show");
-      document.body.style.overflow = "";
-    });
+  modalClose.addEventListener("click", function () {
+    modal.classList.toggle("show");
+    document.body.style.overflow = "";
   });
   modal.addEventListener("click", function (e) {
     if (e.target === modal) {

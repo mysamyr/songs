@@ -1,9 +1,18 @@
-const {Router} = require("express");
-const auth = require("../middleware/auth");
-const promisify = require("../middleware/promisify");
-const Category = require("../models/category");
-const Song = require("../models/song");
-const router = Router();
+const router = require("express").Router();
+const {
+  auth,
+  promisify
+} = require("../middleware");
+const {
+  EXISTING_CATEGORY,
+  SUCCESS_CREATE_CATEGORY,
+  SUCCESS_DELETE_CATEGORY,
+  SONGS_INSIDE_CATEGORY
+} = require("../constants");
+const {
+  Category,
+  Song
+} = require("../models");
 
 // Categories
 router.get("/", promisify(async (req, res) => {
@@ -31,17 +40,17 @@ router.post("/add", promisify(async (req, res) => {
 
   const categories = await Category.find();
   if (categories.find(c => c.name === name)) {
-    req.flash("err", "Категорія вже існує");
+    req.flash("err", EXISTING_CATEGORY);
     return res.redirect("/category/add");
   }
 
   const newCategory = await new Category({
     name,
-    created_by: user._id,
+    created_by: user.id,
   });
   await newCategory.save();
 
-  req.flash("msg", `Категорія ${name} успішно створена`);
+  req.flash("msg", SUCCESS_CREATE_CATEGORY(name));
   res.redirect("/category");
 }));
 
@@ -57,15 +66,15 @@ router.get("/delete/:id", auth, promisify(async (req, res) => {
     const category = await Category.findOneAndDelete({_id: id});
     await category.deleteOne();
 
-    req.flash("msg", `Категорія ${category.name} видалена`);
+    req.flash("msg", SUCCESS_DELETE_CATEGORY(category.name));
     res.redirect("/category");
   } else {
-    req.flash("err", "В категорії ще є пісні");
+    req.flash("err", SONGS_INSIDE_CATEGORY);
     res.redirect(`/category/${id}`);
   }
 }));
 
-// Show songs from category
+// Show songs in category
 router.get("/:id", promisify(async (req, res, next) => {
   const {id} = req.params;
 
@@ -78,6 +87,7 @@ router.get("/:id", promisify(async (req, res, next) => {
 
   res.render("category", {
     title: dbCategories.name,
+    isSong: true,
     categoryName: dbCategories.name,
     categoryId: dbCategories._id,
     songs: songs.map(i => i.toObject()).sort((x, y) => {
@@ -89,7 +99,6 @@ router.get("/:id", promisify(async (req, res, next) => {
       }
       return 0;
     }),
-    isSong: true,
     err: req.flash("err"),
   });
 }));

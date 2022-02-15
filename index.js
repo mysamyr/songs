@@ -1,19 +1,18 @@
-const express = require("express");
-const path = require("path");
-const mongoose = require("mongoose");
-const helmet = require("helmet");
-const compression = require("compression");
-const expHbs = require("express-handlebars");
-const session = require("express-session");
-const MongoStore = require("connect-mongodb-session")(session);
-const flash = require("connect-flash");
-const homeRoute = require("./features/home");
-const categoryRoute = require("./features/category");
-const songRoute = require("./features/songs");
-const authRoute = require("./features/auth");
-const errorHandler = require("./utils/errorHandler");
-const varMiddleware = require("./middleware/variables");
+const express = require("express"),
+  path = require("path"),
+  mongoose = require("mongoose"),
+  helmet = require("helmet"),
+  compression = require("compression"),
+  expHbs = require("express-handlebars"),
+  session = require("express-session"),
+  MongoStore = require("connect-mongodb-session")(session),
+  flash = require("connect-flash");
+const homeRoute = require("./features/home"),
+  categoryRoute = require("./features/category"),
+  songRoute = require("./features/songs"),
+  authRoute = require("./features/auth");
 const keys = require("./keys");
+const {variable, h404} = require("./middleware");
 
 const app = express();
 const hbs = expHbs.create({
@@ -39,16 +38,8 @@ app.use(session({
   saveUninitialized: false,
   store,
 }));
-app.use(varMiddleware);
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      ...helmet.contentSecurityPolicy.getDefaultDirectives(),
-      "img-src": ["'self'", "https:"],
-      "script-src-elem": ["'self'", "https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js", "'unsafe-inline'"]
-    }
-  }
-}));
+app.use(variable);
+app.use(helmet());
 app.use(compression());
 app.use(flash());
 
@@ -57,7 +48,7 @@ app.use("/category", categoryRoute);
 app.use("/song", songRoute);
 app.use("/auth", authRoute);
 
-app.use(errorHandler);
+app.use(h404);
 
 const start = async () => {
   try {

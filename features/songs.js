@@ -1,10 +1,18 @@
-const {Router} = require("express");
-const auth = require("../middleware/auth");
-const promisify = require("../middleware/promisify");
-const Song = require("../models/song");
-const Category = require("../models/category");
-const User = require("../models/user");
-const router = Router();
+const router = require("express").Router();
+const {
+  auth,
+  promisify
+} = require("../middleware");
+const {
+  DELETED_CATEGORY,
+  LOGIN_PLEASE,
+  SUCCESS_DELETE_SONG
+} = require("../constants");
+const {
+  Song,
+  Category,
+  User
+} = require("../models");
 
 // Add new song
 router.get("/add", auth, promisify(async (req, res) => {
@@ -12,8 +20,8 @@ router.get("/add", auth, promisify(async (req, res) => {
 
   res.render("new_song", {
     title: "Додати пісню",
-    categories: categories.map(i => i.toObject()),
     isSong: true,
+    categories: categories.map(i => i.toObject()),
     err: req.flash("err")
   });
 }));
@@ -21,13 +29,14 @@ router.post("/add", promisify(async (req, res) => {
   const {categories, name, text} = req.body;
   const {login} = req.session.user;
 
-  const dbCategories = await Category.find({name: categories}).select("short");
+  const catArray = Array.isArray(categories)
+    ? categories
+    : [categories];
 
-  if (
-    Array.isArray(categories) && categories.length !== dbCategories.length
-    || !dbCategories.length
-  ) {
-    req.flash("err", "Категорія була видалена. Виберіть нову");
+  const dbCat = await Category.find({name: catArray});
+
+  if (!dbCat.length || catArray.length !== dbCat.length) {
+    req.flash("err", DELETED_CATEGORY);
     res.redirect("/song/add");
   }
 
@@ -35,8 +44,8 @@ router.post("/add", promisify(async (req, res) => {
   const song = await new Song({
     name,
     text,
-    author: user._id,
-    categories: dbCategories.map(i => i._id),
+    author: user.id,
+    categories: dbCat.map(i => i._id),
   });
   await song.save();
 
@@ -64,12 +73,12 @@ router.get("/edit/:id", auth, promisify(async (req, res) => {
 
   res.render("edit_song", {
     title: "Редагувати пісню",
+    isSong: true,
     id,
     name: song.name,
     text: song.text,
     currents,
     categories,
-    isSong: true,
   });
 }));
 router.post("/edit/:id", promisify(async (req, res) => {
@@ -78,10 +87,10 @@ router.post("/edit/:id", promisify(async (req, res) => {
   const {user} = req.session;
 
   const dbCategories = await Category.find({name: categories});
-  const dbUser = await User.findOne({_id: user?._id});
+  const dbUser = await User.findOne({id: user?.id});
 
   if (!dbUser) {
-    req.flash("err", "Зареєструйтеся, будь ласка");
+    req.flash("err", LOGIN_PLEASE);
     res.redirect(`/song/edit/${req.params.id}`);
   }
 
@@ -101,7 +110,7 @@ router.post("/delete/:id", auth, promisify(async (req, res) => {
 
   const song = await Song.findOneAndDelete({_id: id});
 
-  req.flash("msg", `Пісня ${song.name} успішно видалена`);
+  req.flash("msg", SUCCESS_DELETE_SONG(song.name));
   res.redirect("/category");
 }));
 
@@ -112,17 +121,16 @@ router.get("/:id", promisify(async (req, res) => {
 
   const song = await Song.findOne({_id: id});
   const dbSongUser = await User.findOne({_id: song.author});
-  const dbSessionUser = await User.findOne({_id: user?._id});
-  const isAuthor = dbSessionUser?.id === song.author;
+  const isAuthor = user?.id === dbSongUser.id;
 
   res.render("song", {
     title: song.name,
+    isSong: true,
     name: song.name,
     author: dbSongUser.name,
     text: song.text,
     id: song.id,
     isAuthor,
-    isSong: true,
   });
 }));
 

@@ -37,15 +37,13 @@ document.addEventListener('DOMContentLoaded', function () {
         break;
     }
 
-    const over = document.createElement("div");
-    over.classList.add("screen");
+    // Arrow
     const btn = document.createElement("i");
     btn.classList.add("material-icons", "arr_top");
     btn.innerHTML = "arrow_upward";
-    over.append(btn);
     window.addEventListener("scroll", function () {
       if (document.documentElement.scrollTop > 1) {
-        document.body.prepend(over);
+        document.body.prepend(btn);
         btn.classList.add("show");
       } else {
         btn.classList.remove("show");
@@ -59,17 +57,15 @@ document.addEventListener('DOMContentLoaded', function () {
   // Modal
   const modalTrigger = document.querySelector("[data-modal]"),
     modal = document.querySelector(".mod"),
-    modalClose = document.querySelectorAll("[data-close]");
+    modalClose = document.querySelector("[data-close]");
 
   modalTrigger.addEventListener("click", function () {
     modal.classList.toggle("show");
     document.body.style.overflow = "hidden";
   });
-  modalClose.forEach(function (c) {
-    c.addEventListener("click", function () {
-      modal.classList.toggle("show");
-      document.body.style.overflow = "";
-    });
+  modalClose.addEventListener("click", function () {
+    modal.classList.toggle("show");
+    document.body.style.overflow = "";
   });
   modal.addEventListener("click", function (e) {
     if (e.target === modal) {

@@ -1,17 +1,18 @@
-const {Router} = require("express");
+const router = require("express").Router();
 const bcrypt = require("bcryptjs");
-const auth = require("../middleware/auth");
-const promisify = require("../middleware/promisify");
-const User = require("../models/user");
-const router = Router();
-
-const noAuth = (req, res, next) => {
-  if(req.session.isAuthenticated) {
-    req.flash("msg", "Ви вже зареєстровані");
-    return res.redirect("/");
-  }
-  next();
-};
+const {
+  auth,
+  promisify,
+  noAuth
+} = require("../middleware");
+const {
+  WRONG_LOGIN_OR_PASSWORD,
+  EXISTING_USER,
+  NOT_EXISTING_USER,
+  PASSWORDS_NOT_MATCH,
+  SUCCESS
+} = require("../constants");
+const {User} = require("../models");
 
 // login
 router.get("/login", noAuth, promisify((req, res) => {
@@ -31,7 +32,11 @@ router.post("/login", promisify(async (req, res) => {
   if (candidate) {
     const isSame = await bcrypt.compare(password, candidate.password);
     if (isSame) {
-      session.user = candidate;
+      session.user = {
+        id: candidate.id,
+        login: candidate.login,
+        name: candidate.name
+      };
       session.isAuthenticated = true;
       session.save(err => {
         if (err) {
@@ -40,11 +45,11 @@ router.post("/login", promisify(async (req, res) => {
         return res.redirect("/");
       });
     } else {
-      req.flash("loginErr", "Неправильний логін чи пароль");
+      req.flash("loginErr", WRONG_LOGIN_OR_PASSWORD);
       return res.redirect("/auth/login#login");
     }
   } else {
-    req.flash("loginErr", "Такого користувача не існує");
+    req.flash("loginErr", NOT_EXISTING_USER);
     return res.redirect("/auth/login#login");
   }
 }));
@@ -59,12 +64,12 @@ router.post("/register", noAuth, promisify(async (req, res) => {
   const {name, login, password, confirm} = req.body;
 
   if (password !== confirm) {
-    req.flash("registerErr", "Паролі мають співпадати");
+    req.flash("registerErr", PASSWORDS_NOT_MATCH);
     return res.status(422).redirect("/auth/login#register");
   }
   const candidate = await User.findOne({login});
   if (candidate) {
-    req.flash("registerErr", "Користувач вже існує");
+    req.flash("registerErr", EXISTING_USER);
     res.status(422).redirect("/auth/login#register");
   } else {
     const hashPassword = await bcrypt.hash(password, 10);
@@ -75,7 +80,7 @@ router.post("/register", noAuth, promisify(async (req, res) => {
     });
     await user.save();
 
-    req.flash("msg", "Ви успішно зареєструвалися");
+    req.flash("msg", SUCCESS);
     res.redirect("/auth/login#login");
   }
 }));

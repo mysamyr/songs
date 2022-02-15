@@ -340,12 +340,7 @@ const lit = `
         помилує і спасе нас, як благий і чоловіколюбець.</p>
     <p class="choir">Амі́нь.</p>
   </div>
-  <div class="buttons">
-    <form action="/" method="GET">
-      <button class="btn goHome">На головну</button>
-    </form>
-    </div>
-  <div class="mod">
+  <div id="modal1" class="mod">
     <div class="mod_content">
       <i class="material-icons" data-close>clear</i>
       <h3>Причасні</h3>
