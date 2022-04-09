@@ -13,6 +13,9 @@ const {
   Category,
   User
 } = require("../models");
+const {
+  separateCategories
+} = require("../helpers/songs.helper");
 
 // Add new song
 router.get("/add", auth, promisify(async (req, res) => {
@@ -61,17 +64,7 @@ router.get("/edit/:id", auth, promisify(async (req, res) => {
   const song = await Song.findOne({_id: id});
   const allCategories = await Category.find();
 
-  const {currents, categories} = allCategories.reduce((acc, c) => {
-    if (song.categories.includes(c._id)) {
-      acc.currents.push({name: c.name});
-    } else {
-      acc.categories.push({name: c.name})
-    }
-    return acc;
-  }, {
-    currents: [],
-    categories: []
-  });
+  const {currents, categories} = separateCategories(allCategories, song);
 
   res.render("edit_song", {
     title: "Редагувати пісню",

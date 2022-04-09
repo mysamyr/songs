@@ -13,6 +13,9 @@ const {
   Category,
   Song
 } = require("../models");
+const {
+  sortSongs
+} = require("../helpers/category.helper");
 
 // Categories
 router.get("/", promisify(async (req, res) => {
@@ -90,15 +93,7 @@ router.get("/:id", promisify(async (req, res, next) => {
     isSong: true,
     categoryName: dbCategories.name,
     categoryId: dbCategories._id,
-    songs: songs.map(i => i.toObject()).sort((x, y) => {
-      if (x.name < y.name) {
-        return -1;
-      }
-      if (x.name > y.name) {
-        return 1;
-      }
-      return 0;
-    }),
+    songs: sortSongs(songs),
     err: req.flash("err"),
   });
 }));

@@ -144,6 +144,13 @@ pre {
     display: none;
 }
 
+#search {
+    width: 200px;
+}
+.search-container {
+    text-align: right;
+}
+
 @media only screen and (max-width: 992px) {
     nav {
         padding: 0;

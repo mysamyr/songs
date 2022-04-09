@@ -3,18 +3,23 @@
 {{/if}}
 
 <h1>{{categoryName}}</h1>
+<div class="search-container">
+    <input type="text" id="search" placeholder="шукати пісню...">
+</div>
 
-{{#if songs.length}}
-    {{#each songs}}
-        <div class="card">
-            <div class="card-content">
-                <a href="/song/{{id}}">{{name}}</a>
+<div class="songs">
+    {{#if songs.length}}
+        {{#each songs}}
+            <div class="card">
+                <div class="card-content">
+                    <a href="/song/{{id}}" class="song">{{name}}</a>
+                </div>
             </div>
-        </div>
-    {{/each}}
-{{else}}
-    <p>Поки пісень для даної категорії не додали</p>
-{{/if}}
+        {{/each}}
+    {{else}}
+        <p>Поки пісень для даної категорії не додали</p>
+    {{/if}}
+</div>
 
 <div class="buttons">
     <a href="/category" class="btn goHome">До списку категорій</a>
