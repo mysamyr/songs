@@ -1,4 +1,4 @@
-node_modules
+/node_modules
 .idea
-keys/keys-dev.js
-public/dist/bundle.js.map
+/keys/keys-dev.js
+/public/dist/bundle.js.map
