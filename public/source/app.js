@@ -27,12 +27,12 @@ document.addEventListener("DOMContentLoaded", function () {
   if (flashAlert) {
     setTimeout(function () {
       flashAlert.remove();
-    }, 3000);
+    }, 5000);
   }
   if (flashMsg) {
     setTimeout(function () {
       flashMsg.remove();
-    }, 3000);
+    }, 5000);
   }
 
   // Templates view

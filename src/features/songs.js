@@ -1,13 +1,16 @@
 const router = require("express").Router();
 const {
   auth,
-  promisify
+  promisify,
+  isValid
 } = require("../middleware");
 const {
-  DELETED_CATEGORY,
   LOGIN_PLEASE,
+} = require("../constants/error-messages");
+const {
+  DELETED_CATEGORY,
   SUCCESS_DELETE_SONG
-} = require("../constants");
+} = require("../constants/messages");
 const {
   Song,
   Category,
@@ -18,21 +21,28 @@ const {
 } = require("../helpers/songs.helper");
 
 // Add new song
-router.get("/add", auth, promisify(async (req, res) => {
-  const categories = await Category.find();
+router.get("/add", auth, isValid, promisify(async (req, res) => {
   const {current} = req.query;
+
+  const categories = await Category.find();
+  if (!categories?.length) {
+    req.flash("err", DELETED_CATEGORY);
+    res.render("", {
+
+    });
+  }
 
   res.render("new_song", {
     title: "Додати пісню",
     isSong: true,
     current,
     categories: categories.map(i => i.toObject()),
-    err: req.flash("err")
+    err: req.flash("err"),
   });
 }));
 router.post("/add", promisify(async (req, res) => {
   const {categories, name, text} = req.body;
-  const {login} = req.session.user;
+  const {email} = req.session.user;
 
   const catArray = Array.isArray(categories)
     ? categories
@@ -45,7 +55,7 @@ router.post("/add", promisify(async (req, res) => {
     res.redirect("/song/add");
   }
 
-  const user = await User.findOne({login});
+  const user = await User.findOne({email});
   const song = await new Song({
     name,
     text,
@@ -58,7 +68,7 @@ router.post("/add", promisify(async (req, res) => {
 }));
 
 // Edit existing song
-router.get("/edit/:id", auth, promisify(async (req, res) => {
+router.get("/edit/:id", auth, isValid, promisify(async (req, res) => {
   const {id} = req.params;
 
   const song = await Song.findOne({_id: id});
@@ -100,7 +110,7 @@ router.post("/edit/:id", promisify(async (req, res) => {
 }));
 
 // Delete song
-router.post("/delete/:id", auth, promisify(async (req, res) => {
+router.post("/delete/:id", auth, isValid, promisify(async (req, res) => {
   const {id} = req.params;
 
   const song = await Song.findOneAndDelete({_id: id});

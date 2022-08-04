@@ -1,14 +1,17 @@
 const router = require("express").Router();
 const {
   auth,
-  promisify
+  promisify,
+  isValid
 } = require("../middleware");
 const {
   EXISTING_CATEGORY,
+  SONGS_INSIDE_CATEGORY,
+} = require("../constants/error-messages");
+const {
   SUCCESS_CREATE_CATEGORY,
   SUCCESS_DELETE_CATEGORY,
-  SONGS_INSIDE_CATEGORY
-} = require("../constants");
+} = require("../constants/messages");
 const {
   Category,
   Song
@@ -30,7 +33,7 @@ router.get("/", promisify(async (req, res) => {
 }));
 
 // Add new category
-router.get("/add", auth, promisify((req, res) => {
+router.get("/add", auth, isValid, promisify((req, res) => {
   res.render("new_category", {
     title: "Додати нову категорію",
     isSong: true,
@@ -58,7 +61,7 @@ router.post("/add", promisify(async (req, res) => {
 }));
 
 // Delete category
-router.get("/delete/:id", auth, promisify(async (req, res) => {
+router.get("/delete/:id", auth, isValid, promisify(async (req, res) => {
   const {id} = req.params;
 
   const categorySongs = await Song.find({

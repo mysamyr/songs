@@ -3,7 +3,7 @@ module.exports.separateCategories = (categories, song) => {
     if (song.categories.includes(c._id)) {
       acc.currents.push({name: c.name});
     } else {
-      acc.categories.push({name: c.name})
+      acc.categories.push({name: c.name});
     }
     return acc;
   }, {

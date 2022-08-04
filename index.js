@@ -7,23 +7,27 @@ const express = require("express"),
   session = require("express-session"),
   MongoStore = require("connect-mongodb-session")(session),
   flash = require("connect-flash");
-const homeRoute = require("./features/home"),
-  categoryRoute = require("./features/category"),
-  songRoute = require("./features/songs"),
-  authRoute = require("./features/auth");
-const keys = require("./keys");
-const {variable, h404} = require("./middleware");
+const homeRoute = require("./src/features/home"),
+  categoryRoute = require("./src/features/category"),
+  songRoute = require("./src/features/songs"),
+  authRoute = require("./src/features/auth");
+const {
+  PORT,
+  MONGODB_URI,
+  SESSION_SECRET,
+} = require("./src/keys");
+const {variable, h404} = require("./src/middleware");
 
 const app = express();
 const hbs = expHbs.create({
   defaultLayout: "main",
   extname: "hbs",
-  helpers: require("./utils/hbs.helpers"),
+  helpers: require("./src/utils/hbs.helpers"),
   allowProtoMethodsByDefault: true,
 });
 const store = new MongoStore({
   collection: "sessions",
-  uri: keys.MONGODB_URI,
+  uri: MONGODB_URI,
 });
 
 app.engine("hbs", hbs.engine);
@@ -33,7 +37,7 @@ app.set("view engine", "hbs");
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({extended: true}));
 app.use(session({
-  secret: keys.SESSION_SECRET,
+  secret: SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
   store,
@@ -52,15 +56,13 @@ app.use(h404);
 
 const start = async () => {
   try {
-    await mongoose.connect(keys.MONGODB_URI, {
+    await mongoose.connect(MONGODB_URI, {
       useNewUrlParser: true,
     }, (err) => {
-      if (err) {
-        console.log(err);
-      }
+      if (err) console.log(err);
     });
-    app.listen(keys.PORT, () => {
-      console.log(`Server is running on port ${keys.PORT}`);
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
     });
   } catch (e) {
     console.log(e);

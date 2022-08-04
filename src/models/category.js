@@ -16,14 +16,14 @@ const categorySchema = new Schema({
     required: true,
   },
   created_by: {
-    type: Object,
+    type: String,
     required: true
   },
   created_at: {
     type: Date,
     required: true,
-    default: new Date()
-  }
+    default: new Date(),
+  },
 }, opts);
 
 module.exports = model("Category", categorySchema);
