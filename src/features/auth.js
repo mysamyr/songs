@@ -40,7 +40,7 @@ router.post("/login", promisify(async (req, res) => {
         name: candidate.name
       };
       session.isAuthenticated = true;
-      session.isValidated = true;
+      session.isValidated = candidate.verified;
       session.save(err => {
         if (err) console.log(err);
         return res.redirect("/");

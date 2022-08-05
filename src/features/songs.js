@@ -6,6 +6,7 @@ const {
 } = require("../middleware");
 const {
   LOGIN_PLEASE,
+  NO_CATEGORIES
 } = require("../constants/error-messages");
 const {
   DELETED_CATEGORY,
@@ -26,10 +27,9 @@ router.get("/add", auth, isValid, promisify(async (req, res) => {
 
   const categories = await Category.find();
   if (!categories?.length) {
-    req.flash("err", DELETED_CATEGORY);
-    res.render("", {
-
-    });
+    req.flash("msg", NO_CATEGORIES);
+    res.redirect("/category");
+    return;
   }
 
   res.render("new_song", {

@@ -29,7 +29,7 @@ module.exports = {
   isValid: (req, res, next) => {
     if (!req.session.isValidated) {
       req.flash("msg", VALIDATE_ACCOUNT);
-      return res.redirect("/");
+      return res.redirect("/category");
     }
     next();
   },
