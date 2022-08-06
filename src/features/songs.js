@@ -110,7 +110,7 @@ router.post("/edit/:id", promisify(async (req, res) => {
 }));
 
 // Delete song
-router.post("/delete/:id", auth, isValid, promisify(async (req, res) => {
+router.get("/delete/:id", auth, isValid, promisify(async (req, res) => {
   const {id} = req.params;
 
   const song = await Song.findOneAndDelete({_id: id});

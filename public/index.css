@@ -14,7 +14,7 @@ h3 {
 
 em {
     display: block;
-    margin-top: 100px;
+    margin: 100px 0 20px 0;
     text-align: center;
 }
 
@@ -101,14 +101,16 @@ pre {
     background-color: rgba(0, 0, 0, .5);
 }
 .mod_content {
+    position: relative;
+    top: 10%;
     width: 100%;
-    max-width: 800px;
-    margin: 40px auto;
+    max-width: 700px;
+    max-height: 80vh;
+    margin: 0 auto;
     padding: 1rem;
     background-color: #fff;
     border: 1px solid rgba(0, 0, 0, .2);
     border-radius: 4px;
-    max-height: 80vh;
     overflow-y: auto;
 }
 .mod_content h3 {
@@ -121,20 +123,23 @@ pre {
     float: left;
     cursor: pointer;
 }
+.mod_content .buttons {
+    margin: 0 auto;
+}
 
 .arr_top {
     display: none;
-    height:40px;
-    width:40px;
+    height: 40px;
+    width: 40px;
     color: #ccc;
-    border:2px solid #ccc;
+    border: 2px solid #ccc;
     border-radius: 50%;
-    text-align:center;
+    text-align: center;
     line-height: 34px;
-    position:fixed;
-    bottom:50px;
-    right:50px;
-    cursor:pointer;
+    position: fixed;
+    bottom: 50px;
+    right: 50px;
+    cursor: pointer;
 }
 
 .show {
@@ -170,7 +175,7 @@ pre {
     }
 
     .arr_top {
-        bottom:20px;
-        right:20px;
+        bottom: 20px;
+        right: 20px;
     }
 }

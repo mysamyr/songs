@@ -67,16 +67,22 @@ document.addEventListener("DOMContentLoaded", function () {
   // Modal
   const modalTrigger = document.querySelector("[data-modal]"),
     modal = document.querySelector(".mod"),
-    modalClose = document.querySelector("[data-close]");
+    modalClose = document.querySelectorAll("[data-close]");
 
   if (modalTrigger) {
+    const applyButton = document.querySelector("#apply");
     modalTrigger.addEventListener("click", function () {
+      if (modalTrigger.dataset.modal && applyButton) {
+        applyButton.href = modalTrigger.dataset.modal;
+      }
       modal.classList.toggle("show");
       document.body.style.overflow = "hidden";
     });
-    modalClose.addEventListener("click", function () {
-      modal.classList.toggle("show");
-      document.body.style.overflow = "";
+    modalClose.forEach(function (close) {
+      close.addEventListener("click", function () {
+        modal.classList.toggle("show");
+        document.body.style.overflow = "";
+      });
     });
     modal.addEventListener("click", function (e) {
       if (e.target === modal) {
@@ -88,14 +94,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Search
   let searchField = document.querySelector("#search"),
-  songsContainer = document.querySelector(".songs"),
-  songs = document.querySelectorAll(".song");
+    songsContainer = document.querySelector(".songs"),
+    songs = document.querySelectorAll(".song");
   if (searchField) {
     searchField.addEventListener("input", function () {
       if (songs.length) {
         const searchValue = searchField.value.toLowerCase();
         const filteredSongs = [];
-        songs.forEach(function (song){
+        songs.forEach(function (song) {
           if (song.text.toLowerCase().includes(searchValue)) {
             filteredSongs.push(song);
           }
@@ -104,13 +110,13 @@ document.addEventListener("DOMContentLoaded", function () {
           songsContainer.innerHTML = "Пісень не знайдено";
         } else if (!searchValue.length) {
           songsContainer.innerHTML = "";
-          songs.forEach(function (song){
+          songs.forEach(function (song) {
             const songCard = makeSongsContainer(song);
             songsContainer.appendChild(songCard);
           });
         } else {
           songsContainer.innerHTML = "";
-          filteredSongs.forEach(function (song){
+          filteredSongs.forEach(function (song) {
             const songCard = makeSongsContainer(song);
             songsContainer.appendChild(songCard);
           });

@@ -8,9 +8,9 @@
         <a href="/category" class="btn goHome">До категорій</a>
         {{#if isAuthor}}
             <a href="/song/edit/{{id}}" class="btn">Редагувати</a>
-            <form action="/song/delete/{{id}}" method="POST">
-                <button class="btn red">Видалити</button>
-            </form>
+            <button class="btn red" data-modal="/song/delete/{{id}}">Видалити</button>
         {{/if}}
     </div>
 </div>
+
+{{> modal}}
