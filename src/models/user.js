@@ -1,4 +1,4 @@
-const {Schema, model} = require("mongoose");
+const { Schema, model } = require("mongoose");
 
 const opts = {
   toObject: {
@@ -7,31 +7,34 @@ const opts = {
   toJSON: {
     virtuals: true,
   },
-  collection: "user"
+  collection: "user",
 };
 
-const userSchema = new Schema({
-  name: {
-    type: String,
-    required: true,
+const userSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    link: {
+      type: String,
+    },
+    verified: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
   },
-  email: {
-    type: String,
-    required: true,
-    unique: true
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-  link: {
-    type: String,
-  },
-  verified: {
-    type: Boolean,
-    required: true,
-    default: false
-  },
-}, opts);
+  opts,
+);
 
 module.exports = model("User", userSchema);

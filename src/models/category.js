@@ -1,4 +1,4 @@
-const {Schema, model} = require("mongoose");
+const { Schema, model } = require("mongoose");
 
 const opts = {
   toObject: {
@@ -7,23 +7,26 @@ const opts = {
   toJSON: {
     virtuals: true,
   },
-  collection: "category"
+  collection: "category",
 };
 
-const categorySchema = new Schema({
-  name: {
-    type: String,
-    required: true,
+const categorySchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    created_by: {
+      type: String,
+      required: true,
+    },
+    created_at: {
+      type: Date,
+      required: true,
+      default: new Date(),
+    },
   },
-  created_by: {
-    type: String,
-    required: true
-  },
-  created_at: {
-    type: Date,
-    required: true,
-    default: new Date(),
-  },
-}, opts);
+  opts,
+);
 
 module.exports = model("Category", categorySchema);

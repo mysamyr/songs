@@ -1,4 +1,4 @@
-const {Schema, model} = require("mongoose");
+const { Schema, model } = require("mongoose");
 
 const opts = {
   toObject: {
@@ -10,29 +10,41 @@ const opts = {
   collection: "song",
 };
 
-const songSchema = new Schema({
-  name: {
-    type: String,
-    required: true,
+const songSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    author: {
+      type: String,
+      required: true,
+    },
+    text: {
+      type: String,
+      required: true,
+    },
+    categories: {
+      type: [String],
+      required: true,
+      default: [],
+    },
+    created_at: {
+      type: Date,
+      required: true,
+      default: new Date(),
+    },
+    deleted: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+    deleted_at: {
+      type: Date,
+      required: false,
+    },
   },
-  author: {
-    type: String,
-    required: true,
-  },
-  text: {
-    type: String,
-    required: true,
-  },
-  categories: {
-    type: [String],
-    required: true,
-    default: [],
-  },
-  created_at: {
-    type: Date,
-    required: true,
-    default: new Date(),
-  },
-}, opts);
+  opts,
+);
 
 module.exports = model("Song", songSchema);

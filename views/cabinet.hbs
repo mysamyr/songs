@@ -1,0 +1,57 @@
+{{#if err}}
+    <p class="msg alert">{{err}}</p>
+{{/if}}
+{{#if msg}}
+    <p class="msg">{{msg}}</p>
+{{/if}}
+
+<h1>Персональний кабінет</h1>
+
+<div class="personal-info">
+    <div class="personal-info-line">
+        <b>Ім'я:</b> <i class="tiny material-icons help" title="Щоб змінити ім'я зверніться до адміністрації">help_outline</i>
+        <p>{{user.name}}</p>
+    </div>
+    <div class="personal-info-line">
+        <b>Електронна пошта: </b>
+        <div id="button-container">
+            <form action="/cabinet/email" method="POST">
+                <input type="email"
+                       name="email"
+                       id="email"
+                       class="validate"
+                       required
+                       value={{user.email}}>
+                <div class="personal-info-btns">
+                    <button class="btn">Зберегти</button>
+                    <button id="email-reset" class="btn red">Відмінити</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="personal-info-line">
+        <b>Пароль:</b>
+        <form action="/cabinet/password" method="POST" id="password">
+            <p>Теперішній пароль</p>
+            <input type="password"
+                   name="password"
+                   placeholder="Введіть пароль"
+                   class="validate"
+            required>
+            <p>Новий пароль</p>
+            <input type="password"
+                   name="newPassword"
+                   placeholder="Введіть новий пароль"
+                   class="validate"
+            required>
+            <p>Підтвердження паролю</p>
+            <input type="password"
+                   name="confirmPassword"
+                   placeholder="Введіть новий пароль знову"
+                   class="validate"
+            required>
+            <button class="btn">Зберегти</button>
+            <button id="password-reset" class="btn red">Відмінити</button>
+        </form>
+    </div>
+</div>

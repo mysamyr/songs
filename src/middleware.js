@@ -1,17 +1,22 @@
-const { VALIDATE_ACCOUNT, LOGGED_IN, LOGIN_PLEASE } = require("./constants/error-messages");
+const {
+  VALIDATE_ACCOUNT,
+  LOGGED_IN,
+  LOGIN_PLEASE,
+} = require("./constants/error-messages");
 
 module.exports = {
   auth: (req, res, next) => {
-  if (!req.session.isAuthenticated) {
-    req.flash("msg", LOGIN_PLEASE);
-    return res.redirect("/auth/login");
-  }
-  next();
-},
-  promisify: (fn) => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next),
+    if (!req.session.isAuthenticated) {
+      req.flash("msg", LOGIN_PLEASE);
+      return res.redirect("/auth/login");
+    }
+    next();
+  },
+  promisify: (fn) => (req, res, next) =>
+    Promise.resolve(fn(req, res, next)).catch(next),
   h404: (req, res, next) => {
     res.status(404).render("404", {
-      title: "Page not found"
+      title: "Page not found",
     });
   },
   // variable for client to know that user is logged in

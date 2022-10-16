@@ -37,6 +37,7 @@ pre {
     justify-content: space-around;
     margin-bottom: 10px;
     padding: 20px;
+    width: 100%;
 }
 
 .goHome {
@@ -156,6 +157,19 @@ pre {
     text-align: right;
 }
 
+/*.personal-info {*/
+
+/*}*/
+.personal-info-line {
+    margin: 20px 0;
+}
+.personal-info-btns {
+    margin: 10px;
+}
+.help {
+    color: #999;
+}
+
 @media only screen and (max-width: 992px) {
     nav {
         padding: 0;
@@ -177,5 +191,9 @@ pre {
     .arr_top {
         bottom: 20px;
         right: 20px;
+    }
+
+    .help {
+        display: none;
     }
 }

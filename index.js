@@ -9,6 +9,7 @@ const express = require("express"),
   flash = require("connect-flash");
 const homeRoute = require("./src/features/home"),
   categoryRoute = require("./src/features/category"),
+  cabinetRoute = require("./src/features/cabinet"),
   songRoute = require("./src/features/songs"),
   authRoute = require("./src/features/auth");
 const {
@@ -51,6 +52,7 @@ app.use("/", homeRoute);
 app.use("/category", categoryRoute);
 app.use("/song", songRoute);
 app.use("/auth", authRoute);
+app.use("/cabinet", cabinetRoute);
 
 app.use(h404);
 
