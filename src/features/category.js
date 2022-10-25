@@ -77,7 +77,6 @@ router.get(
 
     if (!categorySongs.length) {
       const category = await Category.findOneAndDelete({ _id: id });
-      await category.deleteOne();
 
       req.flash("msg", SUCCESS_DELETE_CATEGORY(category.name));
       res.redirect("/category");

@@ -7,9 +7,7 @@
 {{#if categories.length}}
     {{#each categories}}
         <div class="card">
-            <div class="card-content">
-                <a href="/category/{{id}}">{{name}}</a>
-            </div>
+            <a href="/category/{{id}}" class="card-content">{{name}}</a>
         </div>
     {{/each}}
 {{else}}

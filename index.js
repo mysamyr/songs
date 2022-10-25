@@ -4,6 +4,7 @@ const express = require("express"),
   helmet = require("helmet"),
   compression = require("compression"),
   expHbs = require("express-handlebars"),
+  cors = require("cors"),
   session = require("express-session"),
   MongoStore = require("connect-mongodb-session")(session),
   flash = require("connect-flash");
@@ -37,6 +38,10 @@ app.set("view engine", "hbs");
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({extended: true}));
+app.use(helmet());
+app.use(cors({origin: "*"}));
+app.use(compression());
+app.use(flash());
 app.use(session({
   secret: SESSION_SECRET,
   resave: false,
@@ -44,9 +49,6 @@ app.use(session({
   store,
 }));
 app.use(variable);
-app.use(helmet());
-app.use(compression());
-app.use(flash());
 
 app.use("/", homeRoute);
 app.use("/category", categoryRoute);

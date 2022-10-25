@@ -74,7 +74,6 @@ router.post(
   "/password",
   auth,
   promisify(async (req, res) => {
-    console.log(req.body);
     const {
       session: { user },
     } = req;

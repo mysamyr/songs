@@ -1,3 +1,7 @@
+body {
+    margin: 0;
+}
+
 h1 {
     font-size: 2.5rem;
 }
@@ -25,6 +29,10 @@ nav {
 
 pre {
     text-align: center;
+}
+
+a {
+    text-decoration: none;
 }
 
 .author {
@@ -60,11 +68,8 @@ pre {
     background-color: #8f0f0f !important;
 }
 
-.auth {
-    padding: 1rem;
-}
-#login, #register {
-    padding-top: 1rem;
+.tabs-container {
+    margin: 10px;
 }
 
 .msg {
@@ -151,15 +156,12 @@ pre {
 }
 
 #search {
+    display: block;
     width: 200px;
-}
-.search-container {
     text-align: right;
+    margin: 0 0 0 auto;
 }
 
-/*.personal-info {*/
-
-/*}*/
 .personal-info-line {
     margin: 20px 0;
 }
@@ -170,7 +172,24 @@ pre {
     color: #999;
 }
 
+.container {
+    width: 70%;
+}
+.card {
+    margin: 0.5rem 0 1rem 0;
+    background-color: #fff;
+    border-radius: 2px;
+}
+.card .card-content {
+    display: block;
+    padding: 24px;
+}
+
 @media only screen and (max-width: 992px) {
+    html {
+        font-size: 14px;
+    }
+
     nav {
         padding: 0;
     }

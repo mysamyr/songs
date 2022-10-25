@@ -2,12 +2,10 @@ import M from "materialize-css";
 import {lit, pan} from "./text";
 
 const makeSongsContainer = (song) => {
-  const songContent = document.createElement("div");
-  songContent.classList.add("card-content");
-  songContent.append(song);
   const songCard = document.createElement("div");
   songCard.classList.add("card");
-  songCard.append(songContent);
+  songCard.append(song);
+
   return songCard;
 };
 const modal = () => {
@@ -16,56 +14,60 @@ const modal = () => {
   const modalClose = document.querySelectorAll("[data-close]");
   const applyButton = document.querySelector("#apply");
 
-  modalTrigger.addEventListener("click", () => {
-    if (modalTrigger.dataset.modal && applyButton) {
-      applyButton.href = modalTrigger.dataset.modal;
-    }
-    modal.classList.toggle("show");
-    document.body.style.overflow = "hidden";
-  });
-  modalClose.forEach((close) => {
-    close.addEventListener("click", () => {
+  if (modalTrigger) {
+    modalTrigger.addEventListener("click", () => {
+      if (modalTrigger.dataset.modal && applyButton) {
+        applyButton.href = modalTrigger.dataset.modal;
+      }
       modal.classList.toggle("show");
-      document.body.style.overflow = "";
+      document.body.style.overflow = "hidden";
     });
-  });
-  modal.addEventListener("click", (e) => {
-    if (e.target === modal) {
-      modal.classList.toggle("show");
-      document.body.style.overflow = "";
-    }
-  });
+    modalClose.forEach((close) => {
+      close.addEventListener("click", () => {
+        modal.classList.toggle("show");
+        document.body.style.overflow = "";
+      });
+    });
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        modal.classList.toggle("show");
+        document.body.style.overflow = "";
+      }
+    });
+  }
 };
 const search = () => {
   const searchField = document.querySelector("#search");
   const songsContainer = document.querySelector(".songs");
   const songs = document.querySelectorAll(".song");
-  searchField.addEventListener("input", () => {
-    if (songs.length) {
-      const searchValue = searchField.value.toLowerCase();
-      const filteredSongs = [];
-      songs.forEach((song) => {
-        if (song.text.toLowerCase().includes(searchValue)) {
-          filteredSongs.push(song);
-        }
-      });
-      if (!filteredSongs.length) {
-        songsContainer.innerHTML = "Пісень не знайдено";
-      } else if (!searchValue.length) {
-        songsContainer.innerHTML = "";
+  if (searchField) {
+    searchField.addEventListener("input", () => {
+      if (songs.length) {
+        const searchValue = searchField.value.toLowerCase();
+        const filteredSongs = [];
         songs.forEach((song) => {
-          const songCard = makeSongsContainer(song);
-          songsContainer.appendChild(songCard);
+          if (song.text.toLowerCase().includes(searchValue)) {
+            filteredSongs.push(song);
+          }
         });
-      } else {
-        songsContainer.innerHTML = "";
-        filteredSongs.forEach((song) => {
-          const songCard = makeSongsContainer(song);
-          songsContainer.appendChild(songCard);
-        });
+        if (!filteredSongs.length) {
+          songsContainer.innerHTML = "Пісень не знайдено";
+        } else if (!searchValue.length) {
+          songsContainer.innerHTML = "";
+          songs.forEach((song) => {
+            const songCard = makeSongsContainer(song);
+            songsContainer.appendChild(songCard);
+          });
+        } else {
+          songsContainer.innerHTML = "";
+          filteredSongs.forEach((song) => {
+            const songCard = makeSongsContainer(song);
+            songsContainer.appendChild(songCard);
+          });
+        }
       }
-    }
-  });
+    });
+  }
 };
 const arrow = () => {
   const btn = document.createElement("i");
@@ -204,7 +206,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       break;
     case "song":
-      if (pageName[2] === "add") {
+      if (pageName[2] === "add" || pageName[2] === "edit") {
         M.FormSelect.init(document.querySelectorAll("select"));
       } else {
         modal();
