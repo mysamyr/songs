@@ -1,3 +1,7 @@
+body {
+    margin: 0;
+}
+
 h1 {
     font-size: 2.5rem;
 }
@@ -14,7 +18,7 @@ h3 {
 
 em {
     display: block;
-    margin-top: 100px;
+    margin: 100px 0 20px 0;
     text-align: center;
 }
 
@@ -27,6 +31,10 @@ pre {
     text-align: center;
 }
 
+a {
+    text-decoration: none;
+}
+
 .author {
     text-align: right;
     margin-right: 10%;
@@ -37,6 +45,7 @@ pre {
     justify-content: space-around;
     margin-bottom: 10px;
     padding: 20px;
+    width: 100%;
 }
 
 .goHome {
@@ -59,11 +68,8 @@ pre {
     background-color: #8f0f0f !important;
 }
 
-.auth {
-    padding: 1rem;
-}
-#login, #register {
-    padding-top: 1rem;
+.tabs-container {
+    margin: 10px;
 }
 
 .msg {
@@ -101,14 +107,16 @@ pre {
     background-color: rgba(0, 0, 0, .5);
 }
 .mod_content {
+    position: relative;
+    top: 10%;
     width: 100%;
-    max-width: 800px;
-    margin: 40px auto;
+    max-width: 700px;
+    max-height: 80vh;
+    margin: 0 auto;
     padding: 1rem;
     background-color: #fff;
     border: 1px solid rgba(0, 0, 0, .2);
     border-radius: 4px;
-    max-height: 80vh;
     overflow-y: auto;
 }
 .mod_content h3 {
@@ -121,20 +129,23 @@ pre {
     float: left;
     cursor: pointer;
 }
+.mod_content .buttons {
+    margin: 0 auto;
+}
 
 .arr_top {
     display: none;
-    height:40px;
-    width:40px;
+    height: 40px;
+    width: 40px;
     color: #ccc;
-    border:2px solid #ccc;
+    border: 2px solid #ccc;
     border-radius: 50%;
-    text-align:center;
+    text-align: center;
     line-height: 34px;
-    position:fixed;
-    bottom:50px;
-    right:50px;
-    cursor:pointer;
+    position: fixed;
+    bottom: 50px;
+    right: 50px;
+    cursor: pointer;
 }
 
 .show {
@@ -145,13 +156,40 @@ pre {
 }
 
 #search {
+    display: block;
     width: 200px;
-}
-.search-container {
     text-align: right;
+    margin: 0 0 0 auto;
+}
+
+.personal-info-line {
+    margin: 20px 0;
+}
+.personal-info-btns {
+    margin: 10px;
+}
+.help {
+    color: #999;
+}
+
+.container {
+    width: 70%;
+}
+.card {
+    margin: 0.5rem 0 1rem 0;
+    background-color: #fff;
+    border-radius: 2px;
+}
+.card .card-content {
+    display: block;
+    padding: 24px;
 }
 
 @media only screen and (max-width: 992px) {
+    html {
+        font-size: 14px;
+    }
+
     nav {
         padding: 0;
     }
@@ -170,7 +208,11 @@ pre {
     }
 
     .arr_top {
-        bottom:20px;
-        right:20px;
+        bottom: 20px;
+        right: 20px;
+    }
+
+    .help {
+        display: none;
     }
 }

@@ -3,17 +3,15 @@
 {{/if}}
 
 <h1>{{categoryName}}</h1>
-<div class="search-container">
-    <input type="text" id="search" placeholder="шукати пісню...">
-</div>
+{{#if songs.length}}
+    <input type="text" id="search" placeholder="пошук...">
+{{/if}}
 
 <div class="songs">
     {{#if songs.length}}
         {{#each songs}}
             <div class="card">
-                <div class="card-content">
-                    <a href="/song/{{id}}" class="song">{{name}}</a>
-                </div>
+                <a href="/song/{{id}}" class="card-content song">{{name}}</a>
             </div>
         {{/each}}
     {{else}}
@@ -25,6 +23,8 @@
     <a href="/category" class="btn goHome">До списку категорій</a>
     {{#if isAuth}}
         <a href="/song/add?current={{categoryName}}" class="btn">Додати нову пісню</a>
-        <a href="/category/delete/{{categoryId}}" class="btn red">Видалити категорію</a>
+        <button class="btn red" data-modal="/category/delete/{{categoryId}}">Видалити категорію</button>
     {{/if}}
 </div>
+
+{{> del-confirm}}

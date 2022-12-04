@@ -4,7 +4,7 @@
     <div class="input-field col s12">
         <select id="categories" name="categories" required multiple>
             {{#each currents}}
-                <option value="{{name}}" selected>{{name}}</option>
+                <option selected>{{name}}</option>
             {{/each}}
             {{#each categories}}
                 <option>{{name}}</option>
@@ -16,7 +16,7 @@
     <div class="input-field">
         <input id="name" name="name" type="text" class="validate" required value="{{name}}">
         <label for="name">Назва пісні</label>
-        <span class="helper-text" data-error="Назва пісні"></span>
+        <span class="helper-text" data-error="введіть назву пісні"></span>
     </div>
 
     <div class="input-field">

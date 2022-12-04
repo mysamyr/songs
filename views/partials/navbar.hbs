@@ -8,6 +8,7 @@
             <li {{#if isLit}}class="active"{{/if}}><a href="/lit">Літургія</a></li>
             <li {{#if isPan}}class="active"{{/if}}><a href="/pan">Панахида</a></li>
             {{#if isAuth}}
+                <li {{#if isCab}}class="active"{{/if}}><a href="/cabinet">Кабінет</a></li>
                 <li><a href="/auth/logout">Вийти</a></li>
             {{else}}
                 <li {{#if isLogin}}class="active"{{/if}}><a href="/auth/login#login">Увійти</a></li>
@@ -22,6 +23,7 @@
     <li><a href="/lit">Літургія</a></li>
     <li><a href="/pan">Панахида</a></li>
     {{#if isAuth}}
+        <li><a href="/cabinet">Кабінет</a></li>
         <li><a href="/auth/logout">Вийти</a></li>
     {{else}}
         <li><a href="/auth/login#login">Увійти</a></li>
