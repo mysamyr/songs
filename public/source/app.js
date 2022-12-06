@@ -1,6 +1,20 @@
-import M from "materialize-css";
+// import M from "materialize-css";
 import {lit, pan} from "./text";
 
+const flash = () => {
+  const flashAlert = document.querySelector(".alert"),
+    flashMsg = document.querySelector(".msg");
+  if (flashAlert) {
+    setTimeout(() => {
+      flashAlert.remove();
+    }, 5000);
+  }
+  if (flashMsg) {
+    setTimeout(() => {
+      flashMsg.remove();
+    }, 5000);
+  }
+};
 const makeSongsContainer = (song) => {
   const songCard = document.createElement("div");
   songCard.classList.add("card");
@@ -85,39 +99,33 @@ const arrow = () => {
     document.documentElement.scrollTop = 0;
   });
 };
+const auth = () => {
+  const tabsContainer = document.querySelector(".tabs");
+  const login = document.getElementById("login");
+  const register = document.getElementById("register");
 
-const liturgy = () => {
-  const text = document.querySelector("#template");
-  text.innerHTML = lit;
-
-  arrow();
-
-  const modalTrigger = document.querySelector("[data-modal]"),
-    modal = document.querySelector(".mod"),
-    modalClose = document.querySelectorAll("[data-close]");
-
-  modalTrigger.addEventListener("click", () => {
-    modal.classList.toggle("show");
-    document.body.style.overflow = "hidden";
-  });
-  modalClose.forEach((close) => {
-    close.addEventListener("click", () => {
-      modal.classList.toggle("show");
-      document.body.style.overflow = "";
+  if (tabsContainer) {
+    const tabs = [...tabsContainer.children];
+    tabs.forEach(tab => {
+      tab.addEventListener("click", () => {
+        if (tab.dataset.ref === "login") {
+          tabs[1].classList.remove("active");
+          tab.classList.add("active");
+          login.classList.remove("hide");
+          register.classList.add("hide");
+        } else {
+          tabs[0].classList.remove("active");
+          tab.classList.add("active");
+          register.classList.remove("hide");
+          login.classList.add("hide");
+        }
+      });
     });
-  });
-  modal.addEventListener("click", (e) => {
-    if (e.target === modal) {
-      modal.classList.toggle("show");
-      document.body.style.overflow = "";
-    }
-  });
+  }
 };
-const panachyda = () => {
-  const text = document.querySelector("#template");
-  text.innerHTML = pan;
-
-  arrow();
+const text = (text) => {
+  const container = document.querySelector("#template");
+  container.innerHTML = text;
 };
 const cabinet = () => {
   const email = document.querySelector("#email");
@@ -168,32 +176,17 @@ const cabinet = () => {
 document.addEventListener("DOMContentLoaded", () => {
   const pageName = location.pathname.split("/");
 
-  // sidebar for mobile
-  M.Sidenav.init(document.querySelectorAll(".sidenav"));
-
-  // flash events
-  const flashAlert = document.querySelector(".alert"),
-    flashMsg = document.querySelector(".msg");
-  if (flashAlert) {
-    setTimeout(() => {
-      flashAlert.remove();
-    }, 5000);
-  }
-  if (flashMsg) {
-    setTimeout(() => {
-      flashMsg.remove();
-    }, 5000);
-  }
-
   switch (pageName[1]) {
     case "lit":
-      liturgy();
+      text(lit);
+      arrow();
       break;
     case "pan":
-      panachyda();
+      text(pan);
+      arrow();
       break;
     case "auth":
-      M.Tabs.init(document.querySelectorAll(".tabs"));
+      auth();
       break;
     case "cabinet":
       cabinet();
@@ -202,15 +195,10 @@ document.addEventListener("DOMContentLoaded", () => {
       // for single category
       if (pageName.length === 3) {
         search();
-        modal();
-      }
-      break;
-    case "song":
-      if (pageName[2] === "add" || pageName[2] === "edit") {
-        M.FormSelect.init(document.querySelectorAll("select"));
-      } else {
-        modal();
       }
       break;
   }
+
+  modal();
+  flash();
 });

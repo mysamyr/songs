@@ -17,7 +17,7 @@ const {
   PORT,
   MONGODB_URI,
   SESSION_SECRET,
-} = require("./src/keys");
+} = require("./src/config");
 const {variable, h404} = require("./src/middleware");
 
 const app = express();

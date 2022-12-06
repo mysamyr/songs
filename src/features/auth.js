@@ -108,7 +108,6 @@ router.get(
   "/verify/:id",
   promisify(async (req, res) => {
     const candidate = await User.findOne({ link: req.params.id });
-    console.log(candidate);
     if (!candidate) {
       return res.render("index", {
         title: "Головна",
@@ -116,10 +115,8 @@ router.get(
         msg: "Ви не змогли активувати обліковий запис.",
       });
     }
-    candidate.verified = true;
+    candidate.verify = true;
     await candidate.save();
-
-    req.session.isValidated = candidate.verified;
 
     res.render("verified", {
       title: "Вітання",

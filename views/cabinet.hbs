@@ -7,50 +7,48 @@
 
 <h1>Персональний кабінет</h1>
 
-<div class="personal-info">
-    <div class="personal-info-line">
+<div>
+    <div class="personal-info">
         <b>Ім'я:</b> <i class="tiny material-icons help" title="Щоб змінити ім'я зверніться до адміністрації">help_outline</i>
         <p>{{user.name}}</p>
     </div>
-    <div class="personal-info-line">
-        <b>Електронна пошта: </b>
-        <div id="button-container">
+    <div class="personal-info">
+        <b>Електронна пошта:</b>
             <form action="/cabinet/email" method="POST">
+                <label for="email">Змінити електронну пошту:</label>
                 <input type="email"
                        name="email"
                        id="email"
-                       class="validate"
                        required
                        value={{user.email}}>
-                <div class="personal-info-btns">
+                <div class="buttons">
                     <button class="btn">Зберегти</button>
                     <button id="email-reset" class="btn red">Відмінити</button>
                 </div>
             </form>
-        </div>
     </div>
-    <div class="personal-info-line">
+    <div class="personal-info">
         <b>Пароль:</b>
         <form action="/cabinet/password" method="POST" id="password">
-            <p>Теперішній пароль</p>
+            <label for="password">Теперішній пароль:</label>
             <input type="password"
                    name="password"
+                   id="password"
                    placeholder="Введіть пароль"
-                   class="validate"
                    required>
-            <p>Новий пароль</p>
+            <label for="newPassword">Новий пароль:</label>
             <input type="password"
                    name="newPassword"
+                   id="newPassword"
                    placeholder="Введіть новий пароль"
-                   class="validate"
                    required>
-            <p>Підтвердження паролю</p>
+            <label for="confirmPassword">Підтвердження паролю:</label>
             <input type="password"
                    name="confirmPassword"
+                   id="confirmPassword"
                    placeholder="Введіть новий пароль знову"
-                   class="validate"
                    required>
-            <div class="personal-info-btns">
+            <div class="buttons">
                 <button class="btn">Зберегти</button>
                 <button id="password-reset" class="btn red">Відмінити</button>
             </div>

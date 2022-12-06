@@ -2,10 +2,11 @@
 
 <div>
     <pre>{{text}}</pre>
+
     <p class="author">{{author}}</p>
 
     <div class="buttons">
-        <a href="/category" class="btn goHome">До категорій</a>
+        <a href="/category" class="btn blue">До категорій</a>
         {{#if isAuthor}}
             <a href="/song/edit/{{id}}" class="btn">Редагувати</a>
             <button class="btn red" data-modal="/song/delete/{{id}}">Видалити</button>
