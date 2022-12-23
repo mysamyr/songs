@@ -1,4 +1,3 @@
-// import M from "materialize-css";
 import {lit, pan} from "./text";
 
 const flash = () => {
@@ -24,7 +23,7 @@ const makeSongsContainer = (song) => {
 };
 const modal = () => {
   const modalTrigger = document.querySelector("[data-modal]");
-  const modal = document.querySelector(".mod");
+  const modal = document.querySelector(".modal");
   const modalClose = document.querySelectorAll("[data-close]");
   const applyButton = document.querySelector("#apply");
 
@@ -128,42 +127,49 @@ const text = (text) => {
   container.innerHTML = text;
 };
 const cabinet = () => {
+  const emailForm = document.querySelector("#email-form");
   const email = document.querySelector("#email");
+  console.log(email);
   const currentEmail = email.defaultValue;
+  emailForm.addEventListener("submit", e => {
+    if (email.value === currentEmail) {
+      e.preventDefault();
+    }
+    console.log("LOL")
+  })
   const emailReset = document.querySelector("#email-reset");
   emailReset.addEventListener("click", e => {
     e.preventDefault();
     email.value = currentEmail;
   });
 
-  const passwordForm = document.querySelector("#password");
+  const passwordForm = document.querySelector("#password-form");
   const passwordReset = document.querySelector("#password-reset");
   const [
-    ,
+    oldPass,
     newPass,
     confirmPass
   ] = passwordForm.getElementsByTagName("input");
 
-  newPass.addEventListener("focusout", e => {
-    if (e.target.value.trim().length < 8) {
-      e.target.classList.remove("valid");
-      e.target.classList.add("invalid");
+  oldPass.addEventListener("keyup", () => {
+    if (oldPass.value === newPass.value) {
+      newPass.classList.add("invalid");
+    } else {
+      newPass.classList.remove("invalid");
     }
-    if (e.target.value !== confirmPass.value) {
-      confirmPass.classList.remove("valid");
+  });
+  newPass.addEventListener("keyup", () => {
+    if (newPass.value.trim().length < 8 || oldPass.value === newPass.value) {
+      newPass.classList.add("invalid");
+    } else {
+      newPass.classList.remove("invalid");
+    }
+  });
+  confirmPass.addEventListener("keyup", () => {
+    if (confirmPass.value !== newPass.value) {
       confirmPass.classList.add("invalid");
     } else {
       confirmPass.classList.remove("invalid");
-      confirmPass.classList.add("valid");
-    }
-  });
-  confirmPass.addEventListener("keyup", e => {
-    if (e.target.value !== newPass.value) {
-      e.target.classList.remove("valid");
-      e.target.classList.add("invalid");
-    } else {
-      e.target.classList.remove("invalid");
-      e.target.classList.add("valid");
     }
   });
 

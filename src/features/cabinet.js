@@ -9,6 +9,7 @@ const {
   WRONG_PASSWORD,
   PASSWORDS_MATCH,
   PASSWORDS_NOT_MATCH,
+  VALIDATE_ACCOUNT,
 } = require("../constants/error-messages");
 const { User } = require("../models");
 const { getLinkForVerification } = require("../helpers/user.helper");
@@ -30,12 +31,15 @@ router.get(
     });
   }),
 );
-// перевірити чи email не повторюється, поміняти в базі email, скасувати верифікацію, відправити верифікаційний email
 router.post(
   "/email",
   auth,
   promisify(async (req, res) => {
     const { session } = req;
+    if (!session.isValidated) {
+      req.flash("err", VALIDATE_ACCOUNT);
+      return res.redirect("/cabinet");
+    }
     const newEmail = req.body.email;
     const oldEmail = session.user.email;
     // todo additional email validation
@@ -53,10 +57,7 @@ router.post(
       link,
     });
     //  override session user with new email and cancel validation
-    session.user = {
-      ...session.user,
-      email: newEmail,
-    };
+    session.user.email = newEmail;
     session.isValidated = false;
 
     await sendUpdateEmail({
@@ -69,14 +70,17 @@ router.post(
     res.redirect("/cabinet");
   }),
 );
-// перевірити пароль (і чи не той самий), поміняти в базі тільки пароль
 router.post(
   "/password",
   auth,
   promisify(async (req, res) => {
     const {
-      session: { user },
+      session: { user, isValidated }
     } = req;
+    if (!isValidated) {
+      req.flash("err", VALIDATE_ACCOUNT);
+      return res.redirect("/cabinet");
+    }
     const { password, newPassword, confirmPassword } = req.body;
     const candidate = await User.findById(user.id);
     // todo additional password validation

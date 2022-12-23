@@ -9,19 +9,22 @@
 
 <div>
     <div class="personal-info">
-        <b>Ім'я:</b> <i class="tiny material-icons help" title="Щоб змінити ім'я зверніться до адміністрації">help_outline</i>
-        <p>{{user.name}}</p>
+        <b>Ім'я:</b>
+        <input type="text"
+               disabled
+               title="Щоб змінити ім'я зверніться до адміністрації"
+               value="{{user.name}}">
     </div>
     <div class="personal-info">
         <b>Електронна пошта:</b>
-            <form action="/cabinet/email" method="POST">
+            <form action="/cabinet/email" method="POST" id="email-form">
                 <label for="email">Змінити електронну пошту:</label>
                 <input type="email"
                        name="email"
                        id="email"
                        required
                        value={{user.email}}>
-                <div class="buttons">
+                <div class="buttons_container">
                     <button class="btn">Зберегти</button>
                     <button id="email-reset" class="btn red">Відмінити</button>
                 </div>
@@ -29,7 +32,7 @@
     </div>
     <div class="personal-info">
         <b>Пароль:</b>
-        <form action="/cabinet/password" method="POST" id="password">
+        <form action="/cabinet/password" method="POST" id="password-form">
             <label for="password">Теперішній пароль:</label>
             <input type="password"
                    name="password"
@@ -48,7 +51,7 @@
                    id="confirmPassword"
                    placeholder="Введіть новий пароль знову"
                    required>
-            <div class="buttons">
+            <div class="buttons_container">
                 <button class="btn">Зберегти</button>
                 <button id="password-reset" class="btn red">Відмінити</button>
             </div>

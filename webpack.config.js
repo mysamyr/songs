@@ -2,7 +2,7 @@
 
 module.exports = {
   mode: "production",
-  entry: "./public/source/app.js",
+  entry: "./public/js/app.js",
   output: {
     filename: "bundle.js",
     path: require("path").resolve(__dirname, "public", "dist"),

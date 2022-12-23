@@ -277,7 +277,7 @@ const lit = `
     <h3>Причастя</h3>
     <p class="normal">Будьмо уважні. Святеє святим.</p>
     <p class="bold">Єди́н свят, єди́н Госпо́дь, Ісу́с Христо́с, на сла́ву Бо́га Отця́. Амі́нь.</p>
-    <span class="italic">І співають <a href="#modal1" data-modal>причасний</a>.</span>
+    <span class="italic">І співають <a href="#modal" data-modal>причасний</a>.</span>
     <h3>Молитва приготування до святого причастя:</h3>
     <p class="bold">
         Ві́рую, Го́споди, і іспові́дую, що Ти єси́ воі́стину Христо́с, Син Бо́га живо́го, що прийшо́в у світ грі́шників
@@ -340,7 +340,7 @@ const lit = `
         помилує і спасе нас, як благий і чоловіколюбець.</p>
     <p class="bold">Амі́нь.</p>
   </div>
-  <div id="modal1" class="mod">
+  <div id="modal" class="modal">
     <div class="mod_content">
       <i class="material-icons" data-close>clear</i>
       <h3>Причасні</h3>
