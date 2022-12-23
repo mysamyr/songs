@@ -1,55 +1,53 @@
-<div>
-    <div class="tabs">
-        <div class="tab active" data-ref="login"><a href="#login">Увійти</a></div>
-        <div class="tab" data-ref="register"><a href="#register">Зареєструватися</a></div>
-    </div>
-    <div id="login">
-        {{#if loginErr}}
-            <p class="msg alert">{{loginErr}}</p>
-        {{/if}}
-        {{#if msg}}
-            <p class="msg">{{msg}}</p>
-        {{/if}}
-        <form action="/auth/login" method="POST">
-            <div class="input-field">
-                <label for="email">Email</label>
-                <input id="email" name="email" type="email" class="validate" required>
-            </div>
-            <div class="input-field">
-                <label for="password">Пароль</label>
-                <input id="password" name="password" type="password" class="validate" required>
-            </div>
+<div class="tab_headers">
+    <div class="tab" data-ref="login"><a href="#login">Увійти</a></div>
+    <div class="tab" data-ref="register"><a href="#register">Зареєструватися</a></div>
+</div>
+<div id="login" class="tab_content">
+    {{#if loginErr}}
+        <p class="msg alert">{{loginErr}}</p>
+    {{/if}}
+    {{#if msg}}
+        <p class="msg">{{msg}}</p>
+    {{/if}}
+    <form action="/auth/login" method="POST">
+        <div class="input-field">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" class="validate" required>
+        </div>
+        <div class="input-field">
+            <label for="password">Пароль</label>
+            <input id="password" name="password" type="password" class="validate" required>
+        </div>
 
-            <div class="buttons">
-                <button class="btn" type="submit">Увійти</button>
-            </div>
-        </form>
-    </div>
-    <div id="register" class="hide">
-        {{#if registerErr}}
-            <p class="msg alert">{{registerErr}}</p>
-        {{/if}}
-        <form action="/auth/register" method="POST">
-            <div class="input-field">
-                <label for="name">Введіть ім'я:</label>
-                <input id="name" name="name" type="text" class="validate" required>
-            </div>
-            <div class="input-field">
-                <label for="remail">Введіть email:</label>
-                <input id="remail" name="email" type="email" class="validate" required>
-            </div>
-            <div class="input-field">
-                <label for="rpassword">Введіть пароль:</label>
-                <input id="rpassword" name="password" type="password" class="validate" required>
-            </div>
-            <div class="input-field">
-                <label for="confirm">Повторіть пароль:</label>
-                <input id="confirm" name="confirm" type="password" class="validate" required>
-            </div>
+        <div class="buttons">
+            <button class="btn" type="submit">Увійти</button>
+        </div>
+    </form>
+</div>
+<div id="register" class="tab_content">
+    {{#if registerErr}}
+        <p class="msg alert">{{registerErr}}</p>
+    {{/if}}
+    <form action="/auth/register" method="POST">
+        <div class="input-field">
+            <label for="name">Введіть ім'я:</label>
+            <input id="name" name="name" type="text" class="validate" required>
+        </div>
+        <div class="input-field">
+            <label for="remail">Введіть email:</label>
+            <input id="remail" name="email" type="email" class="validate" required>
+        </div>
+        <div class="input-field">
+            <label for="rpassword">Введіть пароль:</label>
+            <input id="rpassword" name="password" type="password" class="validate" required>
+        </div>
+        <div class="input-field">
+            <label for="confirm">Повторіть пароль:</label>
+            <input id="confirm" name="confirm" type="password" class="validate" required>
+        </div>
 
-            <div class="buttons">
-                <button class="btn" type="submit">Зареєструватися</button>
-            </div>
-        </form>
-    </div>
+        <div class="buttons">
+            <button class="btn" type="submit">Зареєструватися</button>
+        </div>
+    </form>
 </div>
