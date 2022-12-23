@@ -99,28 +99,33 @@ const arrow = () => {
   });
 };
 const auth = () => {
-  const tabsContainer = document.querySelector(".tabs");
-  const login = document.getElementById("login");
-  const register = document.getElementById("register");
+  const tabHeaders = document.querySelectorAll(".tab");
+  const tabContents = document.querySelectorAll(".tab_content");
 
-  if (tabsContainer) {
-    const tabs = [...tabsContainer.children];
-    tabs.forEach(tab => {
-      tab.addEventListener("click", () => {
-        if (tab.dataset.ref === "login") {
-          tabs[1].classList.remove("active");
-          tab.classList.add("active");
-          login.classList.remove("hide");
-          register.classList.add("hide");
-        } else {
-          tabs[0].classList.remove("active");
-          tab.classList.add("active");
-          register.classList.remove("hide");
-          login.classList.add("hide");
-        }
-      });
+  const hideTabs = () => {
+    tabContents.forEach(tab => {
+      tab.classList.add("hide");
     });
-  }
+    tabHeaders.forEach(header => {
+      header.classList.remove("tab_active");
+    });
+  };
+  const showTab = (i = 0) => {
+    tabContents[i].classList.remove("hide");
+    tabHeaders[i].classList.add("tab_active");
+  };
+
+  hideTabs();
+  showTab();
+
+  tabHeaders.forEach((header, index) => {
+    header.addEventListener("click", () => {
+      if (!header.classList.contains("tab_active")) {
+        hideTabs();
+        showTab(index);
+      }
+    });
+  });
 };
 const text = (text) => {
   const container = document.querySelector("#template");
