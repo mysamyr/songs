@@ -8,14 +8,14 @@
 <h1>Персональний кабінет</h1>
 
 <div>
-    <div class="personal-info">
+    <div class="input-field">
         <b>Ім'я:</b>
         <input type="text"
                disabled
                title="Щоб змінити ім'я зверніться до адміністрації"
                value="{{user.name}}">
     </div>
-    <div class="personal-info">
+    <div class="input-field">
         <b>Електронна пошта:</b>
             <form action="/cabinet/email" method="POST" id="email-form">
                 <label for="email">Змінити електронну пошту:</label>
@@ -30,7 +30,7 @@
                 </div>
             </form>
     </div>
-    <div class="personal-info">
+    <div class="input-field">
         <b>Пароль:</b>
         <form action="/cabinet/password" method="POST" id="password-form">
             <label for="password">Теперішній пароль:</label>

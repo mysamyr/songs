@@ -183,7 +183,15 @@ const cabinet = () => {
     passwordForm.reset();
   });
 };
-
+const sideNav = () => {
+  const trigger = document.querySelector(".sidenav-trigger");
+  const sidebar = document.querySelector(".sidenav");
+  trigger.addEventListener("click", () => {
+    sidebar.classList.toggle("close");
+    trigger.classList.toggle("open");
+  });
+};
+const test = () => {};
 document.addEventListener("DOMContentLoaded", () => {
   const pageName = location.pathname.split("/");
 
@@ -208,8 +216,12 @@ document.addEventListener("DOMContentLoaded", () => {
         search();
       }
       break;
+    case "test":
+      test()
+      break;
   }
 
+  sideNav();
   modal();
   flash();
 });

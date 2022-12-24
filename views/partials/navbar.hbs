@@ -1,5 +1,4 @@
 <nav>
-    <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
     <a href="/" class="logo">Пісенник</a>
     <ul class="nav-list">
         <li {{#if isHome}}class="active"{{/if}}><a href="/">Головна</a></li>
@@ -15,15 +14,18 @@
     </ul>
 </nav>
 
-<ul id="mobile-demo" class="sidenav">
-    <li><a href="/">Головна</a></li>
-    <li><a href="/category">Пісенник</a></li>
-    <li><a href="/lit">Літургія</a></li>
-    <li><a href="/pan">Панахида</a></li>
-    {{#if isAuth}}
-        <li {{#if isCab}}class="active"{{/if}}><a href="/cabinet">Кабінет</a></li>
-        <li><a href="/auth/logout">Вийти</a></li>
-    {{else}}
-        <li {{#if isLogin}}class="active"{{/if}}><a href="/auth/login#login">Увійти</a></li>
-    {{/if}}
-</ul>
+<div class="sidenav close">
+    <i class="material-icons sidenav-trigger">menu</i>
+    <ul>
+        <li><a href="/">Головна</a></li>
+        <li><a href="/category">Пісенник</a></li>
+        <li><a href="/lit">Літургія</a></li>
+        <li><a href="/pan">Панахида</a></li>
+        {{#if isAuth}}
+            <li {{#if isCab}}class="active"{{/if}}><a href="/cabinet">Кабінет</a></li>
+            <li><a href="/auth/logout">Вийти</a></li>
+        {{else}}
+            <li {{#if isLogin}}class="active"{{/if}}><a href="/auth/login#login">Увійти</a></li>
+        {{/if}}
+    </ul>
+</div>

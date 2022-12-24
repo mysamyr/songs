@@ -35,4 +35,14 @@ router.get(
   }),
 );
 
+//Panachyda
+router.get(
+  "/test",
+  promisify(async (req, res) => {
+    res.render("test", {
+      title: "Test",
+    });
+  }),
+);
+
 module.exports = router;
