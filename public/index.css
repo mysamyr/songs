@@ -179,10 +179,6 @@ i {
 .right {
     text-align: right;
 }
-.author {
-    text-align: right;
-    margin-right: 10%;
-}
 
 /*BUTTONS*/
 .buttons_container {
@@ -277,6 +273,9 @@ textarea {
     float: left;
     cursor: pointer;
 }
+ol {
+    padding-left: 40px;
+}
 
 /*MESSAGES*/
 .msg {
@@ -331,7 +330,7 @@ textarea {
         text-align: left;
     }
     .container {
-        width: 100%;
+        width: 95%;
     }
 }
 @media only screen and (min-width: 576px) {
@@ -413,8 +412,7 @@ textarea {
     .logo {
         left: 35%;
     }
-    .input-field {
-        margin-left: 20px;
-        margin-right: 20px;
+    ol {
+        padding-left: 20px;
     }
 }

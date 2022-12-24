@@ -38,7 +38,7 @@ app.set("view engine", "hbs");
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({extended: true}));
-app.use(helmet());
+// app.use(helmet());
 app.use(cors({origin: "*"}));
 app.use(compression());
 app.use(flash());
