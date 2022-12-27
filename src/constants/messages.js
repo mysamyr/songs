@@ -7,6 +7,6 @@ module.exports = {
   SUCCESS_CREATE_CATEGORY: (name) => `Категорія ${name} успішно створена`,
   SUCCESS_DELETE_CATEGORY: (name) => `Категорія ${name} успішно видалена`,
   SUCCESS_UPDATE_EMAIL:
-    "Email успішно змінено. Активуйте новий email згідно інструкції, відправленої на новий email",
+    "Електронну пошту змінено. Активуйте нову пошту згідно інструкції, відправленої на неї",
   SUCCESS_UPDATE_PASSWORD: "Пароль успішно змінено",
 };

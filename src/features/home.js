@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const { promisify } = require("../middleware");
+const { SENDGRID_EMAIL } = require("../config");
 
 // Home page
 router.get(
@@ -8,7 +9,9 @@ router.get(
     res.render("index", {
       title: "Головна",
       isHome: true,
+      email: SENDGRID_EMAIL,
       msg: req.flash("msg"),
+      err: req.flash("err"),
     });
   }),
 );
@@ -31,16 +34,6 @@ router.get(
     res.render("text", {
       title: "Панахида",
       isPan: true,
-    });
-  }),
-);
-
-//Panachyda
-router.get(
-  "/test",
-  promisify(async (req, res) => {
-    res.render("test", {
-      title: "Test",
     });
   }),
 );

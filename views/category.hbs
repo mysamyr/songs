@@ -23,7 +23,7 @@
     <a href="/category" class="btn blue">До списку категорій</a>
     {{#if isAuth}}
         <a href="/song/add?current={{categoryName}}" class="btn">Додати нову пісню</a>
-        <button class="btn red" data-modal="/category/delete/{{categoryId}}">Видалити категорію</button>
+        <a class="btn red" data-modal="/category/delete/{{categoryId}}">Видалити категорію</a>
     {{/if}}
 </div>
 

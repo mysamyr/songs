@@ -1,11 +1,13 @@
 const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 const { auth, promisify, noAuth } = require("../middleware");
+const { SENDGRID_EMAIL } = require("../config");
 const {
   WRONG_EMAIL_OR_PASSWORD,
   EXISTING_USER,
   NOT_EXISTING_USER,
   PASSWORDS_NOT_MATCH,
+  ALREADY_ACTIVATED,
 } = require("../constants/error-messages");
 const { SUCCESS } = require("../constants/messages");
 const { User } = require("../models");
@@ -46,7 +48,6 @@ router.post(
       id: candidate.id,
       email,
       name: candidate.name,
-      link: candidate.link,
     };
     session.isAuthenticated = true;
     session.isValidated = candidate.verified;
@@ -82,6 +83,7 @@ router.post(
       req.flash("registerErr", EXISTING_USER);
       return res.status(422).redirect("/auth/login#register");
     }
+
     const hashPassword = await bcrypt.hash(password, 10);
     // use timestamp as link for account verification
     const link = Date.now().toString();
@@ -107,20 +109,28 @@ router.post(
 router.get(
   "/verify/:id",
   promisify(async (req, res) => {
+    const { session } = req;
+    if (session.isValidated) {
+      req.flash("err", ALREADY_ACTIVATED);
+      return res.status(400).redirect("/");
+    }
     const candidate = await User.findOne({ link: req.params.id });
     if (!candidate) {
-      return res.render("index", {
-        title: "Головна",
-        isHome: true,
-        msg: "Ви не змогли активувати обліковий запис.",
+      return res.render("verified", {
+        title: "Помилка активації",
+        email: SENDGRID_EMAIL,
       });
     }
-    candidate.verify = true;
+    candidate.verified = true;
     await candidate.save();
 
-    res.render("verified", {
-      title: "Вітання",
-      name: candidate.name,
+    session.isValidated = true;
+    session.save((err) => {
+      if (err) console.log(err);
+      res.render("verified", {
+        title: "Вітання",
+        name: candidate.name,
+      });
     });
   }),
 );

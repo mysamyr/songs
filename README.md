@@ -1,3 +1,13 @@
+# Пісенник (+ текст літургії і панахиди)
+
+## Stack
+- express
+- MongoDB
+- handlebars
+
+
 TODO:
-- sidenav for mobile
-- select with checklists
+1) Виписати всі сторінки чи вони можуть приймати msg/err (flash)
+2) Додати логи для апі
+3) Перевірити session
+4) Додати валідацію

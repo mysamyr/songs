@@ -13,4 +13,5 @@ module.exports = {
   EXISTING_EMAIL: "Введіть інший email",
   WRONG_PASSWORD: "Хибний пароль",
   PASSWORDS_MATCH: "Новий та старий пароль не мають співпадати",
+  ALREADY_ACTIVATED: "Ваш обліковий запис вже активовано",
 };

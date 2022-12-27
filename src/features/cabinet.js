@@ -40,9 +40,10 @@ router.post(
       req.flash("err", VALIDATE_ACCOUNT);
       return res.redirect("/cabinet");
     }
+
     const newEmail = req.body.email;
     const oldEmail = session.user.email;
-    // todo additional email validation
+
     if (newEmail === oldEmail) {
       // throw error if email is the same
       req.flash("err", EXISTING_EMAIL);
@@ -75,24 +76,27 @@ router.post(
   auth,
   promisify(async (req, res) => {
     const {
-      session: { user, isValidated }
+      session: { user, isValidated },
     } = req;
     if (!isValidated) {
       req.flash("err", VALIDATE_ACCOUNT);
       return res.redirect("/cabinet");
     }
+
     const { password, newPassword, confirmPassword } = req.body;
     const candidate = await User.findById(user.id);
-    // todo additional password validation
-    if (confirmPassword !== confirmPassword) {
+
+    if (newPassword !== confirmPassword) {
       req.flash("err", PASSWORDS_NOT_MATCH);
       return res.redirect("/cabinet");
     }
+
     const isValidPassword = await bcrypt.compare(password, candidate.password);
     if (!isValidPassword) {
       req.flash("err", WRONG_PASSWORD);
       return res.redirect("/cabinet");
     }
+
     const arePasswordsTheSame = await bcrypt.compare(
       newPassword,
       candidate.password,

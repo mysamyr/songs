@@ -128,20 +128,18 @@ const auth = () => {
   });
 };
 const text = (text) => {
-  const container = document.querySelector("#template");
+  const container = document.querySelector(".container");
   container.innerHTML = text;
 };
 const cabinet = () => {
   const emailForm = document.querySelector("#email-form");
   const email = document.querySelector("#email");
-  console.log(email);
   const currentEmail = email.defaultValue;
   emailForm.addEventListener("submit", e => {
     if (email.value === currentEmail) {
       e.preventDefault();
     }
-    console.log("LOL")
-  })
+  });
   const emailReset = document.querySelector("#email-reset");
   emailReset.addEventListener("click", e => {
     e.preventDefault();
@@ -186,12 +184,21 @@ const cabinet = () => {
 const sideNav = () => {
   const trigger = document.querySelector(".sidenav-trigger");
   const sidebar = document.querySelector(".sidenav");
-  trigger.addEventListener("click", () => {
+  const sidebarCover = document.querySelector("#sidenav-cover");
+  const toggleNavbar = () => {
     sidebar.classList.toggle("close");
     trigger.classList.toggle("open");
+    sidebarCover.classList.toggle("show");
+  };
+  trigger.addEventListener("click", () => {
+    toggleNavbar();
+  });
+  sidebarCover.addEventListener("click", e => {
+    if(!sidebar.classList.contains("close") && e.target !== sidebar) {
+      toggleNavbar();
+    }
   });
 };
-const test = () => {};
 document.addEventListener("DOMContentLoaded", () => {
   const pageName = location.pathname.split("/");
 
@@ -205,7 +212,8 @@ document.addEventListener("DOMContentLoaded", () => {
       arrow();
       break;
     case "auth":
-      auth();
+      // avoid email verification
+      if (!pageName[3]) auth();
       break;
     case "cabinet":
       cabinet();
@@ -215,9 +223,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (pageName.length === 3) {
         search();
       }
-      break;
-    case "test":
-      test()
       break;
   }
 
