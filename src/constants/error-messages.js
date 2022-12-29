@@ -10,6 +10,7 @@ module.exports = {
   SONGS_INSIDE_CATEGORY: "В категорії ще є пісні",
   NO_CATEGORIES: "Спочатку створіть категорію щоб могти додати пісню",
   EXISTING_CATEGORY: "Категорія вже існує",
+  NO_SUCH_CATEGORY: "Такої категорії не існує",
   EXISTING_EMAIL: "Введіть інший email",
   WRONG_PASSWORD: "Хибний пароль",
   PASSWORDS_MATCH: "Новий та старий пароль не мають співпадати",

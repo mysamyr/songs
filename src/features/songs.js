@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const { auth, promisify, isValid } = require("../middleware");
+const { logger } = require("../services/logger");
 const { LOGIN_PLEASE, NO_CATEGORIES } = require("../constants/error-messages");
 const {
   DELETED_CATEGORY,
@@ -18,12 +19,12 @@ router.get(
 
     const categories = await Category.find();
     if (!categories?.length) {
+      logger.error(NO_CATEGORIES);
       req.flash("msg", NO_CATEGORIES);
-      res.redirect("/category");
-      return;
+      return res.redirect("/category");
     }
 
-    res.render("new_song", {
+    return res.render("new_song", {
       title: "Додати пісню",
       isSong: true,
       current,
@@ -43,8 +44,9 @@ router.post(
     const dbCat = await Category.find({ name: catArray });
 
     if (!dbCat.length || catArray.length !== dbCat.length) {
+      logger.error(DELETED_CATEGORY);
       req.flash("err", DELETED_CATEGORY);
-      res.redirect("/song/add");
+      return res.redirect("/song/add");
     }
 
     const user = await User.findOne({ email });
@@ -56,7 +58,7 @@ router.post(
     });
     await song.save();
 
-    res.redirect(`/song/${song._id}`);
+    return res.redirect(`/song/${song._id}`);
   }),
 );
 
@@ -73,7 +75,7 @@ router.get(
 
     const { currents, categories } = separateCategories(allCategories, song);
 
-    res.render("edit_song", {
+    return res.render("edit_song", {
       title: "Редагувати пісню",
       isSong: true,
       id,
@@ -95,8 +97,9 @@ router.post(
     const dbUser = await User.findOne({ id: user?.id });
 
     if (!dbUser) {
+      logger.error(LOGIN_PLEASE);
       req.flash("err", LOGIN_PLEASE);
-      res.redirect(`/song/edit/${req.params.id}`);
+      return res.redirect(`/song/edit/${req.params.id}`);
     }
 
     await Song.findOneAndUpdate(
@@ -109,7 +112,7 @@ router.post(
       },
     );
 
-    res.redirect(`/song/${req.params.id}`);
+    return res.redirect(`/song/${req.params.id}`);
   }),
 );
 
@@ -130,7 +133,7 @@ router.get(
     );
 
     req.flash("msg", SUCCESS_DELETE_SONG(song.name));
-    res.redirect("/category");
+    return res.redirect("/category");
   }),
 );
 
@@ -145,7 +148,7 @@ router.get(
     const dbSongUser = await User.findOne({ _id: song.author });
     const isAuthor = user?.id === dbSongUser.id;
 
-    res.render("song", {
+    return res.render("song", {
       title: song.name,
       isSong: true,
       name: song.name,

@@ -5,6 +5,8 @@
 - MongoDB
 - handlebars
 
+## Features
+- Possibility to change the category name - admin
 
 TODO:
 1) Виписати всі сторінки чи вони можуть приймати msg/err (flash)

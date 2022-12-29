@@ -1,13 +1,14 @@
-const express = require("express"),
-  path = require("path"),
-  mongoose = require("mongoose"),
-  helmet = require("helmet"),
-  compression = require("compression"),
-  expHbs = require("express-handlebars"),
-  cors = require("cors"),
-  session = require("express-session"),
-  MongoStore = require("connect-mongodb-session")(session),
-  flash = require("connect-flash");
+const express = require("express");
+const path = require("path");
+const mongoose = require("mongoose");
+// const helmet = require("helmet");
+const compression = require("compression");
+const expHbs = require("express-handlebars");
+const cors = require("cors");
+const session = require("express-session");
+const MongoStore = require("connect-mongodb-session")(session);
+const flash = require("connect-flash");
+const {errorLogger} = require("./src/services/logger");
 const homeRoute = require("./src/features/home"),
   categoryRoute = require("./src/features/category"),
   cabinetRoute = require("./src/features/cabinet"),
@@ -18,7 +19,7 @@ const {
   MONGODB_URI,
   SESSION_SECRET,
 } = require("./src/config");
-const {variable, h404} = require("./src/middleware");
+const {variable, h404, requestLoggerMiddleware, errorHandler} = require("./src/middleware");
 
 const app = express();
 const hbs = expHbs.create({
@@ -49,12 +50,15 @@ app.use(session({
   store,
 }));
 app.use(variable);
+app.use(requestLoggerMiddleware);
 
 app.use("/", homeRoute);
 app.use("/category", categoryRoute);
 app.use("/song", songRoute);
 app.use("/auth", authRoute);
 app.use("/cabinet", cabinetRoute);
+
+app.use(errorHandler);
 
 app.use(h404);
 
@@ -63,13 +67,13 @@ const start = async () => {
     await mongoose.connect(MONGODB_URI, {
       useNewUrlParser: true,
     }, (err) => {
-      if (err) console.log(err);
+      if (err) errorLogger(err);
     });
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
     });
   } catch (e) {
-    console.log(e);
+    errorLogger(e);
   }
 };
 

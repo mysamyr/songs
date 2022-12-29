@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const { auth, promisify } = require("../middleware");
+const { logger } = require("../services/logger");
 const {
   SUCCESS_UPDATE_EMAIL,
   SUCCESS_UPDATE_PASSWORD,
@@ -22,7 +23,7 @@ router.get(
   promisify(async (req, res) => {
     const { user } = req.session;
 
-    res.render("cabinet", {
+    return res.render("cabinet", {
       title: "Кабінет",
       isCab: true,
       user,
@@ -37,6 +38,7 @@ router.post(
   promisify(async (req, res) => {
     const { session } = req;
     if (!session.isValidated) {
+      logger.error(VALIDATE_ACCOUNT);
       req.flash("err", VALIDATE_ACCOUNT);
       return res.redirect("/cabinet");
     }
@@ -45,7 +47,7 @@ router.post(
     const oldEmail = session.user.email;
 
     if (newEmail === oldEmail) {
-      // throw error if email is the same
+      logger.error(EXISTING_EMAIL);
       req.flash("err", EXISTING_EMAIL);
       return res.redirect("/cabinet");
     }
@@ -68,7 +70,7 @@ router.post(
     });
 
     req.flash("msg", SUCCESS_UPDATE_EMAIL);
-    res.redirect("/cabinet");
+    return res.redirect("/cabinet");
   }),
 );
 router.post(
@@ -79,6 +81,7 @@ router.post(
       session: { user, isValidated },
     } = req;
     if (!isValidated) {
+      logger.error(VALIDATE_ACCOUNT);
       req.flash("err", VALIDATE_ACCOUNT);
       return res.redirect("/cabinet");
     }
@@ -87,12 +90,14 @@ router.post(
     const candidate = await User.findById(user.id);
 
     if (newPassword !== confirmPassword) {
+      logger.error(PASSWORDS_NOT_MATCH);
       req.flash("err", PASSWORDS_NOT_MATCH);
       return res.redirect("/cabinet");
     }
 
     const isValidPassword = await bcrypt.compare(password, candidate.password);
     if (!isValidPassword) {
+      logger.error(WRONG_PASSWORD);
       req.flash("err", WRONG_PASSWORD);
       return res.redirect("/cabinet");
     }
@@ -102,6 +107,7 @@ router.post(
       candidate.password,
     );
     if (arePasswordsTheSame) {
+      logger.error(PASSWORDS_MATCH);
       req.flash("err", PASSWORDS_MATCH);
       return res.redirect("/cabinet");
     }
@@ -114,7 +120,7 @@ router.post(
     await sendUpdatePassword(user.email);
 
     req.flash("msg", SUCCESS_UPDATE_PASSWORD);
-    res.redirect("/cabinet");
+    return res.redirect("/cabinet");
   }),
 );
 

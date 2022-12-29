@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 const { auth, promisify, noAuth } = require("../middleware");
+const { logger, errorLogger } = require("../services/logger");
 const { SENDGRID_EMAIL } = require("../config");
 const {
   WRONG_EMAIL_OR_PASSWORD,
@@ -18,15 +19,15 @@ const { sendAuthorisationEmail } = require("../services/mail");
 router.get(
   "/login",
   noAuth,
-  promisify((req, res) => {
+  promisify((req, res) =>
     res.render("auth", {
       title: "Увійти",
+      isLogin: true,
       loginErr: req.flash("loginErr"),
       registerErr: req.flash("registerErr"),
       msg: req.flash("msg"),
-      isLogin: true,
-    });
-  }),
+    }),
+  ),
 );
 router.post(
   "/login",
@@ -36,11 +37,13 @@ router.post(
 
     const candidate = await User.findOne({ email });
     if (!candidate) {
+      logger.error(NOT_EXISTING_USER);
       req.flash("loginErr", NOT_EXISTING_USER);
       return res.redirect("/auth/login#login");
     }
     const isSame = await bcrypt.compare(password, candidate.password);
     if (!isSame) {
+      logger.error(WRONG_EMAIL_OR_PASSWORD);
       req.flash("loginErr", WRONG_EMAIL_OR_PASSWORD);
       return res.redirect("/auth/login#login");
     }
@@ -52,7 +55,7 @@ router.post(
     session.isAuthenticated = true;
     session.isValidated = candidate.verified;
     session.save((err) => {
-      if (err) console.log(err);
+      if (err) return errorLogger(err);
       return res.redirect("/");
     });
   }),
@@ -62,9 +65,7 @@ router.post(
 router.get(
   "/logout",
   auth,
-  promisify(async (req, res) => {
-    req.session.destroy(() => res.redirect("/"));
-  }),
+  promisify(async (req, res) => req.session.destroy(() => res.redirect("/"))),
 );
 
 // register
@@ -75,11 +76,13 @@ router.post(
     const { name, email, password, confirm } = req.body;
 
     if (password !== confirm) {
+      logger.error(PASSWORDS_NOT_MATCH);
       req.flash("registerErr", PASSWORDS_NOT_MATCH);
       return res.status(422).redirect("/auth/login#register");
     }
     const candidate = await User.findOne({ email });
     if (candidate) {
+      logger.error(EXISTING_USER);
       req.flash("registerErr", EXISTING_USER);
       return res.status(422).redirect("/auth/login#register");
     }
@@ -101,7 +104,7 @@ router.post(
     });
 
     req.flash("msg", SUCCESS);
-    res.redirect("/auth/login#login");
+    return res.redirect("/auth/login#login");
   }),
 );
 
@@ -111,11 +114,13 @@ router.get(
   promisify(async (req, res) => {
     const { session } = req;
     if (session.isValidated) {
+      logger.error(ALREADY_ACTIVATED);
       req.flash("err", ALREADY_ACTIVATED);
       return res.status(400).redirect("/");
     }
     const candidate = await User.findOne({ link: req.params.id });
     if (!candidate) {
+      logger.error("Помилка активації");
       return res.render("verified", {
         title: "Помилка активації",
         email: SENDGRID_EMAIL,
@@ -126,8 +131,8 @@ router.get(
 
     session.isValidated = true;
     session.save((err) => {
-      if (err) console.log(err);
-      res.render("verified", {
+      if (err) return errorLogger(err);
+      return res.render("verified", {
         title: "Вітання",
         name: candidate.name,
       });

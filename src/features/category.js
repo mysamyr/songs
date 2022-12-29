@@ -1,8 +1,10 @@
 const router = require("express").Router();
 const { auth, promisify, isValid } = require("../middleware");
+const { logger } = require("../services/logger");
 const {
   EXISTING_CATEGORY,
   SONGS_INSIDE_CATEGORY,
+  NO_SUCH_CATEGORY,
 } = require("../constants/error-messages");
 const {
   SUCCESS_CREATE_CATEGORY,
@@ -17,11 +19,12 @@ router.get(
   promisify(async (req, res) => {
     const categories = await Category.find();
 
-    res.render("categories", {
+    return res.render("categories", {
       title: "Збірник пісень",
       categories: categories.map((i) => i.toObject()),
       isSong: true,
       msg: req.flash("msg"),
+      err: req.flash("err"),
     });
   }),
 );
@@ -31,34 +34,38 @@ router.get(
   "/add",
   auth,
   isValid,
-  promisify((req, res) => {
+  promisify((req, res) =>
     res.render("new_category", {
       title: "Додати нову категорію",
       isSong: true,
       err: req.flash("err"),
-    });
-  }),
+    }),
+  ),
 );
 router.post(
   "/add",
   promisify(async (req, res) => {
     const { name } = req.body;
     const { user } = req.session;
+    const formattedName = name.trim().toLowerCase();
 
-    const categories = await Category.find();
-    if (categories.find((c) => c.name === name)) {
+    const isCategoryExists = await Category.findOne({
+      name: formattedName,
+    });
+    if (isCategoryExists) {
+      logger.error(EXISTING_CATEGORY);
       req.flash("err", EXISTING_CATEGORY);
       return res.redirect("/category/add");
     }
 
     const newCategory = await new Category({
-      name,
+      name: formattedName,
       created_by: user.id,
     });
     await newCategory.save();
 
-    req.flash("msg", SUCCESS_CREATE_CATEGORY(name));
-    res.redirect("/category");
+    req.flash("msg", SUCCESS_CREATE_CATEGORY(formattedName));
+    return res.redirect("/category");
   }),
 );
 
@@ -70,27 +77,27 @@ router.get(
   promisify(async (req, res) => {
     const { id } = req.params;
 
-    const categorySongs = await Song.find({
+    const areSongsInsideCategory = await Song.find({
       categories: id,
       deleted: false,
     });
 
-    if (!categorySongs.length) {
-      const category = await Category.findOneAndDelete({ _id: id });
-
-      req.flash("msg", SUCCESS_DELETE_CATEGORY(category.name));
-      res.redirect("/category");
-    } else {
+    if (areSongsInsideCategory.length) {
+      logger.error(SONGS_INSIDE_CATEGORY);
       req.flash("err", SONGS_INSIDE_CATEGORY);
-      res.redirect(`/category/${id}`);
+      return res.redirect(`/category/${id}`);
     }
+    const category = await Category.findOneAndDelete({ _id: id });
+
+    req.flash("msg", SUCCESS_DELETE_CATEGORY(category.name));
+    return res.redirect("/category");
   }),
 );
 
 // Show songs in category
 router.get(
   "/:id",
-  promisify(async (req, res, next) => {
+  promisify(async (req, res) => {
     const { id } = req.params;
 
     const songs = await Song.find({ categories: id, deleted: false }).select(
@@ -99,10 +106,12 @@ router.get(
     const dbCategory = await Category.findOne({ _id: id });
 
     if (!dbCategory) {
-      return next();
+      logger.error(NO_SUCH_CATEGORY);
+      req.flash("err", NO_SUCH_CATEGORY);
+      return res.redirect("/category");
     }
 
-    res.render("category", {
+    return res.render("category", {
       title: dbCategory.name,
       isSong: true,
       categoryName: dbCategory.name,
