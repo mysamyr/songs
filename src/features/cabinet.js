@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const { auth, promisify } = require("../middleware");
 const { logger } = require("../services/logger");
+const {validator, changeEmail, changePassword} = require("../validators");
 const {
   SUCCESS_UPDATE_EMAIL,
   SUCCESS_UPDATE_PASSWORD,
@@ -35,17 +36,19 @@ router.get(
 router.post(
   "/email",
   auth,
+  validator.body(changeEmail.body),
   promisify(async (req, res) => {
     const { session } = req;
+    const { email } = req.body;
+
     if (!session.isValidated) {
       logger.error(VALIDATE_ACCOUNT);
       req.flash("err", VALIDATE_ACCOUNT);
       return res.redirect("/cabinet");
     }
 
-    const newEmail = req.body.email;
+    const newEmail = email;
     const oldEmail = session.user.email;
-
     if (newEmail === oldEmail) {
       logger.error(EXISTING_EMAIL);
       req.flash("err", EXISTING_EMAIL);
@@ -55,7 +58,7 @@ router.post(
     const link = Date.now().toString();
 
     await User.findByIdAndUpdate(session.user.id, {
-      email: req.body.email,
+      email: email,
       verified: false,
       link,
     });
@@ -76,24 +79,25 @@ router.post(
 router.post(
   "/password",
   auth,
+  validator.body(changePassword.body),
   promisify(async (req, res) => {
     const {
       session: { user, isValidated },
     } = req;
+    const { password, newPassword, confirm } = req.body;
+
     if (!isValidated) {
       logger.error(VALIDATE_ACCOUNT);
       req.flash("err", VALIDATE_ACCOUNT);
       return res.redirect("/cabinet");
     }
-
-    const { password, newPassword, confirmPassword } = req.body;
-    const candidate = await User.findById(user.id);
-
-    if (newPassword !== confirmPassword) {
+    if (newPassword !== confirm) {
       logger.error(PASSWORDS_NOT_MATCH);
       req.flash("err", PASSWORDS_NOT_MATCH);
       return res.redirect("/cabinet");
     }
+
+    const candidate = await User.findById(user.id);
 
     const isValidPassword = await bcrypt.compare(password, candidate.password);
     if (!isValidPassword) {

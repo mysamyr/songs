@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const { auth, promisify, isValid } = require("../middleware");
 const { logger } = require("../services/logger");
+const {validator, params, category} = require("../validators");
 const {
   EXISTING_CATEGORY,
   SONGS_INSIDE_CATEGORY,
@@ -44,6 +45,7 @@ router.get(
 );
 router.post(
   "/add",
+  validator.body(category.body),
   promisify(async (req, res) => {
     const { name } = req.body;
     const { user } = req.session;
@@ -74,6 +76,7 @@ router.get(
   "/delete/:id",
   auth,
   isValid,
+  validator.params(params),
   promisify(async (req, res) => {
     const { id } = req.params;
 
@@ -97,6 +100,7 @@ router.get(
 // Show songs in category
 router.get(
   "/:id",
+  validator.params(params),
   promisify(async (req, res) => {
     const { id } = req.params;
 

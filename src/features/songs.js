@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const { auth, promisify, isValid } = require("../middleware");
 const { logger } = require("../services/logger");
+const {validator, params, song} = require("../validators");
 const { LOGIN_PLEASE, NO_CATEGORIES } = require("../constants/error-messages");
 const {
   DELETED_CATEGORY,
@@ -35,6 +36,7 @@ router.get(
 );
 router.post(
   "/add",
+  validator.body(song.body),
   promisify(async (req, res) => {
     const { categories, name, text } = req.body;
     const { email } = req.session.user;
@@ -67,6 +69,7 @@ router.get(
   "/edit/:id",
   auth,
   isValid,
+  validator.params(params),
   promisify(async (req, res) => {
     const { id } = req.params;
 
@@ -88,8 +91,10 @@ router.get(
 );
 router.post(
   "/edit/:id",
+  validator.params(params),
+  validator.body(song.body),
   promisify(async (req, res) => {
-    const { name, text, categories } = req.body;
+    const { categories, name, text } = req.body;
     const { id } = req.params;
     const { user } = req.session;
 
@@ -121,6 +126,7 @@ router.get(
   "/delete/:id",
   auth,
   isValid,
+  validator.params(params),
   promisify(async (req, res) => {
     const { id } = req.params;
 
@@ -140,6 +146,7 @@ router.get(
 // Get song
 router.get(
   "/:id",
+  validator.params(params),
   promisify(async (req, res) => {
     const { id } = req.params;
     const { user } = req.session;

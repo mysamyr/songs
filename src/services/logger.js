@@ -28,7 +28,7 @@ const requestLogger = (req) => {
   });
 };
 const errorLogger = (err) => {
-  logger.error(err.message);
+  logger.error(err);
 };
 
 module.exports = {

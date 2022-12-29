@@ -2,6 +2,7 @@ const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 const { auth, promisify, noAuth } = require("../middleware");
 const { logger, errorLogger } = require("../services/logger");
+const { validator, params, login, register } = require("../validators");
 const { SENDGRID_EMAIL } = require("../config");
 const {
   WRONG_EMAIL_OR_PASSWORD,
@@ -31,6 +32,7 @@ router.get(
 );
 router.post(
   "/login",
+  validator.body(login.body),
   promisify(async (req, res) => {
     const { email, password } = req.body;
     const { session } = req;
@@ -55,7 +57,7 @@ router.post(
     session.isAuthenticated = true;
     session.isValidated = candidate.verified;
     session.save((err) => {
-      if (err) return errorLogger(err);
+      if (err) return errorLogger(err.message);
       return res.redirect("/");
     });
   }),
@@ -72,6 +74,7 @@ router.get(
 router.post(
   "/register",
   noAuth,
+  validator.body(register.body),
   promisify(async (req, res) => {
     const { name, email, password, confirm } = req.body;
 
@@ -111,8 +114,10 @@ router.post(
 // verification
 router.get(
   "/verify/:id",
+  validator.params(params),
   promisify(async (req, res) => {
     const { session } = req;
+
     if (session.isValidated) {
       logger.error(ALREADY_ACTIVATED);
       req.flash("err", ALREADY_ACTIVATED);
@@ -131,7 +136,7 @@ router.get(
 
     session.isValidated = true;
     session.save((err) => {
-      if (err) return errorLogger(err);
+      if (err) return errorLogger(err.message);
       return res.render("verified", {
         title: "Вітання",
         name: candidate.name,

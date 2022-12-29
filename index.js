@@ -67,13 +67,13 @@ const start = async () => {
     await mongoose.connect(MONGODB_URI, {
       useNewUrlParser: true,
     }, (err) => {
-      if (err) errorLogger(err);
+      if (err) errorLogger(err.message);
     });
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
     });
-  } catch (e) {
-    errorLogger(e);
+  } catch (err) {
+    errorLogger(err.message);
   }
 };
 
