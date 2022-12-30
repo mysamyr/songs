@@ -1,3 +1,13 @@
+/*VARIABLES*/
+:root {
+    --white: #fff;
+    --header-color: #7EB5A6;
+    --sidenav-color: #101816;
+    --link-color: #039be5;
+    --font-color: rgba(0,0,0,0.87);
+    --border: 1px solid #777;
+}
+
 /*COMMON*/
 *, *::before, *::after {
     margin: 0;
@@ -8,12 +18,10 @@ html {
     line-height: 1.5;
     font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
     font-weight: normal;
-    color: rgba(0,0,0,0.87);
+    color: var(--font-color);
 }
 body {
-    margin: 0;
-    padding: 0;
-    background-color: #fff;
+    background-color: var(--white);
     width: 100%;
 }
 .active {
@@ -57,12 +65,11 @@ body {
 
 /*CONTAINERS*/
 .container {
-    max-width: 1024px;
     margin: 0 auto;
 }
 .card {
     margin: .5rem 0 1rem;
-    background-color: #fff;
+    background-color: var(--white);
     border-radius: 2px;
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
 }
@@ -76,10 +83,10 @@ body {
     position: absolute;
     font-size: 2.1rem;
     padding: 0;
-    color: #fff;
+    color: var(--white);
 }
 nav {
-    background-color: #7EB5A6;
+    background-color: var(--header-color);
     padding: 0 2rem;
     height: 64px;
     line-height: 64px;
@@ -96,7 +103,7 @@ ul li {
     float: left;
 }
 ul li a {
-    color: #fff;
+    color: var(--white);
     display: block;
     padding: 0 15px;
 }
@@ -108,7 +115,7 @@ ul li a {
     left: 0;
     height: 100%;
     width: 260px;
-    background: #101816;
+    background: var(--sidenav-color);
     z-index: 3;
     transition: all .5s ease;
 }
@@ -121,7 +128,6 @@ ul li a {
     align-items: center;
 }
 .sidenav ul li {
-    width: 100%;
     text-align: center;
 }
 .sidenav ul li a{
@@ -162,14 +168,14 @@ em {
 }
 a {
     text-decoration: none;
-    color: #039be5;
+    color: var(--link-color);
 }
 pre {
     font-family: monospace, monospace;
     font-size: 1em;
 }
 i {
-    color: rgba(0,0,0,0.87);
+    color: var(--font-color);
 }
 .right {
     text-align: right;
@@ -183,7 +189,7 @@ i {
     padding: 20px;
 }
 .btn {
-    color: #fff;
+    color: var(--white);
     background-color: #26a69a;
     text-align: center;
     cursor: pointer;
@@ -207,31 +213,21 @@ select, input, textarea {
     width: 100%;
     padding: 0;
     border: none;
-    border-bottom: 1px solid #9e9e9e;
+    border-bottom: var(--border);
     outline: none;
     font-size: 1rem;
 }
 select {
-    appearance: none;
-    overflow-y: hidden;
-    border: none;
+    border: var(--border);
+    border-radius: 0.25em;
 }
 option {
-    height: 36px;
     padding: 8px;
-    margin-top: 1px;
-    color: rgba(0,0,0,0.87);
-}
-option:before {
-    content: "○ ";
+    color: var(--font-color);
 }
 textarea {
     height: 10rem;
     resize: none;
-}
-.focused {
-    border-bottom: 1px solid #26a69a;
-    box-shadow: 0 1px 0 0 #26a69a;
 }
 .invalid {
     border-bottom: 1px solid #F44336;
@@ -246,7 +242,7 @@ textarea {
     max-height: 80vh;
     margin: 0 auto;
     padding: 1rem;
-    background-color: #fff;
+    background-color: var(--white);
     border-radius: 4px;
     overflow-y: auto;
     z-index: 3;
@@ -303,7 +299,6 @@ ol {
     background-color: rgba(246,178,181,0.2);
     border-bottom: 1px #ee6e73 solid;
 }
-
 
 .cover {
     position: fixed;
@@ -387,7 +382,7 @@ ol {
 
     .sidenav-trigger {
         padding: 18px 24px 22px;
-        color: #fff;
+        color: var(--white);
         cursor: pointer;
         transition: all .5s ease;
     }

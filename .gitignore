@@ -1,4 +1,5 @@
 /node_modules
 .idea
+/logs
 /src/config/keys-dev.js
 /public/dist/bundle.js.map

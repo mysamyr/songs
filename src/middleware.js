@@ -46,9 +46,8 @@ module.exports = {
     next();
   },
   errorHandler: (err, req, res, next) => {
-    console.log(err);
-    if (err.error && err.error.includes("ValidationError")) {
-      errorLogger(err.error);
+    if (err.error && err.error.stack.includes("ValidationError")) {
+      errorLogger(err.error.stack);
     } else {
       errorLogger(err.message);
     }

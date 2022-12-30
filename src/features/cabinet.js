@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const { auth, promisify } = require("../middleware");
-const { logger } = require("../services/logger");
+const { errorLogger } = require("../services/logger");
 const {validator, changeEmail, changePassword} = require("../validators");
 const {
   SUCCESS_UPDATE_EMAIL,
@@ -42,7 +42,7 @@ router.post(
     const { email } = req.body;
 
     if (!session.isValidated) {
-      logger.error(VALIDATE_ACCOUNT);
+      errorLogger(VALIDATE_ACCOUNT);
       req.flash("err", VALIDATE_ACCOUNT);
       return res.redirect("/cabinet");
     }
@@ -50,7 +50,7 @@ router.post(
     const newEmail = email;
     const oldEmail = session.user.email;
     if (newEmail === oldEmail) {
-      logger.error(EXISTING_EMAIL);
+      errorLogger(EXISTING_EMAIL);
       req.flash("err", EXISTING_EMAIL);
       return res.redirect("/cabinet");
     }
@@ -87,12 +87,12 @@ router.post(
     const { password, newPassword, confirm } = req.body;
 
     if (!isValidated) {
-      logger.error(VALIDATE_ACCOUNT);
+      errorLogger(VALIDATE_ACCOUNT);
       req.flash("err", VALIDATE_ACCOUNT);
       return res.redirect("/cabinet");
     }
     if (newPassword !== confirm) {
-      logger.error(PASSWORDS_NOT_MATCH);
+      errorLogger(PASSWORDS_NOT_MATCH);
       req.flash("err", PASSWORDS_NOT_MATCH);
       return res.redirect("/cabinet");
     }
@@ -101,7 +101,7 @@ router.post(
 
     const isValidPassword = await bcrypt.compare(password, candidate.password);
     if (!isValidPassword) {
-      logger.error(WRONG_PASSWORD);
+      errorLogger(WRONG_PASSWORD);
       req.flash("err", WRONG_PASSWORD);
       return res.redirect("/cabinet");
     }
@@ -111,7 +111,7 @@ router.post(
       candidate.password,
     );
     if (arePasswordsTheSame) {
-      logger.error(PASSWORDS_MATCH);
+      errorLogger(PASSWORDS_MATCH);
       req.flash("err", PASSWORDS_MATCH);
       return res.redirect("/cabinet");
     }

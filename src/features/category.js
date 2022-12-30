@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const { auth, promisify, isValid } = require("../middleware");
-const { logger } = require("../services/logger");
+const { errorLogger } = require("../services/logger");
 const {validator, params, category} = require("../validators");
 const {
   EXISTING_CATEGORY,
@@ -55,7 +55,7 @@ router.post(
       name: formattedName,
     });
     if (isCategoryExists) {
-      logger.error(EXISTING_CATEGORY);
+      errorLogger(EXISTING_CATEGORY);
       req.flash("err", EXISTING_CATEGORY);
       return res.redirect("/category/add");
     }
@@ -86,7 +86,7 @@ router.get(
     });
 
     if (areSongsInsideCategory.length) {
-      logger.error(SONGS_INSIDE_CATEGORY);
+      errorLogger(SONGS_INSIDE_CATEGORY);
       req.flash("err", SONGS_INSIDE_CATEGORY);
       return res.redirect(`/category/${id}`);
     }
@@ -110,7 +110,7 @@ router.get(
     const dbCategory = await Category.findOne({ _id: id });
 
     if (!dbCategory) {
-      logger.error(NO_SUCH_CATEGORY);
+      errorLogger(NO_SUCH_CATEGORY);
       req.flash("err", NO_SUCH_CATEGORY);
       return res.redirect("/category");
     }

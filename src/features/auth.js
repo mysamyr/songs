@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 const { auth, promisify, noAuth } = require("../middleware");
-const { logger, errorLogger } = require("../services/logger");
+const { errorLogger } = require("../services/logger");
 const { validator, params, login, register } = require("../validators");
 const { SENDGRID_EMAIL } = require("../config");
 const {
@@ -10,6 +10,7 @@ const {
   NOT_EXISTING_USER,
   PASSWORDS_NOT_MATCH,
   ALREADY_ACTIVATED,
+  VERIFY_ERROR
 } = require("../constants/error-messages");
 const { SUCCESS } = require("../constants/messages");
 const { User } = require("../models");
@@ -39,13 +40,13 @@ router.post(
 
     const candidate = await User.findOne({ email });
     if (!candidate) {
-      logger.error(NOT_EXISTING_USER);
+      errorLogger(NOT_EXISTING_USER);
       req.flash("loginErr", NOT_EXISTING_USER);
       return res.redirect("/auth/login#login");
     }
     const isSame = await bcrypt.compare(password, candidate.password);
     if (!isSame) {
-      logger.error(WRONG_EMAIL_OR_PASSWORD);
+      errorLogger(WRONG_EMAIL_OR_PASSWORD);
       req.flash("loginErr", WRONG_EMAIL_OR_PASSWORD);
       return res.redirect("/auth/login#login");
     }
@@ -79,13 +80,13 @@ router.post(
     const { name, email, password, confirm } = req.body;
 
     if (password !== confirm) {
-      logger.error(PASSWORDS_NOT_MATCH);
+      errorLogger(PASSWORDS_NOT_MATCH);
       req.flash("registerErr", PASSWORDS_NOT_MATCH);
       return res.status(422).redirect("/auth/login#register");
     }
     const candidate = await User.findOne({ email });
     if (candidate) {
-      logger.error(EXISTING_USER);
+      errorLogger(EXISTING_USER);
       req.flash("registerErr", EXISTING_USER);
       return res.status(422).redirect("/auth/login#register");
     }
@@ -119,15 +120,15 @@ router.get(
     const { session } = req;
 
     if (session.isValidated) {
-      logger.error(ALREADY_ACTIVATED);
+      errorLogger(ALREADY_ACTIVATED);
       req.flash("err", ALREADY_ACTIVATED);
       return res.status(400).redirect("/");
     }
     const candidate = await User.findOne({ link: req.params.id });
     if (!candidate) {
-      logger.error("Помилка активації");
+      errorLogger();
       return res.render("verified", {
-        title: "Помилка активації",
+        title: VERIFY_ERROR,
         email: SENDGRID_EMAIL,
       });
     }

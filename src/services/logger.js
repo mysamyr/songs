@@ -3,17 +3,17 @@ const { format, createLogger, transports } = require("winston");
 const logger = createLogger({
   level: "info",
   format: format.json(),
-  // transports: [
-  //   new transports.File({ filename: "logs/list.log" }),
-  //   new transports.File({ level: "error", filename: "logs/errors.log" }),
-  // ],
 });
 
 if (process.env.NODE_ENV !== "production") {
   logger.add(
-    new transports.Console({
-      format: format.simple(),
-    }),
+    new transports.Console({format: format.simple()})
+  );
+  logger.add(
+    new transports.File({ filename: "logs/list.log" })
+  );
+  logger.add(
+    new transports.File({ level: "error", filename: "logs/errors.log" })
   );
 }
 const requestLogger = (req) => {

@@ -1,6 +1,7 @@
-{{#if msg}}
-    <p class="msg">{{msg}}</p>
+{{#if isLit}}
+    {{> liturgy}}
 {{/if}}
-{{#if err}}
-    <p class="msg alert">{{err}}</p>
+{{#if isPan}}
+    {{> panachyda}}
 {{/if}}
+{{> arrow}}

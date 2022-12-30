@@ -21,12 +21,12 @@
 
     <div class="input-field">
         <label for="name">Назва пісні:</label>
-        <input id="name" name="name" type="text" required>
+        <input id="name" name="name" type="text" maxlength="30" value="{{name}}" required>
     </div>
 
     <div class="input-field">
         <label for="text">Текст пісні:</label>
-        <textarea id="text" name="text" required></textarea>
+        <textarea id="text" name="text" required>{{text}}</textarea>
     </div>
 
     <div class="buttons_container">

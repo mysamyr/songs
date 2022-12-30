@@ -15,4 +15,6 @@ module.exports = {
   WRONG_PASSWORD: "Хибний пароль",
   PASSWORDS_MATCH: "Новий та старий пароль не мають співпадати",
   ALREADY_ACTIVATED: "Ваш обліковий запис вже активовано",
+  EXISTING_SONG: "Пісня з такою назвою вже існує",
+  VERIFY_ERROR: "Помилка активації",
 };

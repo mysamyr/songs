@@ -1,5 +1,3 @@
-import {lit, pan} from "./text";
-
 const flash = () => {
   const flashAlert = document.querySelector(".alert"),
     flashMsg = document.querySelector(".msg");
@@ -13,13 +11,6 @@ const flash = () => {
       flashMsg.remove();
     }, 5000);
   }
-};
-const makeSongsContainer = (song) => {
-  const songCard = document.createElement("div");
-  songCard.classList.add("card");
-  songCard.append(song);
-
-  return songCard;
 };
 const modal = () => {
   const modalTrigger = document.querySelector("[data-modal]");
@@ -53,6 +44,13 @@ const search = () => {
   const searchField = document.querySelector("#search");
   const songsContainer = document.querySelector(".songs");
   const songs = document.querySelectorAll(".song");
+  const makeSongsContainer = (song) => {
+    const songCard = document.createElement("div");
+    songCard.classList.add("card");
+    songCard.append(song);
+
+    return songCard;
+  };
   if (searchField) {
     searchField.addEventListener("input", () => {
       if (songs.length) {
@@ -83,15 +81,16 @@ const search = () => {
   }
 };
 const arrow = () => {
-  const btn = document.createElement("i");
-  btn.classList.add("material-icons", "arr_top");
-  btn.innerHTML = "arrow_upward";
+  const btn = document.querySelector(".arr_top");
+  const trigger = document.querySelector(".sidenav-trigger");
   window.addEventListener("scroll", () => {
     if (document.documentElement.scrollTop > 1) {
       document.body.prepend(btn);
       btn.classList.add("show");
+      trigger.classList.add("hide");
     } else {
       btn.classList.remove("show");
+      trigger.classList.remove("hide");
     }
   });
   btn.addEventListener("click", () => {
@@ -126,10 +125,6 @@ const auth = () => {
       }
     });
   });
-};
-const text = (text) => {
-  const container = document.querySelector(".container");
-  container.innerHTML = text;
 };
 const cabinet = () => {
   const emailForm = document.querySelector("#email-form");
@@ -204,11 +199,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   switch (pageName[1]) {
     case "lit":
-      text(lit);
-      arrow();
-      break;
     case "pan":
-      text(pan);
       arrow();
       break;
     case "auth":

@@ -1,14 +1,14 @@
 const router = require("express").Router();
 const { auth, promisify, isValid } = require("../middleware");
-const { logger } = require("../services/logger");
+const { errorLogger } = require("../services/logger");
 const {validator, params, song} = require("../validators");
-const { LOGIN_PLEASE, NO_CATEGORIES } = require("../constants/error-messages");
+const { LOGIN_PLEASE, NO_CATEGORIES, EXISTING_SONG } = require("../constants/error-messages");
 const {
   DELETED_CATEGORY,
   SUCCESS_DELETE_SONG,
 } = require("../constants/messages");
 const { Song, Category, User } = require("../models");
-const { separateCategories } = require("../helpers/songs.helper");
+const { separateCategories, makeAddSongUrlAfterError } = require("../helpers/songs.helper");
 
 // Add new song
 router.get(
@@ -16,11 +16,11 @@ router.get(
   auth,
   isValid,
   promisify(async (req, res) => {
-    const { current } = req.query;
+    const { current, name, text } = req.query;
 
     const categories = await Category.find();
     if (!categories?.length) {
-      logger.error(NO_CATEGORIES);
+      errorLogger(NO_CATEGORIES);
       req.flash("msg", NO_CATEGORIES);
       return res.redirect("/category");
     }
@@ -29,6 +29,8 @@ router.get(
       title: "Додати пісню",
       isSong: true,
       current,
+      name,
+      text,
       categories: categories.map((i) => i.toObject()),
       err: req.flash("err"),
     });
@@ -36,8 +38,15 @@ router.get(
 );
 router.post(
   "/add",
-  validator.body(song.body),
   promisify(async (req, res) => {
+    const {error} = song.body.validate(req.body);
+    if (error) {
+      errorLogger(error.message);
+      req.flash("err", error.message);
+      const url = makeAddSongUrlAfterError(req);
+      return res.redirect(url);
+    }
+
     const { categories, name, text } = req.body;
     const { email } = req.session.user;
 
@@ -46,21 +55,28 @@ router.post(
     const dbCat = await Category.find({ name: catArray });
 
     if (!dbCat.length || catArray.length !== dbCat.length) {
-      logger.error(DELETED_CATEGORY);
+      errorLogger(DELETED_CATEGORY);
       req.flash("err", DELETED_CATEGORY);
       return res.redirect("/song/add");
     }
 
+    const isSongExist = await Song.findOne({name});
+    if (isSongExist) {
+      errorLogger(EXISTING_SONG);
+      req.flash("err", EXISTING_SONG);
+      return res.redirect("/song/add");
+    }
+
     const user = await User.findOne({ email });
-    const song = await new Song({
+    const newSong = await new Song({
       name,
       text,
       author: user.id,
       categories: dbCat.map((i) => i._id),
     });
-    await song.save();
+    await newSong.save();
 
-    return res.redirect(`/song/${song._id}`);
+    return res.redirect(`/song/${newSong._id}`);
   }),
 );
 
@@ -86,14 +102,21 @@ router.get(
       text: song.text,
       currents,
       categories,
+      err: req.flash("err"),
     });
   }),
 );
 router.post(
   "/edit/:id",
   validator.params(params),
-  validator.body(song.body),
   promisify(async (req, res) => {
+    const {error} = song.body.validate(req.body);
+    if (error) {
+      errorLogger(error.message);
+      req.flash("err", error.message);
+      return res.redirect(`/song/edit/${req.params.id}`);
+    }
+
     const { categories, name, text } = req.body;
     const { id } = req.params;
     const { user } = req.session;
@@ -102,7 +125,7 @@ router.post(
     const dbUser = await User.findOne({ id: user?.id });
 
     if (!dbUser) {
-      logger.error(LOGIN_PLEASE);
+      errorLogger(LOGIN_PLEASE);
       req.flash("err", LOGIN_PLEASE);
       return res.redirect(`/song/edit/${req.params.id}`);
     }
