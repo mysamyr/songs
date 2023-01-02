@@ -1,10 +1,12 @@
+{{#if msg}}
+    <p class="msg">{{msg}}</p>
+{{/if}}
+
 <h1>{{name}}</h1>
 
 <div>
     <pre>{{text}}</pre>
-
     <p class="right">{{author}}</p>
-
     <div class="buttons_container">
         <a href="/category" class="btn blue">До категорій</a>
         {{#if isAuthor}}

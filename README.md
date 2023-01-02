@@ -6,10 +6,31 @@
 - handlebars
 
 ## Features
-- Possibility to change the category name - admin
+- Possibility to change category`s name, username - admin
+- User:
+  - auth
+  - verify
+  - resend verification message
+  - change email/password
+  - create new category (unique)
+  - delete empty category
+  - create new song (unique song name)
+  - edit own song (assign/unbind categories)
+  - delete own song
+  - delete account ?
 
-TODO:
-1) Виписати всі сторінки чи вони можуть приймати msg/err (flash)
-2) Додати логи для апі  +
-3) Перевірити session
-4) Додати валідацію
+## Pages
+- index    `/`
+- text    `/lit, /pan`
+- auth    `/auth`
+- cabinet    `/cabinet`
+- categories    `/category`
+- category    `/category/:id`
+- new_category    `/category/add`
+- song    `/song/:id`
+- new_song    `/song/add`
+- edit_song    `/song/edit/:id`
+- 404
+
+## Problems
+- паролі передаються по HTTP/S

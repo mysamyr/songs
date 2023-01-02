@@ -28,6 +28,11 @@ const userSchema = new Schema(
     link: {
       type: String,
     },
+    verify_sent_at: {
+      type: Date,
+      required: true,
+      default: new Date(),
+    },
     verified: {
       type: Boolean,
       required: true,

@@ -22,8 +22,8 @@ router.get(
 
     return res.render("categories", {
       title: "Збірник пісень",
-      categories: categories.map((i) => i.toObject()),
       isSong: true,
+      categories: categories.map((i) => i.toObject()),
       msg: req.flash("msg"),
       err: req.flash("err"),
     });

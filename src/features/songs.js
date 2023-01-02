@@ -6,6 +6,7 @@ const { LOGIN_PLEASE, NO_CATEGORIES, EXISTING_SONG } = require("../constants/err
 const {
   DELETED_CATEGORY,
   SUCCESS_DELETE_SONG,
+  CREATE_SONG,
 } = require("../constants/messages");
 const { Song, Category, User } = require("../models");
 const { separateCategories, makeAddSongUrlAfterError } = require("../helpers/songs.helper");
@@ -76,6 +77,7 @@ router.post(
     });
     await newSong.save();
 
+    req.flash("msg", CREATE_SONG);
     return res.redirect(`/song/${newSong._id}`);
   }),
 );
@@ -185,6 +187,7 @@ router.get(
       author: dbSongUser.name,
       text: song.text,
       id: song.id,
+      msg: req.flash("msg"),
       isAuthor,
     });
   }),

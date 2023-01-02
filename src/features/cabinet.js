@@ -1,33 +1,35 @@
 const router = require("express").Router();
+const bcrypt = require("bcryptjs");
 const { auth, promisify } = require("../middleware");
 const { errorLogger } = require("../services/logger");
 const {validator, changeEmail, changePassword} = require("../validators");
 const {
   SUCCESS_UPDATE_EMAIL,
-  SUCCESS_UPDATE_PASSWORD,
+  SUCCESS_UPDATE_PASSWORD, VERIFICATION_SENT,
 } = require("../constants/messages");
 const {
   EXISTING_EMAIL,
   WRONG_PASSWORD,
   PASSWORDS_MATCH,
   PASSWORDS_NOT_MATCH,
-  VALIDATE_ACCOUNT,
+  VALIDATE_ACCOUNT, ALREADY_ACTIVATED, VERIFY_TRY_AGAIN,
 } = require("../constants/error-messages");
 const { User } = require("../models");
+const { sendUpdateEmail, sendUpdatePassword, sendAuthorisationEmail} = require("../services/mail");
 const { getLinkForVerification } = require("../helpers/user.helper");
-const { sendUpdateEmail, sendUpdatePassword } = require("../services/mail");
-const bcrypt = require("bcryptjs");
+const {timeDiff} = require("../utils/time");
 
 router.get(
   "/",
   auth,
   promisify(async (req, res) => {
-    const { user } = req.session;
+    const { user, isValidated } = req.session;
 
     return res.render("cabinet", {
       title: "Кабінет",
       isCab: true,
       user,
+      isValidated,
       err: req.flash("err"),
       msg: req.flash("msg"),
     });
@@ -48,8 +50,8 @@ router.post(
     }
 
     const newEmail = email;
-    const oldEmail = session.user.email;
-    if (newEmail === oldEmail) {
+    const currentEmail = session.user.email;
+    if (newEmail === currentEmail) {
       errorLogger(EXISTING_EMAIL);
       req.flash("err", EXISTING_EMAIL);
       return res.redirect("/cabinet");
@@ -124,6 +126,42 @@ router.post(
     await sendUpdatePassword(user.email);
 
     req.flash("msg", SUCCESS_UPDATE_PASSWORD);
+    return res.redirect("/cabinet");
+  }),
+);
+router.get(
+  "/resend",
+  auth,
+  promisify(async (req, res) => {
+    const {
+      session: { user, isValidated },
+    } = req;
+
+    if (isValidated) {
+      errorLogger(ALREADY_ACTIVATED);
+      req.flash("err", ALREADY_ACTIVATED);
+      return res.redirect("/cabinet");
+    }
+
+    const currentTime = new Date();
+    const DBUser = await User.findById(user.id);
+
+    // if was sent inside 5 min
+    if (timeDiff(currentTime, DBUser.verify_sent_at) < 300000) {
+      errorLogger(VERIFY_TRY_AGAIN);
+      req.flash("err", VERIFY_TRY_AGAIN);
+      return res.redirect("/cabinet");
+    }
+    DBUser.verify_sent_at = currentTime;
+    await DBUser.save();
+
+    await sendAuthorisationEmail({
+      email: user.email,
+      name: user.name,
+      link: getLinkForVerification(DBUser.link),
+    });
+
+    req.flash("msg", VERIFICATION_SENT);
     return res.redirect("/cabinet");
   }),
 );

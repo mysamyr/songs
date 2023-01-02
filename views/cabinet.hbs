@@ -24,6 +24,9 @@
                        id="email"
                        required
                        value={{user.email}}>
+                {{#unless isValidated}}
+                    <p>Електронна пошта не підтвердженя. <a href="/cabinet/resend">Надіслати інструкцію на електронну пошту</a>.</p>
+                {{/unless}}
                 <div class="buttons_container">
                     <button class="btn">Зберегти</button>
                     <button id="email-reset" class="btn red">Відмінити</button>

@@ -6,7 +6,8 @@ module.exports = {
   SUCCESS_DELETE_SONG: (name) => `Пісня ${name} успішно видалена`,
   SUCCESS_CREATE_CATEGORY: (name) => `Категорія ${name} успішно створена`,
   SUCCESS_DELETE_CATEGORY: (name) => `Категорія ${name} успішно видалена`,
-  SUCCESS_UPDATE_EMAIL:
-    "Електронну пошту змінено. Активуйте нову пошту згідно інструкції, відправленої на неї",
+  SUCCESS_UPDATE_EMAIL: "Електронну пошту змінено. Активуйте нову пошту згідно з відправленою інструкцією",
   SUCCESS_UPDATE_PASSWORD: "Пароль успішно змінено",
+  CREATE_SONG: "Пісня успішно створена",
+  VERIFICATION_SENT: "Інструкція з активації облікового запису надіслана на Вашу електронну пошту",
 };
