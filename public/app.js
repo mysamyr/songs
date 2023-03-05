@@ -82,15 +82,12 @@ const search = () => {
 };
 const arrow = () => {
   const btn = document.querySelector(".arr_top");
-  const trigger = document.querySelector(".sidenav-trigger");
   window.addEventListener("scroll", () => {
     if (document.documentElement.scrollTop > 1) {
       document.body.prepend(btn);
       btn.classList.add("show");
-      trigger.classList.add("hide");
     } else {
       btn.classList.remove("show");
-      trigger.classList.remove("hide");
     }
   });
   btn.addEventListener("click", () => {
@@ -185,6 +182,15 @@ const sideNav = () => {
     trigger.classList.toggle("open");
     sidebarCover.classList.toggle("show");
   };
+  window.addEventListener("scroll", () => {
+    if (!sidebarCover.classList.contains("show")) {
+      if (document.documentElement.scrollTop > 1) {
+        trigger.classList.add("hide");
+      } else {
+        trigger.classList.remove("hide");
+      }
+    }
+  });
   trigger.addEventListener("click", () => {
     toggleNavbar();
   });

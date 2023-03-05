@@ -2,7 +2,7 @@ const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 const { auth, promisify } = require("../middleware");
 const { errorLogger } = require("../services/logger");
-const {validator, changeEmail, changePassword} = require("../validators");
+const {changeEmail, changePassword, validate} = require("../validators");
 const {
   SUCCESS_UPDATE_EMAIL,
   SUCCESS_UPDATE_PASSWORD, VERIFICATION_SENT,
@@ -16,8 +16,8 @@ const {
 } = require("../constants/error-messages");
 const { User } = require("../models");
 const { sendUpdateEmail, sendUpdatePassword, sendAuthorisationEmail} = require("../services/mail");
-const { getLinkForVerification } = require("../helpers/user.helper");
-const {timeDiff} = require("../utils/time");
+const { getLinkForVerification, getTimestampString } = require("../helpers/user.helper");
+const {timeDiff } = require("../utils/time");
 
 router.get(
   "/",
@@ -38,7 +38,7 @@ router.get(
 router.post(
   "/email",
   auth,
-  validator.body(changeEmail.body),
+  validate("body", changeEmail.body, "/cabinet"),
   promisify(async (req, res) => {
     const { session } = req;
     const { email } = req.body;
@@ -48,30 +48,28 @@ router.post(
       req.flash("err", VALIDATE_ACCOUNT);
       return res.redirect("/cabinet");
     }
-
-    const newEmail = email;
     const currentEmail = session.user.email;
-    if (newEmail === currentEmail) {
+    if (email === currentEmail) {
       errorLogger(EXISTING_EMAIL);
       req.flash("err", EXISTING_EMAIL);
       return res.redirect("/cabinet");
     }
     // link for DB and email verification
-    const link = Date.now().toString();
+    const link = getTimestampString();
 
     await User.findByIdAndUpdate(session.user.id, {
-      email: email,
+      email,
       verified: false,
       link,
     });
     //  override session user with new email and cancel validation
-    session.user.email = newEmail;
+    session.user.email = email;
     session.isValidated = false;
 
     await sendUpdateEmail({
-      email: newEmail,
+      email,
       name: session.user.name,
-      link: getLinkForVerification(link),
+      url: getLinkForVerification(link),
     });
 
     req.flash("msg", SUCCESS_UPDATE_EMAIL);
@@ -81,18 +79,19 @@ router.post(
 router.post(
   "/password",
   auth,
-  validator.body(changePassword.body),
+  validate("body", changePassword.body, "/cabinet"),
   promisify(async (req, res) => {
     const {
       session: { user, isValidated },
+      body: { password, newPassword, confirm }
     } = req;
-    const { password, newPassword, confirm } = req.body;
 
     if (!isValidated) {
       errorLogger(VALIDATE_ACCOUNT);
       req.flash("err", VALIDATE_ACCOUNT);
       return res.redirect("/cabinet");
     }
+    // todo move confirm check to client
     if (newPassword !== confirm) {
       errorLogger(PASSWORDS_NOT_MATCH);
       req.flash("err", PASSWORDS_NOT_MATCH);
@@ -133,9 +132,7 @@ router.get(
   "/resend",
   auth,
   promisify(async (req, res) => {
-    const {
-      session: { user, isValidated },
-    } = req;
+    const {user, isValidated} = req.session;
 
     if (isValidated) {
       errorLogger(ALREADY_ACTIVATED);
@@ -158,7 +155,7 @@ router.get(
     await sendAuthorisationEmail({
       email: user.email,
       name: user.name,
-      link: getLinkForVerification(DBUser.link),
+      url: getLinkForVerification(DBUser.link),
     });
 
     req.flash("msg", VERIFICATION_SENT);

@@ -14,7 +14,4 @@ module.exports.separateCategories = (categories, song) => {
     },
   );
 };
-module.exports.makeAddSongUrlAfterError = ({body}) => {
-  const { name, text } = body;
-  return `/song/add?name=${name}&text=${text}`;
-};
+module.exports.makeAddSongUrlAfterError = ({ name, text }) => `/song/add?name=${name}&text=${text}`;

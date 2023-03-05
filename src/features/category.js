@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const { auth, promisify, isValid } = require("../middleware");
 const { errorLogger } = require("../services/logger");
-const {validator, params, category} = require("../validators");
+const {validate, category, validateParamsId} = require("../validators");
 const {
   EXISTING_CATEGORY,
   SONGS_INSIDE_CATEGORY,
@@ -45,10 +45,9 @@ router.get(
 );
 router.post(
   "/add",
-  validator.body(category.body),
+  validate("body", category.body, "/category/add"),
   promisify(async (req, res) => {
-    const { name } = req.body;
-    const { user } = req.session;
+    const { body: { name }, session: { user } } = req;
     const formattedName = name.trim().toLowerCase();
 
     const isCategoryExists = await Category.findOne({
@@ -60,11 +59,10 @@ router.post(
       return res.redirect("/category/add");
     }
 
-    const newCategory = await new Category({
+    await Category.create({
       name: formattedName,
       created_by: user.id,
     });
-    await newCategory.save();
 
     req.flash("msg", SUCCESS_CREATE_CATEGORY(formattedName));
     return res.redirect("/category");
@@ -76,16 +74,16 @@ router.get(
   "/delete/:id",
   auth,
   isValid,
-  validator.params(params),
+  validateParamsId("/category"),
   promisify(async (req, res) => {
     const { id } = req.params;
 
-    const areSongsInsideCategory = await Song.find({
+    const isCategoryNotEmpty = await Song.findOne({
       categories: id,
       deleted: false,
     });
 
-    if (areSongsInsideCategory.length) {
+    if (isCategoryNotEmpty) {
       errorLogger(SONGS_INSIDE_CATEGORY);
       req.flash("err", SONGS_INSIDE_CATEGORY);
       return res.redirect(`/category/${id}`);
@@ -100,7 +98,7 @@ router.get(
 // Show songs in category
 router.get(
   "/:id",
-  validator.params(params),
+  validateParamsId("/category"),
   promisify(async (req, res) => {
     const { id } = req.params;
 

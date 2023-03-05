@@ -1,15 +1,15 @@
 const router = require("express").Router();
-const { auth, promisify, isValid } = require("../middleware");
-const { errorLogger } = require("../services/logger");
-const {validator, params, song} = require("../validators");
-const { LOGIN_PLEASE, NO_CATEGORIES, EXISTING_SONG } = require("../constants/error-messages");
+const {auth, promisify, isValid} = require("../middleware");
+const {errorLogger} = require("../services/logger");
+const {validateAddSong, validateParamsId, validateEditSong} = require("../validators");
+const {LOGIN_PLEASE, NO_CATEGORIES, EXISTING_SONG} = require("../constants/error-messages");
 const {
   DELETED_CATEGORY,
   SUCCESS_DELETE_SONG,
-  CREATE_SONG,
+  CREATE_SONG, EDIT_SONG,
 } = require("../constants/messages");
-const { Song, Category, User } = require("../models");
-const { separateCategories, makeAddSongUrlAfterError } = require("../helpers/songs.helper");
+const {Song, Category, User} = require("../models");
+const {separateCategories} = require("../helpers/songs.helper");
 
 // Add new song
 router.get(
@@ -17,11 +17,10 @@ router.get(
   auth,
   isValid,
   promisify(async (req, res) => {
-    const { current, name, text } = req.query;
+    const {current, name, text} = req.query;
 
     const categories = await Category.find();
     if (!categories?.length) {
-      errorLogger(NO_CATEGORIES);
       req.flash("msg", NO_CATEGORIES);
       return res.redirect("/category");
     }
@@ -39,21 +38,16 @@ router.get(
 );
 router.post(
   "/add",
+  validateAddSong,
   promisify(async (req, res) => {
-    const {error} = song.body.validate(req.body);
-    if (error) {
-      errorLogger(error.message);
-      req.flash("err", error.message);
-      const url = makeAddSongUrlAfterError(req);
-      return res.redirect(url);
-    }
-
-    const { categories, name, text } = req.body;
-    const { email } = req.session.user;
+    const {
+      body: {categories, name, text},
+      session: {user: {email}}
+    } = req;
 
     const catArray = Array.isArray(categories) ? categories : [categories];
 
-    const dbCat = await Category.find({ name: catArray });
+    const dbCat = await Category.find({name: catArray});
 
     if (!dbCat.length || catArray.length !== dbCat.length) {
       errorLogger(DELETED_CATEGORY);
@@ -61,21 +55,20 @@ router.post(
       return res.redirect("/song/add");
     }
 
-    const isSongExist = await Song.findOne({name});
+    const isSongExist = await Song.findOne({name, deleted: false});
     if (isSongExist) {
       errorLogger(EXISTING_SONG);
       req.flash("err", EXISTING_SONG);
       return res.redirect("/song/add");
     }
 
-    const user = await User.findOne({ email });
-    const newSong = await new Song({
+    const user = await User.findOne({email});
+    const newSong = await Song.create({
       name,
       text,
       author: user.id,
       categories: dbCat.map((i) => i._id),
     });
-    await newSong.save();
 
     req.flash("msg", CREATE_SONG);
     return res.redirect(`/song/${newSong._id}`);
@@ -87,14 +80,14 @@ router.get(
   "/edit/:id",
   auth,
   isValid,
-  validator.params(params),
+  validateParamsId("/category"),
   promisify(async (req, res) => {
-    const { id } = req.params;
+    const {id} = req.params;
 
-    const song = await Song.findOne({ _id: id });
+    const song = await Song.findOne({_id: id});
     const allCategories = await Category.find();
 
-    const { currents, categories } = separateCategories(allCategories, song);
+    const {currents, categories} = separateCategories(allCategories, song);
 
     return res.render("edit_song", {
       title: "Редагувати пісню",
@@ -110,21 +103,14 @@ router.get(
 );
 router.post(
   "/edit/:id",
-  validator.params(params),
+  validateEditSong,
   promisify(async (req, res) => {
-    const {error} = song.body.validate(req.body);
-    if (error) {
-      errorLogger(error.message);
-      req.flash("err", error.message);
-      return res.redirect(`/song/edit/${req.params.id}`);
-    }
+    const {categories, name, text} = req.body;
+    const {id} = req.params;
+    const {user} = req.session;
 
-    const { categories, name, text } = req.body;
-    const { id } = req.params;
-    const { user } = req.session;
-
-    const dbCategories = await Category.find({ name: categories });
-    const dbUser = await User.findOne({ id: user?.id });
+    const dbCategories = await Category.find({name: categories});
+    const dbUser = await User.findOne({id: user?.id});
 
     if (!dbUser) {
       errorLogger(LOGIN_PLEASE);
@@ -133,7 +119,7 @@ router.post(
     }
 
     await Song.findOneAndUpdate(
-      { _id: id },
+      {_id: id},
       {
         name: name,
         text: text,
@@ -142,6 +128,7 @@ router.post(
       },
     );
 
+    req.flash("msg", EDIT_SONG);
     return res.redirect(`/song/${req.params.id}`);
   }),
 );
@@ -151,12 +138,12 @@ router.get(
   "/delete/:id",
   auth,
   isValid,
-  validator.params(params),
+  validateParamsId("/category"),
   promisify(async (req, res) => {
-    const { id } = req.params;
+    const {id} = req.params;
 
     const song = await Song.findOneAndUpdate(
-      { _id: id },
+      {_id: id},
       {
         deleted: true,
         deleted_at: new Date(),
@@ -171,13 +158,13 @@ router.get(
 // Get song
 router.get(
   "/:id",
-  validator.params(params),
+  validateParamsId("/category"),
   promisify(async (req, res) => {
-    const { id } = req.params;
-    const { user } = req.session;
+    const {id} = req.params;
+    const {user} = req.session;
 
-    const song = await Song.findOne({ _id: id });
-    const dbSongUser = await User.findOne({ _id: song.author });
+    const song = await Song.findOne({_id: id});
+    const dbSongUser = await User.findOne({_id: song.author});
     const isAuthor = user?.id === dbSongUser.id;
 
     return res.render("song", {

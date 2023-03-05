@@ -2,7 +2,7 @@ const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 const { auth, promisify, noAuth } = require("../middleware");
 const { errorLogger } = require("../services/logger");
-const { validator, params, login, register } = require("../validators");
+const { validateRegister, validateLogin, validateParamsId} = require("../validators");
 const { SENDGRID_EMAIL } = require("../config");
 const {
   WRONG_EMAIL_OR_PASSWORD,
@@ -14,7 +14,7 @@ const {
 } = require("../constants/error-messages");
 const { SUCCESS } = require("../constants/messages");
 const { User } = require("../models");
-const { getLinkForVerification } = require("../helpers/user.helper");
+const { getLinkForVerification, getTimestampString } = require("../helpers/user.helper");
 const { sendAuthorisationEmail } = require("../services/mail");
 
 // login
@@ -33,7 +33,7 @@ router.get(
 );
 router.post(
   "/login",
-  validator.body(login.body),
+  validateLogin,
   promisify(async (req, res) => {
     const { email, password } = req.body;
     const { session } = req;
@@ -75,10 +75,10 @@ router.get(
 router.post(
   "/register",
   noAuth,
-  validator.body(register.body),
+  validateRegister,
   promisify(async (req, res) => {
     const { name, email, password, confirm } = req.body;
-
+    // todo move confirm from api to client
     if (password !== confirm) {
       errorLogger(PASSWORDS_NOT_MATCH);
       req.flash("registerErr", PASSWORDS_NOT_MATCH);
@@ -93,18 +93,17 @@ router.post(
 
     const hashPassword = await bcrypt.hash(password, 10);
     // use timestamp as link for account verification
-    const link = Date.now().toString();
-    const user = await new User({
+    const link = getTimestampString();
+    await User.create({
       email,
       name,
       password: hashPassword,
       link,
     });
-    await user.save();
     await sendAuthorisationEmail({
       email,
       name,
-      link: getLinkForVerification(link),
+      url: getLinkForVerification(link),
     });
 
     req.flash("msg", SUCCESS);
@@ -115,7 +114,7 @@ router.post(
 // verification
 router.get(
   "/verify/:id",
-  validator.params(params),
+  validateParamsId("/"),
   promisify(async (req, res) => {
     const { session } = req;
 
@@ -126,7 +125,7 @@ router.get(
     }
     const candidate = await User.findOne({ link: req.params.id });
     if (!candidate) {
-      errorLogger();
+      errorLogger(VERIFY_ERROR);
       return res.render("verified", {
         title: VERIFY_ERROR,
         email: SENDGRID_EMAIL,
@@ -136,7 +135,7 @@ router.get(
     await candidate.save();
 
     session.isValidated = true;
-    session.save((err) => {
+    session.save(async(err) => {
       if (err) return errorLogger(err.message);
       return res.render("verified", {
         title: "Вітання",
