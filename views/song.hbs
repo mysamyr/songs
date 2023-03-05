@@ -1,19 +1,24 @@
 {{#if msg}}
-    <p class="msg">{{msg}}</p>
+	<p class="msg">{{msg}}</p>
+{{/if}}
+{{#if err}}
+	<p class="msg err">{{err}}</p>
 {{/if}}
 
 <h1>{{name}}</h1>
 
-<div>
-    <pre>{{text}}</pre>
-    <p class="right">{{author}}</p>
-    <div class="buttons_container">
-        <a href="/category" class="btn blue">До категорій</a>
-        {{#if isAuthor}}
-            <a href="/song/edit/{{id}}" class="btn">Редагувати</a>
-            <a class="btn red" data-modal="/song/delete/{{id}}">Видалити</a>
-        {{/if}}
-    </div>
+<pre>{{text}}</pre>
+
+{{#if author}}
+	<p class="right">{{author}}</p>
+{{/if}}
+
+<div class="buttons_container">
+	<a href="/category" class="btn blue">До категорій</a>
+	{{#if isAuthor}}
+		<a href="/song/edit/{{id}}" class="btn">Редагувати</a>
+		<a class="btn red" data-modal="/song/delete/{{id}}">Видалити</a>
+	{{/if}}
 </div>
 
 {{> del-confirm}}

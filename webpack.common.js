@@ -6,9 +6,8 @@ module.exports = {
   output: {
     filename: "bundle.js",
     path: require("path").resolve(__dirname, "public", "dist"),
+    clean: true,
   },
-  watch: true,
-  devtool: "source-map",
   module: {
     rules: []
   }

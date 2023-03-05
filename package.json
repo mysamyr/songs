@@ -6,8 +6,11 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "setup": "webpack",
-    "format": "prettier --write \"src/**/*.js\""
+    "setup": "webpack --config webpack.prod.js",
+    "setup:dev": "webpack --config webpack.dev.js",
+    "check-formatting": "npx prettier -l \"src/**/*.{js,md,json,css}\"",
+    "format": "prettier --write \"src/**/*.js\" \"public/app.js\"",
+    "check-quality": "eslint src/"
   },
   "keywords": [],
   "author": "",
@@ -24,7 +27,6 @@
     "cors": "^2.8.5",
     "express": "^4.17.2",
     "express-handlebars": "^6.0.2",
-    "express-joi-validation": "^5.0.1",
     "express-session": "^1.17.2",
     "helmet": "^5.0.1",
     "joi": "^17.7.0",
@@ -32,9 +34,18 @@
     "winston": "^3.8.2"
   },
   "devDependencies": {
+    "eslint": "^8.35.0",
+    "eslint-config-prettier": "^8.7.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "husky": "^4.3.8",
     "nodemon": "^2.0.15",
     "prettier": "2.7.1",
     "webpack": "^5.68.0",
     "webpack-cli": "^4.9.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run setup && npm run format && npm run check-quality && git add ."
+    }
   }
 }

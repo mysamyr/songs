@@ -7,13 +7,16 @@
 <form action="/song/add" method="POST">
     <div class="input-field">
         <label for="categories">Виберіть категорію:</label>
-        <select id="categories" name="categories" required multiple>
+        <select id="categories"
+                name="categories"
+                required
+                multiple>
             {{#if current}}
-                <option selected>{{current}}</option>
+                <option class="capitalize" selected>{{current}}</option>
             {{/if}}
             {{#each categories}}
                 {{#ifneq @root.current name}}
-                    <option>{{name}}</option>
+                    <option class="capitalize">{{name}}</option>
                 {{/ifneq}}
             {{/each}}
         </select>
@@ -21,12 +24,22 @@
 
     <div class="input-field">
         <label for="name">Назва пісні:</label>
-        <input id="name" name="name" type="text" maxlength="30" value="{{name}}" required>
+        <input id="name"
+               name="name"
+               type="text"
+               minlength="5"
+               maxlength="30"
+               value="{{name}}"
+               required>
     </div>
 
     <div class="input-field">
         <label for="text">Текст пісні:</label>
-        <textarea id="text" name="text" required>{{text}}</textarea>
+        <textarea id="text"
+                  name="text"
+                  minlength="10"
+                  maxlength="4096"
+                  required>{{text}}</textarea>
     </div>
 
     <div class="buttons_container">
