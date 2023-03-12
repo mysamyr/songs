@@ -1,6 +1,6 @@
 const Joi = require("joi");
 const { errorLogger } = require("../services/logger");
-const { makeAddSongUrlAfterError } = require("../helpers/songs.helper");
+const { makeAddSongUrlAfterError } = require("../features/song/song.helper");
 
 const email = Joi.string().email().required().messages({
 	"any.required": "Введіть email",

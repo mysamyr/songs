@@ -1,8 +1,8 @@
 const router = require("express").Router();
-const { TITLES } = require("../constants");
-const { promisify } = require("../middleware");
+const { TITLES } = require("../../constants");
+const { promisify } = require("../../middleware");
 
-const { SENDGRID_EMAIL } = require("../config");
+const { SENDGRID_EMAIL } = require("../../config");
 
 // Home page
 router.get(

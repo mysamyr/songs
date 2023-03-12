@@ -10,12 +10,14 @@ const MongoStore = require("connect-mongodb-session")(session);
 const flash = require("connect-flash");
 
 const { COLLECTIONS } = require("./src/constants");
+const {
+  auth,
+  cabinet,
+  category,
+  home,
+  song,
+} = require("./src/routes");
 const {logger, errorLogger} = require("./src/services/logger");
-const homeRoute = require("./src/features/home"),
-  categoryRoute = require("./src/features/category"),
-  cabinetRoute = require("./src/features/cabinet"),
-  songRoute = require("./src/features/songs"),
-  authRoute = require("./src/features/auth");
 const {variable, h404, requestLoggerMiddleware, errorHandler} = require("./src/middleware");
 
 const {
@@ -55,11 +57,11 @@ app.use(session({
 app.use(variable);
 app.use(requestLoggerMiddleware);
 
-app.use("/", homeRoute);
-app.use("/category", categoryRoute);
-app.use("/song", songRoute);
-app.use("/auth", authRoute);
-app.use("/cabinet", cabinetRoute);
+app.use("/", home);
+app.use("/category", category);
+app.use("/song", song);
+app.use("/auth", auth);
+app.use("/cabinet", cabinet);
 
 app.use(errorHandler);
 
