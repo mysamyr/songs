@@ -2,7 +2,8 @@
     <p class="msg alert">{{err}}</p>
 {{/if}}
 
-<h1>{{categoryName}}</h1>
+<h1>{{categoryName}}{{#if isAuth}} <span class="material-icons edit">edit</span>{{/if}}</h1>
+{{> cat-edit}}
 
 {{#if songs.length}}
     <input type="text" id="search" placeholder="пошук...">

@@ -1,3 +1,25 @@
+/* eslint-disable no-undef */
+
+const showFlashErr = (msg, elemSelector) => {
+	const elem = document.querySelector(elemSelector);
+	const p = document.createElement("p");
+	p.classList.add("msg", "alert");
+	p.innerHTML = msg;
+	document.querySelector(".container").insertBefore(p, elem);
+	flash();
+};
+const passwordValidate = (form, pass, conf, elemId) => {
+	form.addEventListener("submit", async (e) => {
+		e.preventDefault();
+		const password = form.elements[pass].value;
+		const confirm = form.elements[conf].value;
+		if (password === confirm) {
+			form.submit();
+		} else {
+			showFlashErr("Паролі мають співпадати", elemId);
+		}
+	});
+};
 const flash = () => {
 	const flashAlert = document.querySelector(".alert"),
 		flashMsg = document.querySelector(".msg");
@@ -80,6 +102,31 @@ const search = () => {
 		});
 	}
 };
+const edit = () => {
+	const header = document.querySelector("h1");
+	const editBtn = document.querySelector(".edit");
+	const editForm = document.querySelector(".category-edit");
+	const close = document.getElementById("edit-close");
+
+	if (editBtn) {
+		editBtn.addEventListener("click", () => {
+			header.classList.add("hide");
+			editForm.classList.remove("hide");
+		});
+		editForm.addEventListener("submit", (e) => {
+			e.preventDefault();
+			if (editForm.newValue.value === editForm.prevValue.value) {
+				showFlashErr("Назви категорії співпадають", "h1");
+			} else {
+				editForm.submit();
+			}
+		});
+		close.addEventListener("click", () => {
+			header.classList.remove("hide");
+			editForm.classList.add("hide");
+		});
+	}
+};
 const arrow = () => {
 	const btn = document.querySelector(".arr_top");
 	window.addEventListener("scroll", () => {
@@ -92,23 +139,6 @@ const arrow = () => {
 	});
 	btn.addEventListener("click", () => {
 		document.documentElement.scrollTop = 0;
-	});
-};
-const passwordValidate = (form, pass, conf, elemId) => {
-	form.addEventListener("submit", async (e) => {
-		e.preventDefault();
-		const password = form.elements[pass].value;
-		const confirm = form.elements[conf].value;
-		if (password === confirm) {
-			form.submit();
-		} else {
-			const elem = document.getElementById(elemId);
-			const p = document.createElement("p");
-			p.classList.add("msg", "alert");
-			p.innerHTML = "Паролі мають співпадати";
-			document.querySelector(".container").insertBefore(p, elem);
-			flash();
-		}
 	});
 };
 const auth = () => {
@@ -159,7 +189,7 @@ const auth = () => {
 			confirm.setCustomValidity("");
 		}
 	});
-	passwordValidate(registerForm, "password", "confirm", "login");
+	passwordValidate(registerForm, "password", "confirm", "#login");
 };
 const cabinet = () => {
 	const emailForm = document.getElementById("email-form");
@@ -180,7 +210,7 @@ const cabinet = () => {
 	const passwordReset = document.getElementById("password-reset");
 	const [oldPass, newPass, confirmPass] =
 		passwordForm.getElementsByTagName("input");
-	passwordValidate(passwordForm, "newPassword", "confirm", "change-password");
+	passwordValidate(passwordForm, "newPassword", "confirm", "#change-password");
 	newPass.addEventListener("keyup", () => {
 		if (oldPass.value === newPass.value) {
 			newPass.setCustomValidity("Старий і новий паролі не мають співпадати");
@@ -257,6 +287,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			// for single category
 			if (pageName.length === 3) {
 				search();
+				edit(pageName[2]);
 			}
 			break;
 	}

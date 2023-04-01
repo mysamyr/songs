@@ -2,11 +2,14 @@ const { TITLES } = require("../../constants");
 const {
 	SUCCESS_CREATE_CATEGORY,
 	SUCCESS_DELETE_CATEGORY,
+	SUCCESS_UPDATE_CATEGORY,
 } = require("../../constants/messages");
 const {
 	EXISTING_CATEGORY,
 	SONGS_INSIDE_CATEGORY,
 	NO_SUCH_CATEGORY,
+	SAME_CATEGORY,
+	NOT_AUTHOR,
 } = require("../../constants/error-messages");
 const { Category, Song } = require("../../models");
 const { errorLogger } = require("../../services/logger");
@@ -44,6 +47,43 @@ module.exports.addCategory = async (req, res) => {
 
 	req.flash("msg", SUCCESS_CREATE_CATEGORY(name));
 	return res.redirect("/category");
+};
+
+module.exports.editCategory = async (req, res) => {
+	const {
+		body: { prevValue, newValue },
+		params: { id },
+		session: { user },
+	} = req;
+
+	if (prevValue === newValue) {
+		errorLogger(SAME_CATEGORY);
+		return res.status(400).send();
+	}
+
+	const category = await Category.findById(id);
+	if (!category) {
+		errorLogger(NO_SUCH_CATEGORY);
+		req.flash("err", NO_SUCH_CATEGORY);
+		return res.redirect(`/category/${id}`);
+	}
+	const isNewNameNotUnique = await Category.findOne({ name: newValue });
+	if (isNewNameNotUnique) {
+		errorLogger(EXISTING_CATEGORY);
+		req.flash("err", EXISTING_CATEGORY);
+		return res.redirect(`/category/${id}`);
+	}
+	if (category.author.toString() !== user.id) {
+		errorLogger(NOT_AUTHOR);
+		req.flash("err", NOT_AUTHOR);
+		return res.redirect(`/category/${id}`);
+	}
+
+	category.name = newValue;
+	await category.save();
+
+	req.flash("msg", SUCCESS_UPDATE_CATEGORY);
+	return res.redirect(`/category/${id}`);
 };
 
 module.exports.deleteCategory = async (req, res) => {

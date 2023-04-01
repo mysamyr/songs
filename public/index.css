@@ -223,6 +223,10 @@ i {
     text-transform: capitalize;
 }
 
+.edit:hover {
+    cursor: pointer;
+}
+
 /*BUTTONS*/
 .buttons_container {
     display: flex;
@@ -246,6 +250,11 @@ i {
 
 .btn:hover {
     background-color: #2bbbad;
+}
+
+.btn span {
+    line-height: 2;
+    display: inline;
 }
 
 /*INPUTS*/
@@ -286,6 +295,17 @@ input:invalid, textarea:invalid {
 input:valid, textarea:valid {
     border-bottom-color: var(--valid-border);
     box-shadow: 0 1px 0 0 var(--valid-border);
+}
+
+.category-edit {
+    width: 200px;
+    margin-top: 2rem;
+}
+
+.category_edit_btns {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px;
 }
 
 /*MODAL*/

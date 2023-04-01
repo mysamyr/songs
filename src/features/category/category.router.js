@@ -1,7 +1,12 @@
 const router = require("express").Router();
 const { TITLES } = require("../../constants");
 const { auth, promisify, isValid } = require("../../middleware");
-const { validate, category, validateParamsId } = require("../../validators");
+const {
+	validate,
+	category,
+	validateParamsId,
+	validateEditCategory,
+} = require("../../validators");
 const categoryController = require("./category.controller");
 
 // Categories
@@ -22,8 +27,17 @@ router.get(
 );
 router.post(
 	"/add",
+	auth,
 	validate("body", category.body, "/category/add"),
 	promisify(categoryController.addCategory),
+);
+
+router.post(
+	"/edit/:id",
+	auth,
+	validateParamsId("/category"),
+	validateEditCategory,
+	promisify(categoryController.editCategory),
 );
 
 // Delete category

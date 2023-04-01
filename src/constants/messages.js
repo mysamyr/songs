@@ -10,6 +10,7 @@ module.exports = {
 		"Інструкція з активації облікового запису надіслана на Вашу електронну пошту",
 	// category
 	SUCCESS_CREATE_CATEGORY: (name) => `Категорія ${name} успішно створена`,
+	SUCCESS_UPDATE_CATEGORY: "Категорія успішно перейменована",
 	SUCCESS_DELETE_CATEGORY: (name) => `Категорія ${name} успішно видалена`,
 	// song
 	SUCCESS_DELETE_SONG: (name) => `Пісня ${name} успішно видалена`,

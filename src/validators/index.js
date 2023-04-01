@@ -14,6 +14,10 @@ const password = Joi.string().trim().min(8).max(30).required().messages({
 	"string.max": "Пароль не може бути довшим 30-ти символів",
 });
 const category = Joi.string().trim().lowercase().min(5).max(30).required();
+const editCategory = Joi.object({
+	prevValue: category,
+	newValue: category,
+});
 const params = Joi.object({
 	id: Joi.string().hex().length(24).required().messages({
 		"string.empty": "Невірний ідентифікатор",
@@ -109,6 +113,17 @@ module.exports = {
 		errorLogger(message);
 		req.flash("err", message);
 		return res.redirect(`/song/edit/${req.params.id}`);
+	},
+	validateEditCategory: (req, res, next) => {
+		const { error, value } = editCategory.validate(req.body);
+		if (!error) {
+			req.body = value;
+			return next();
+		}
+
+		const message = error.details[0].message;
+		errorLogger(message);
+		return res.status(400).send();
 	},
 	login: Joi.object({
 		email,
