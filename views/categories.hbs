@@ -1,8 +1,11 @@
 {{#if msg}}
     <p class="msg">{{msg}}</p>
 {{/if}}
+{{#if err}}
+    <p class="msg alert">{{err}}</p>
+{{/if}}
 
-<h1>Пісенник</h1>
+<h1>Категорії</h1>
 
 {{#if categories.length}}
     {{#each categories}}
@@ -14,10 +17,10 @@
     <p>Поки немає категорій</p>
 {{/if}}
 
-<div class="buttons">
-    <a href="/" class="btn goHome">На головну</a>
+<div class="buttons_container">
+    <a href="/" class="btn blue">На головну</a>
     {{#if isAuth}}
-        <a href="/song/add" class="btn">Додати нову пісню</a>
         <a href="/category/add" class="btn">Додати нову категорію</a>
+        <a href="/song/add" class="btn">Додати нову пісню</a>
     {{/if}}
 </div>

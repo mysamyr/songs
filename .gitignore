@@ -1,4 +1,6 @@
 /node_modules
 .idea
-/src/keys/keys-dev.js
+.vscode
+/logs
+/src/config/keys-dev.js
 /public/dist/bundle.js.map

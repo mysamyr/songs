@@ -1,24 +1,30 @@
-const express = require("express"),
-  path = require("path"),
-  mongoose = require("mongoose"),
-  helmet = require("helmet"),
-  compression = require("compression"),
-  expHbs = require("express-handlebars"),
-  cors = require("cors"),
-  session = require("express-session"),
-  MongoStore = require("connect-mongodb-session")(session),
-  flash = require("connect-flash");
-const homeRoute = require("./src/features/home"),
-  categoryRoute = require("./src/features/category"),
-  cabinetRoute = require("./src/features/cabinet"),
-  songRoute = require("./src/features/songs"),
-  authRoute = require("./src/features/auth");
+const express = require("express");
+const path = require("path");
+const mongoose = require("mongoose");
+const helmet = require("helmet");
+const compression = require("compression");
+const expHbs = require("express-handlebars");
+const cors = require("cors");
+const session = require("express-session");
+const MongoStore = require("connect-mongodb-session")(session);
+const flash = require("connect-flash");
+
+const { COLLECTIONS } = require("./src/constants");
+const {
+  auth,
+  cabinet,
+  category,
+  home,
+  song,
+} = require("./src/routes");
+const {logger, errorLogger} = require("./src/services/logger");
+const {variable, h404, requestLoggerMiddleware, errorHandler} = require("./src/middleware");
+
 const {
   PORT,
   MONGODB_URI,
   SESSION_SECRET,
-} = require("./src/keys");
-const {variable, h404} = require("./src/middleware");
+} = require("./src/config");
 
 const app = express();
 const hbs = expHbs.create({
@@ -28,7 +34,7 @@ const hbs = expHbs.create({
   allowProtoMethodsByDefault: true,
 });
 const store = new MongoStore({
-  collection: "sessions",
+  collection: COLLECTIONS.SESSION,
   uri: MONGODB_URI,
 });
 
@@ -49,27 +55,27 @@ app.use(session({
   store,
 }));
 app.use(variable);
+app.use(requestLoggerMiddleware);
 
-app.use("/", homeRoute);
-app.use("/category", categoryRoute);
-app.use("/song", songRoute);
-app.use("/auth", authRoute);
-app.use("/cabinet", cabinetRoute);
+app.use("/", home);
+app.use("/category", category);
+app.use("/song", song);
+app.use("/auth", auth);
+app.use("/cabinet", cabinet);
+
+app.use(errorHandler);
 
 app.use(h404);
 
 const start = async () => {
   try {
-    await mongoose.connect(MONGODB_URI, {
-      useNewUrlParser: true,
-    }, (err) => {
-      if (err) console.log(err);
-    });
+    mongoose.set('strictQuery', false);
+    await mongoose.connect(MONGODB_URI);
     app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
+      logger.info(`Server is running on port ${PORT}`);
     });
-  } catch (e) {
-    console.log(e);
+  } catch (err) {
+    errorLogger(err.message);
   }
 };
 

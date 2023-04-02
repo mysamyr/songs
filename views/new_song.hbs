@@ -5,34 +5,45 @@
 <h1>Додати нову пісню</h1>
 
 <form action="/song/add" method="POST">
-    <div class="input-field col s12">
-        <select id="categories" name="categories" required multiple>
+    <div class="input-field">
+        <label for="categories">Виберіть категорію:</label>
+        <select id="categories"
+                name="categories"
+                required
+                multiple>
             {{#if current}}
-                <option selected>{{current}}</option>
+                <option class="capitalize" selected>{{current}}</option>
             {{/if}}
             {{#each categories}}
                 {{#ifneq @root.current name}}
-                    <option>{{name}}</option>
+                    <option class="capitalize">{{name}}</option>
                 {{/ifneq}}
             {{/each}}
         </select>
-        <label for="categories">Виберіть категорію</label>
     </div>
 
     <div class="input-field">
-        <input id="name" name="name" type="text" class="validate" required>
-        <label for="name">Назва пісні</label>
-        <span class="helper-text" data-error="Назва пісні"></span>
+        <label for="name">Назва пісні:</label>
+        <input id="name"
+               name="name"
+               type="text"
+               minlength="5"
+               maxlength="30"
+               value="{{name}}"
+               required>
     </div>
 
     <div class="input-field">
-        <textarea id="text" name="text" class="materialize-textarea validate" required></textarea>
-        <label for="text">Текст пісні</label>
-        <span class="helper-text" data-error="Введіть текст пісні"></span>
+        <label for="text">Текст пісні:</label>
+        <textarea id="text"
+                  name="text"
+                  minlength="10"
+                  maxlength="4096"
+                  required>{{text}}</textarea>
     </div>
 
-    <div class="buttons">
+    <div class="buttons_container">
         <button class="btn">Додати пісню</button>
-        <a href="/category" class="btn goHome">Назад до категорій</a>
+        <a href="/category" class="btn blue">Назад до категорій</a>
     </div>
 </form>

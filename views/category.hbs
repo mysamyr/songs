@@ -2,7 +2,9 @@
     <p class="msg alert">{{err}}</p>
 {{/if}}
 
-<h1>{{categoryName}}</h1>
+<h1>{{categoryName}}{{#ifor isAuthor isAdmin}} <span class="material-icons edit">edit</span>{{/ifor}}</h1>
+{{> cat-edit}}
+
 {{#if songs.length}}
     <input type="text" id="search" placeholder="пошук...">
 {{/if}}
@@ -19,11 +21,11 @@
     {{/if}}
 </div>
 
-<div class="buttons">
-    <a href="/category" class="btn goHome">До списку категорій</a>
+<div class="buttons_container">
+    <a href="/category" class="btn blue">До списку категорій</a>
     {{#if isAuth}}
         <a href="/song/add?current={{categoryName}}" class="btn">Додати нову пісню</a>
-        <button class="btn red" data-modal="/category/delete/{{categoryId}}">Видалити категорію</button>
+        <a class="btn red" data-modal="/category/delete/{{categoryId}}">Видалити категорію</a>
     {{/if}}
 </div>
 

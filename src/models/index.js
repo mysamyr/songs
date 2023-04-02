@@ -1,5 +1,5 @@
 module.exports = {
-  Category: require("./category"),
-  Song: require("./song"),
-  User: require("./user"),
+	Category: require("./category"),
+	Song: require("./song"),
+	User: require("./user"),
 };

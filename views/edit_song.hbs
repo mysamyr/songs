@@ -1,32 +1,44 @@
+{{#if err}}
+    <p class="msg alert">{{err}}</p>
+{{/if}}
+
 <h1>Редагувати пісню</h1>
 
 <form action="/song/edit/{{id}}" method="POST">
-    <div class="input-field col s12">
-        <select id="categories" name="categories" required multiple>
+    <div class="input-field">
+        <label for="categories">Виберіть категорію:</label>
+        <select id="categories"
+                name="categories"
+                required
+                multiple>
             {{#each currents}}
-                <option selected>{{name}}</option>
+                <option class="capitalize" selected>{{name}}</option>
             {{/each}}
             {{#each categories}}
-                <option>{{name}}</option>
+                <option class="capitalize">{{name}}</option>
             {{/each}}
         </select>
-        <label for="categories">Виберіть категорію</label>
     </div>
 
     <div class="input-field">
-        <input id="name" name="name" type="text" class="validate" required value="{{name}}">
-        <label for="name">Назва пісні</label>
-        <span class="helper-text" data-error="введіть назву пісні"></span>
+        <label for="name">Назва пісні:</label>
+        <input id="name"
+               name="name"
+               type="text"
+               maxlength="30"
+               required
+               value="{{name}}">
     </div>
 
     <div class="input-field">
-        <textarea id="text" name="text" class="materialize-textarea validate" required>{{text}}</textarea>
-        <label for="text">Текст пісні</label>
-        <span class="helper-text" data-error="Введіть текст пісні"></span>
+        <label for="text">Текст пісні:</label>
+        <textarea id="text"
+                  name="text"
+                  required>{{text}}</textarea>
     </div>
 
-    <div class="buttons">
-        <button class="btn btn-primary">Зберегти</button>
+    <div class="buttons_container">
+        <button class="btn">Зберегти</button>
         <a href="/category" class="btn red">Скасувати</a>
     </div>
 </form>
