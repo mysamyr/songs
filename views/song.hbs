@@ -15,10 +15,10 @@
 
 <div class="buttons_container">
 	<a href="/category" class="btn blue">До категорій</a>
-	{{#if isAuthor}}
+	{{#ifor isAuthor isAdmin}}
 		<a href="/song/edit/{{id}}" class="btn">Редагувати</a>
 		<a class="btn red" data-modal="/song/delete/{{id}}">Видалити</a>
-	{{/if}}
+	{{/ifor}}
 </div>
 
 {{> del-confirm}}

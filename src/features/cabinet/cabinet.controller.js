@@ -3,6 +3,7 @@ const {
 	SUCCESS_UPDATE_EMAIL,
 	SUCCESS_UPDATE_PASSWORD,
 	VERIFICATION_SENT,
+	USER_DELETED,
 } = require("../../constants/messages");
 const {
 	VALIDATE_ACCOUNT,
@@ -12,6 +13,7 @@ const {
 	PASSWORDS_MATCH,
 	ALREADY_ACTIVATED,
 	VERIFY_TRY_AGAIN,
+	ACCOUNT_NOT_DELETED,
 } = require("../../constants/error-messages");
 const { User } = require("../../models");
 const { transaction } = require("../../services/db");
@@ -144,4 +146,18 @@ module.exports.resendVerification = async (req, res) => {
 
 	req.flash("msg", VERIFICATION_SENT);
 	return res.redirect("/cabinet");
+};
+
+module.exports.deleteAccount = async (req, res) => {
+	const { user } = req.session;
+
+	const userData = await User.findByIdAndDelete(user.id);
+
+	if (!userData) {
+		req.flash("err", ACCOUNT_NOT_DELETED);
+		return res.redirect("/cabinet");
+	}
+
+	req.flash("msg", USER_DELETED);
+	return req.session.destroy(() => res.redirect("/"));
 };

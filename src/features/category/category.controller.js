@@ -53,7 +53,7 @@ module.exports.editCategory = async (req, res) => {
 	const {
 		body: { prevValue, newValue },
 		params: { id },
-		session: { user },
+		session: { user, isAdmin },
 	} = req;
 
 	if (prevValue === newValue) {
@@ -73,13 +73,14 @@ module.exports.editCategory = async (req, res) => {
 		req.flash("err", EXISTING_CATEGORY);
 		return res.redirect(`/category/${id}`);
 	}
-	if (category.author.toString() !== user.id) {
+	if (category.author.toString() !== user.id && !isAdmin) {
 		errorLogger(NOT_AUTHOR);
 		req.flash("err", NOT_AUTHOR);
 		return res.redirect(`/category/${id}`);
 	}
 
 	category.name = newValue;
+	category.author = user.id;
 	await category.save();
 
 	req.flash("msg", SUCCESS_UPDATE_CATEGORY);
@@ -108,7 +109,10 @@ module.exports.deleteCategory = async (req, res) => {
 };
 
 module.exports.getSongsForCategory = async (req, res) => {
-	const { id } = req.params;
+	const {
+		params: { id },
+		session: { user },
+	} = req;
 
 	const songs = await Song.find({
 		categories: id,
@@ -119,7 +123,7 @@ module.exports.getSongsForCategory = async (req, res) => {
 	const dbCategory = await Category.findOne({
 		_id: id,
 	})
-		.select("id name")
+		.select("id name author")
 		.exec();
 
 	if (!dbCategory) {
@@ -134,6 +138,7 @@ module.exports.getSongsForCategory = async (req, res) => {
 		isSong: true,
 		categoryName,
 		categoryId: dbCategory.id,
+		isAuthor: dbCategory.author.toString() === user?.id,
 		songs: sortByName(songs),
 		err: req.flash("err"),
 	});
