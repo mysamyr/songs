@@ -8,6 +8,7 @@ module.exports = {
 	SUCCESS_UPDATE_PASSWORD: "Пароль успішно змінено",
 	VERIFICATION_SENT:
 		"Інструкція з активації облікового запису надіслана на Вашу електронну пошту",
+	USER_DELETED: "Профіль видалено",
 	// category
 	SUCCESS_CREATE_CATEGORY: (name) => `Категорія ${name} успішно створена`,
 	SUCCESS_UPDATE_CATEGORY: "Категорія успішно перейменована",

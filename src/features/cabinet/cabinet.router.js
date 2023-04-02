@@ -34,4 +34,6 @@ router.post(
 );
 router.get("/resend", auth, promisify(cabinetController.resendVerification));
 
+router.get("/delete", auth, promisify(cabinetController.deleteAccount));
+
 module.exports = router;

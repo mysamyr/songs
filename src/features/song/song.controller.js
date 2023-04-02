@@ -76,7 +76,7 @@ module.exports.addSong = async (req, res) => {
 module.exports.renderEditSong = async (req, res) => {
 	const {
 		params: { id },
-		session: { user },
+		session: { user, isAdmin },
 	} = req;
 
 	const song = await Song.findOne({ _id: id })
@@ -87,7 +87,7 @@ module.exports.renderEditSong = async (req, res) => {
 		req.flash("err", NOT_EXISTING_SONG);
 		return res.redirect("/category");
 	}
-	if (!user.isAdmin && user.id !== song.author.toString()) {
+	if (!isAdmin && user.id !== song.author.toString()) {
 		errorLogger(NOT_AUTHOR);
 		req.flash("err", NOT_AUTHOR);
 		return res.redirect(`/song/${id}`);
@@ -144,7 +144,7 @@ module.exports.editSong = async (req, res) => {
 module.exports.deleteSong = async (req, res) => {
 	const {
 		params: { id },
-		session: { user },
+		session: { user, isAdmin },
 	} = req;
 
 	const song = await Song.findOne({ _id: id });
@@ -153,7 +153,7 @@ module.exports.deleteSong = async (req, res) => {
 		req.flash("err", NOT_EXISTING_SONG);
 		return res.redirect("/category");
 	}
-	if (!user.isAdmin && user.id !== song.author.toString()) {
+	if (!isAdmin && user.id !== song.author.toString()) {
 		errorLogger(NOT_AUTHOR);
 		req.flash("err", NOT_AUTHOR);
 		return res.redirect(`/song/${id}`);

@@ -25,6 +25,7 @@ module.exports = {
 	// variable for client to know that user is logged in
 	variable: (req, res, next) => {
 		res.locals.isAuth = req.session.isAuthenticated;
+		res.locals.isAdmin = req.session.isAdmin;
 		res.locals.userName = req.session.user?.name;
 		next();
 	},

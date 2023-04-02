@@ -70,11 +70,7 @@ app.use(h404);
 const start = async () => {
   try {
     mongoose.set('strictQuery', false);
-    await mongoose.connect(MONGODB_URI, {
-      useNewUrlParser: true,
-    }, (err) => {
-      if (err) errorLogger(err.message);
-    });
+    await mongoose.connect(MONGODB_URI);
     app.listen(PORT, () => {
       logger.info(`Server is running on port ${PORT}`);
     });
