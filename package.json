@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "npm run setup && node index.js",
     "dev": "nodemon index.js",
     "setup": "webpack --config webpack.prod.js",
     "setup:dev": "webpack --config webpack.dev.js",
