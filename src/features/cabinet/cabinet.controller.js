@@ -1,4 +1,3 @@
-const bcrypt = require("bcryptjs");
 const {
 	SUCCESS_UPDATE_EMAIL,
 	SUCCESS_UPDATE_PASSWORD,
@@ -25,6 +24,7 @@ const {
 } = require("../../services/mail");
 const { getLinkForVerification } = require("./cabinet.helper");
 const { getTimestampString, timeDiff } = require("../../utils/time");
+const { compare, hash } = require("../../utils/crypto");
 
 module.exports.changeEmail = async (req, res) => {
 	const {
@@ -88,24 +88,21 @@ module.exports.changePassword = async (req, res) => {
 			.session(session)
 			.exec();
 
-		const isValidPassword = await bcrypt.compare(password, candidate.password);
+		const isValidPassword = compare(password, candidate.password);
 		if (!isValidPassword) {
 			errorLogger(WRONG_PASSWORD);
 			req.flash("err", WRONG_PASSWORD);
 			return res.redirect("/cabinet");
 		}
 
-		const arePasswordsTheSame = await bcrypt.compare(
-			newPassword,
-			candidate.password,
-		);
+		const arePasswordsTheSame = compare(newPassword, candidate.password);
 		if (arePasswordsTheSame) {
 			errorLogger(PASSWORDS_MATCH);
 			req.flash("err", PASSWORDS_MATCH);
 			return res.redirect("/cabinet");
 		}
 
-		const hashPassword = await bcrypt.hash(newPassword, +process.env.HASH_SALT);
+		const hashPassword = hash(newPassword);
 		await User.findByIdAndUpdate(user.id, {
 			password: hashPassword,
 		}).session(session);

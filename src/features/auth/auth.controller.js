@@ -1,4 +1,3 @@
-const bcrypt = require("bcryptjs");
 const { TITLES } = require("../../constants");
 const { SUCCESS_LOGIN, SUCCESS } = require("../../constants/messages");
 const {
@@ -17,6 +16,7 @@ const { getLinkForVerification } = require("../cabinet/cabinet.helper");
 const { getTimestampString } = require("../../utils/time");
 
 const { SENDGRID_EMAIL } = require("../../config");
+const { compare, hash } = require("../../utils/crypto");
 
 module.exports.login = async (req, res) => {
 	const {
@@ -35,7 +35,7 @@ module.exports.login = async (req, res) => {
 		return res.redirect("/auth/login#login");
 	}
 
-	const isSame = await bcrypt.compare(password, candidate.password);
+	const isSame = compare(password, candidate.password);
 	if (!isSame) {
 		errorLogger(WRONG_EMAIL_OR_PASSWORD);
 		req.flash("err", WRONG_EMAIL_OR_PASSWORD);
@@ -75,7 +75,7 @@ module.exports.register = async (req, res) => {
 		return res.status(422).redirect("/auth/login#register");
 	}
 
-	const hashPassword = await bcrypt.hash(password, +process.env.HASH_SALT);
+	const hashPassword = hash(password);
 	// use timestamp as link for account verification
 	const link = getTimestampString();
 	await User.create({

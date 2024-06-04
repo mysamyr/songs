@@ -3,7 +3,6 @@ module.exports = {
 	URL: process.env.URL,
 	MONGODB_URI: process.env.MONGODB_URI,
 	SESSION_SECRET: process.env.SESSION_SECRET,
-	SENDGRID_API_KEY: process.env.SENDGRID_API_KEY,
-	SENDGRID_EMAIL: process.env.SENDGRID_EMAIL,
-	HASH_SALT: process.env.HASH_SALT,
+	SEND_EMAIL: process.env.SEND_EMAIL,
+	EMAIL_API_KEY: process.env.EMAIL_API_KEY,
 };

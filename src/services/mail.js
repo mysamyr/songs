@@ -1,18 +1,26 @@
-const sgMail = require("@sendgrid/mail");
+const { createTransport } = require("nodemailer");
 
-const { SENDGRID_API_KEY, SENDGRID_EMAIL } = require("../config");
+const { SEND_EMAIL, EMAIL_API_KEY } = process.env;
 
-sgMail.setApiKey(SENDGRID_API_KEY);
+const transporter = createTransport({
+	host: "smtp.gmail.com",
+	port: 587,
+	secure: false,
+	auth: {
+		user: SEND_EMAIL,
+		pass: EMAIL_API_KEY,
+	},
+});
 
 const generateMail = (email, subject, text) => ({
-	from: SENDGRID_EMAIL,
+	from: SEND_EMAIL,
 	to: email,
 	subject,
 	text,
 });
 
-module.exports.sendAuthorisationEmail = async ({ email, name, url }) => {
-	return await sgMail.send(
+module.exports.sendAuthorisationEmail = async ({ email, name, url }) =>
+	transporter.send(
 		generateMail(
 			email,
 			"Вітаю на сайті пісеннику!",
@@ -21,10 +29,9 @@ module.exports.sendAuthorisationEmail = async ({ email, name, url }) => {
       Приємного користування сайтом!`,
 		),
 	);
-};
 
-module.exports.sendUpdateEmail = async ({ email, name, url }) => {
-	return await sgMail.send(
+module.exports.sendUpdateEmail = async ({ email, name, url }) =>
+	transporter.send(
 		generateMail(
 			email,
 			"Пошту успішно змінено!",
@@ -33,10 +40,9 @@ module.exports.sendUpdateEmail = async ({ email, name, url }) => {
       Дякую, що користуєтесь сайтом!`,
 		),
 	);
-};
 
-module.exports.sendUpdatePassword = async (email) => {
-	return await sgMail.send(
+module.exports.sendUpdatePassword = async (email) =>
+	transporter.send(
 		generateMail(
 			email,
 			"Ваш пароль до сайту Пісенник було змінено",
@@ -45,4 +51,3 @@ module.exports.sendUpdatePassword = async (email) => {
       Ви можете зв'язатися просто відповівши на це повідомлення.`,
 		),
 	);
-};
