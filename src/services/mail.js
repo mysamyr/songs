@@ -20,7 +20,7 @@ const generateMail = (email, subject, text) => ({
 });
 
 module.exports.sendAuthorisationEmail = async ({ email, name, url }) =>
-	transporter.send(
+	transporter.sendMail(
 		generateMail(
 			email,
 			"Вітаю на сайті пісеннику!",
@@ -31,7 +31,7 @@ module.exports.sendAuthorisationEmail = async ({ email, name, url }) =>
 	);
 
 module.exports.sendUpdateEmail = async ({ email, name, url }) =>
-	transporter.send(
+	transporter.sendMail(
 		generateMail(
 			email,
 			"Пошту успішно змінено!",
@@ -42,7 +42,7 @@ module.exports.sendUpdateEmail = async ({ email, name, url }) =>
 	);
 
 module.exports.sendUpdatePassword = async (email) =>
-	transporter.send(
+	transporter.sendMail(
 		generateMail(
 			email,
 			"Ваш пароль до сайту Пісенник було змінено",
