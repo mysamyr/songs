@@ -1,51 +1,55 @@
 {
-  "name": "songs_text_app",
+  "name": "song-pb-app",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Song Pocket Book App",
+  "module": "index.js",
+  "type": "module",
   "scripts": {
-    "start": "npm run setup && node index.js",
-    "dev": "nodemon index.js",
-    "setup": "webpack --config webpack.prod.js",
-    "setup:dev": "webpack --config webpack.dev.js",
-    "check-formatting": "npx prettier -l \"src/**/*.{js,md,json,css}\"",
-    "format": "prettier --write \"src/**/*.js\" \"public/app.js\"",
-    "check-quality": "eslint src/"
+    "start": "node index.js",
+    "start:dev": "nodemon index.js",
+    "build": "webpack --config webpack.prod.js",
+    "build:dev": "webpack --config webpack.dev.js",
+    "secrets:fetch": "node scripts/fetch.js",
+    "secrets:upload": "node scripts/upload.js",
+    "setup": "node scripts/copy.js",
+    "check-formatting": "npx prettier -l ./src",
+    "format": "prettier --write ./src ./public/app.js",
+    "check-quality": "eslint src/",
+    "prepare": "husky"
   },
   "keywords": [],
-  "author": "",
+  "author": "Mysamyr",
   "license": "ISC",
   "browserslist": [
     ">1%"
   ],
   "dependencies": {
-    "compression": "^1.7.4",
+    "@google-cloud/storage": "^7.14.0",
+    "compression": "^1.7.5",
     "connect-flash": "^0.1.1",
-    "connect-mongodb-session": "^2.2.0",
+    "connect-mongodb-session": "^5.0.0",
     "cors": "^2.8.5",
-    "express": "^4.19.2",
-    "express-handlebars": "^7.1.2",
-    "express-session": "^1.18.0",
-    "helmet": "^7.1.0",
-    "joi": "^17.13.1",
-    "mongoose": "^8.4.1",
-    "nodemailer": "^6.9.13",
-    "winston": "^3.13.0"
+    "express": "^5.0.1",
+    "express-handlebars": "^8.0.1",
+    "express-session": "^1.18.1",
+    "helmet": "^8.0.0",
+    "joi": "^17.13.3",
+    "mongoose": "^8.8.3",
+    "nodemailer": "^6.9.16",
+    "webpack": "^5.96.1",
+    "webpack-cli": "^5.1.4",
+    "winston": "^3.17.0"
   },
   "devDependencies": {
-    "eslint": "^8.57.0",
+    "@eslint/eslintrc": "^3.2.0",
+    "@eslint/js": "^9.15.0",
+    "eslint": "^9.15.0",
     "eslint-config-prettier": "^8.10.0",
     "eslint-plugin-prettier": "^5.1.3",
-    "husky": "^4.3.8",
-    "nodemon": "^3.1.3",
-    "prettier": "^3.3.0",
-    "webpack": "^5.91.0",
-    "webpack-cli": "^5.1.4"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run setup && npm run format && npm run check-quality && git add ."
-    }
+    "globals": "^15.12.0",
+    "husky": "^9.1.7",
+    "nodemon": "^3.1.7",
+    "prettier": "^3.4.1"
   },
   "engines": {
     "node": "20"

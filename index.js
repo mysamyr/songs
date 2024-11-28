@@ -1,36 +1,49 @@
-const express = require("express");
-const path = require("path");
-const mongoose = require("mongoose");
-const helmet = require("helmet");
-const compression = require("compression");
-const expHbs = require("express-handlebars");
-const cors = require("cors");
-const session = require("express-session");
-const MongoStore = require("connect-mongodb-session")(session);
-const flash = require("connect-flash");
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import express from "express";
+import mongoose from "mongoose";
+import helmet from "helmet";
+import compression from "compression";
+import expHbs from "express-handlebars";
+import cors from "cors";
+import session from "express-session";
+import connectMongoSession from "connect-mongodb-session";
+import flash from "connect-flash";
 
-const { COLLECTIONS } = require("./src/constants");
-const { auth, cabinet, category, home, song } = require("./src/routes");
-const { logger, errorLogger } = require("./src/services/logger");
-const {
+import { COLLECTIONS } from "./src/constants/index.js";
+import config from "./src/utils/dotenv.js";
+import { auth, cabinet, category, home, song } from "./src/routes/index.js";
+import { logger } from "./src/services/logger.js";
+import * as helpers from "./src/utils/hbs.helpers.js";
+import {
 	variable,
 	h404,
 	requestLoggerMiddleware,
 	errorHandler,
-} = require("./src/middleware");
+} from "./src/middleware.js";
 
-const { PORT, MONGODB_URI, SESSION_SECRET } = require("./src/config");
+config();
+const MongoStore = connectMongoSession(session);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const PORT = +process.env.PORT;
+const REQUEST_TIMEOUT = +process.env.REQUEST_TIMEOUT || 5000;
+const HEADERS_TIMEOUT = +process.env.HEADERS_TIMEOUT || 2000;
+const KEEP_ALIVE_TIMEOUT = +process.env.KEEP_ALIVE_TIMEOUT || 3000;
+const SERVER_TIMEOUT = +process.env.SERVER_TIMEOUT || 60000;
 
 const app = express();
+
 const hbs = expHbs.create({
 	defaultLayout: "main",
 	extname: "hbs",
-	helpers: require("./src/utils/hbs.helpers"),
+	helpers,
 	allowProtoMethodsByDefault: true,
 });
 const store = new MongoStore({
 	collection: COLLECTIONS.SESSION,
-	uri: MONGODB_URI,
+	uri: process.env.MONGODB_URL,
 });
 
 app.engine("hbs", hbs.engine);
@@ -38,14 +51,14 @@ app.set("views", "views");
 app.set("view engine", "hbs");
 
 app.use(express.static(path.join(__dirname, "public")));
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '1mb' }));
 app.use(helmet());
 app.use(cors({ origin: "*" }));
 app.use(compression());
 app.use(flash());
 app.use(
 	session({
-		secret: SESSION_SECRET,
+		secret: process.env.SESSION_SECRET,
 		resave: false,
 		saveUninitialized: false,
 		cookie: { maxAge: 1000 * 60 * 60 * 24 * 7 },
@@ -54,6 +67,10 @@ app.use(
 );
 app.use(variable);
 app.use(requestLoggerMiddleware);
+
+app.get('/ping', (req, res) => {
+	res.status(200).send();
+});
 
 app.use("/", home);
 app.use("/category", category);
@@ -68,13 +85,39 @@ app.use(h404);
 const start = async () => {
 	try {
 		mongoose.set("strictQuery", false);
-		await mongoose.connect(MONGODB_URI);
-		app.listen(PORT, () => {
+		await mongoose.connect(process.env.MONGODB_URL);
+		const server = app.listen(PORT, () => {
 			logger.info(`Server is running on port ${PORT}`);
 		});
+
+		server.requestTimeout = REQUEST_TIMEOUT;
+		server.headersTimeout = HEADERS_TIMEOUT;
+		server.keepAliveTimeout = KEEP_ALIVE_TIMEOUT;
+		server.setTimeout(SERVER_TIMEOUT);
 	} catch (err) {
-		errorLogger(err.message);
+		logger.error(err.message);
 	}
 };
 
 start();
+
+process
+	.on('unhandledRejection', err => {
+		logger.error(err);
+	})
+	.on('uncaughtException', async err => {
+		logger.error(err);
+		logger.error('!= () APP shutdown ');
+		await mongoose.disconnect();
+		process.exit(1);
+	})
+	.on('SIGINT', async () => {
+		logger.log('Received SIGINT. Closing connections...');
+		await mongoose.disconnect();
+		process.exit(0);
+	})
+	.on('SIGTERM', async () => {
+		logger.log('Received SIGTERM. Closing connections...');
+		await mongoose.disconnect();
+		process.exit(0);
+	});

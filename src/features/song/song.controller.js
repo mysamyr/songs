@@ -1,26 +1,26 @@
-const { TITLES } = require("../../constants");
-const {
+import { TITLES } from "../../constants/index.js";
+import {
 	CREATE_SONG,
 	EDIT_SONG,
 	SUCCESS_DELETE_SONG,
-} = require("../../constants/messages");
-const {
+} from "../../constants/messages.js";
+import {
 	DELETED_CATEGORY,
 	EXISTING_SONG,
 	NOT_EXISTING_SONG,
 	NOT_AUTHOR,
 	NO_CATEGORIES,
-} = require("../../constants/error-messages");
-const { Category, Song } = require("../../models");
-const { errorLogger } = require("../../services/logger");
-const { separateCategories } = require("./song.helper");
+} from "../../constants/error-messages.js";
+import { Category, Song } from "../../models/index.js";
+import { logger } from "../../services/logger.js";
+import { separateCategories } from "./song.helper.js";
 
-module.exports.renderAddSong = async (req, res) => {
+export const renderAddSong = async (req, res) => {
 	const { current, name, text } = req.query;
 
 	const categories = await Category.find().select("name").exec();
 	if (!categories.length) {
-		errorLogger(NO_CATEGORIES);
+		logger.error(NO_CATEGORIES);
 		req.flash("err", NO_CATEGORIES);
 		return res.redirect("/category");
 	}
@@ -36,7 +36,7 @@ module.exports.renderAddSong = async (req, res) => {
 	});
 };
 
-module.exports.addSong = async (req, res) => {
+export const addSong = async (req, res) => {
 	const {
 		body: { categories, name, text },
 		session: { user },
@@ -47,7 +47,7 @@ module.exports.addSong = async (req, res) => {
 		.select("id name")
 		.exec();
 	if (!dbCategories.length || catArray.length !== dbCategories.length) {
-		errorLogger(DELETED_CATEGORY);
+		logger.error(DELETED_CATEGORY);
 		req.flash("err", DELETED_CATEGORY);
 		return res.redirect("/song/add");
 	}
@@ -57,7 +57,7 @@ module.exports.addSong = async (req, res) => {
 		deleted: false,
 	});
 	if (isSongExist) {
-		errorLogger(EXISTING_SONG);
+		logger.error(EXISTING_SONG);
 		req.flash("err", EXISTING_SONG);
 		return res.redirect("/song/add");
 	}
@@ -73,7 +73,7 @@ module.exports.addSong = async (req, res) => {
 	return res.redirect(`/song/${newSong.id}`);
 };
 
-module.exports.renderEditSong = async (req, res) => {
+export const renderEditSong = async (req, res) => {
 	const {
 		params: { id },
 		session: { user, isAdmin },
@@ -83,12 +83,12 @@ module.exports.renderEditSong = async (req, res) => {
 		.select("name text author categories")
 		.exec();
 	if (!song) {
-		errorLogger(NOT_EXISTING_SONG);
+		logger.error(NOT_EXISTING_SONG);
 		req.flash("err", NOT_EXISTING_SONG);
 		return res.redirect("/category");
 	}
 	if (!isAdmin && user.id !== song.author.toString()) {
-		errorLogger(NOT_AUTHOR);
+		logger.error(NOT_AUTHOR);
 		req.flash("err", NOT_AUTHOR);
 		return res.redirect(`/song/${id}`);
 	}
@@ -109,7 +109,7 @@ module.exports.renderEditSong = async (req, res) => {
 	});
 };
 
-module.exports.editSong = async (req, res) => {
+export const editSong = async (req, res) => {
 	const {
 		params: { id },
 		body: { categories, name, text },
@@ -122,7 +122,7 @@ module.exports.editSong = async (req, res) => {
 		.select("id")
 		.exec();
 	if (!dbCategories.length || catArray.length !== dbCategories.length) {
-		errorLogger(DELETED_CATEGORY);
+		logger.error(DELETED_CATEGORY);
 		req.flash("err", DELETED_CATEGORY);
 		return res.redirect(`/song/edit/${id}`);
 	}
@@ -141,7 +141,7 @@ module.exports.editSong = async (req, res) => {
 	return res.redirect(`/song/${id}`);
 };
 
-module.exports.deleteSong = async (req, res) => {
+export const deleteSong = async (req, res) => {
 	const {
 		params: { id },
 		session: { user, isAdmin },
@@ -149,12 +149,12 @@ module.exports.deleteSong = async (req, res) => {
 
 	const song = await Song.findOne({ _id: id });
 	if (!song) {
-		errorLogger(NOT_EXISTING_SONG);
+		logger.error(NOT_EXISTING_SONG);
 		req.flash("err", NOT_EXISTING_SONG);
 		return res.redirect("/category");
 	}
 	if (!isAdmin && user.id !== song.author.toString()) {
-		errorLogger(NOT_AUTHOR);
+		logger.error(NOT_AUTHOR);
 		req.flash("err", NOT_AUTHOR);
 		return res.redirect(`/song/${id}`);
 	}
@@ -167,7 +167,7 @@ module.exports.deleteSong = async (req, res) => {
 	return res.redirect("/category");
 };
 
-module.exports.getSong = async (req, res) => {
+export const getSong = async (req, res) => {
 	const {
 		params: { id },
 		session: { user },
@@ -178,7 +178,7 @@ module.exports.getSong = async (req, res) => {
 		.populate("author", "id name")
 		.exec();
 	if (!song) {
-		errorLogger(NOT_EXISTING_SONG);
+		logger.error(NOT_EXISTING_SONG);
 		req.flash("err", NOT_EXISTING_SONG);
 		return res.redirect("/category");
 	}

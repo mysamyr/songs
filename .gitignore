@@ -1,6 +1,11 @@
-/node_modules
 .idea
 .vscode
-/logs
-/src/config/keys-dev.js
+.DS_Store
+
+/node_modules
+/logs/**
 /public/dist
+
+.env
+/assets/**
+service-account.json

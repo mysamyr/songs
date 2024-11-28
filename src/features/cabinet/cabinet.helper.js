@@ -1,3 +1,2 @@
-const { URL } = require("../../config");
-
-module.exports.getLinkForVerification = (id) => `${URL}auth/verify/${id}`;
+export const getLinkForVerification = (id) =>
+	`${process.env.URL}auth/verify/${id}`;

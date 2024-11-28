@@ -1,5 +1,5 @@
-const { Schema, model } = require("mongoose");
-const { COLLECTIONS } = require("../constants");
+import { Schema, model } from "mongoose";
+import { COLLECTIONS } from "../constants/index.js";
 
 const opts = {
 	toObject: {
@@ -25,7 +25,6 @@ const songSchema = new Schema(
 		text: {
 			type: String,
 			required: true,
-			unique: true,
 		},
 		categories: {
 			type: [
@@ -53,4 +52,4 @@ const songSchema = new Schema(
 	opts,
 );
 
-module.exports = model(COLLECTIONS.SONG, songSchema);
+export default model(COLLECTIONS.SONG, songSchema);

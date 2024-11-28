@@ -1,0 +1,35 @@
+version: "3.9"
+services:
+  mongo:
+    container_name: mongo
+    image: mongo:latest
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_DATABASE=songs
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+    volumes:
+      - ./assets/database:/data/db
+      - ./assets/initdb:/docker-entrypoint-initdb.d/
+    command: [--auth]
+    networks:
+      - songpb_network
+  api:
+    build:
+      context: .
+      target: prod
+    restart: always
+    container_name: api
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - songpb_network
+    depends_on:
+      - mongo
+
+networks:
+  songpb_network:
+    driver: bridge

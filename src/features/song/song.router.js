@@ -1,11 +1,13 @@
-const router = require("express").Router();
-const { auth, promisify, isValid } = require("../../middleware");
-const {
+import Router from "express";
+import { auth, promisify, isValid } from "../../middleware.js";
+import {
 	validateAddSong,
 	validateParamsId,
 	validateEditSong,
-} = require("../../validators");
-const songController = require("./song.controller");
+} from "../../validators/index.js";
+import * as songController from "./song.controller.js";
+
+const router = Router();
 
 // Add new song
 router.get("/add", auth, isValid, promisify(songController.renderAddSong));
@@ -42,4 +44,4 @@ router.get(
 	promisify(songController.getSong),
 );
 
-module.exports = router;
+export default router;

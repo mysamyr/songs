@@ -1,4 +1,4 @@
-const { createTransport } = require("nodemailer");
+import { createTransport } from "nodemailer";
 
 const { SEND_EMAIL, EMAIL_API_KEY } = process.env;
 
@@ -19,7 +19,7 @@ const generateMail = (email, subject, text) => ({
 	text,
 });
 
-module.exports.sendAuthorisationEmail = async ({ email, name, url }) =>
+export const sendAuthorisationEmail = async ({ email, name, url }) =>
 	transporter.sendMail(
 		generateMail(
 			email,
@@ -30,7 +30,7 @@ module.exports.sendAuthorisationEmail = async ({ email, name, url }) =>
 		),
 	);
 
-module.exports.sendUpdateEmail = async ({ email, name, url }) =>
+export const sendUpdateEmail = async ({ email, name, url }) =>
 	transporter.sendMail(
 		generateMail(
 			email,
@@ -41,7 +41,7 @@ module.exports.sendUpdateEmail = async ({ email, name, url }) =>
 		),
 	);
 
-module.exports.sendUpdatePassword = async (email) =>
+export const sendUpdatePassword = async (email) =>
 	transporter.sendMail(
 		generateMail(
 			email,

@@ -1,8 +1,10 @@
-const router = require("express").Router();
-const { TITLES } = require("../../constants");
-const { auth, promisify, noAuth } = require("../../middleware");
-const { register, validate, login } = require("../../validators");
-const authController = require("./auth.controller");
+import Router from "express";
+import { TITLES } from "../../constants/index.js";
+import { auth, promisify, noAuth } from "../../middleware.js";
+import { register, validate, login } from "../../validators/index.js";
+import * as authController from "./auth.controller.js";
+
+const router = Router();
 
 // login
 router.get(
@@ -41,4 +43,4 @@ router.post(
 // verification
 router.get("/verify/:id", promisify(authController.verify));
 
-module.exports = router;
+export default router;

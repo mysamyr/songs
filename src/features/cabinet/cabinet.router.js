@@ -1,8 +1,14 @@
-const router = require("express").Router();
-const { TITLES } = require("../../constants");
-const { auth, promisify } = require("../../middleware");
-const { changeEmail, changePassword, validate } = require("../../validators");
-const cabinetController = require("./cabinet.controller");
+import Router from "express";
+import { TITLES } from "../../constants/index.js";
+import { auth, promisify } from "../../middleware.js";
+import {
+	changeEmail,
+	changePassword,
+	validate,
+} from "../../validators/index.js";
+import * as cabinetController from "./cabinet.controller.js";
+
+const router = Router();
 
 router.get(
 	"/",
@@ -36,4 +42,4 @@ router.get("/resend", auth, promisify(cabinetController.resendVerification));
 
 router.get("/delete", auth, promisify(cabinetController.deleteAccount));
 
-module.exports = router;
+export default router;

@@ -1,7 +1,7 @@
-const { format, createLogger, transports } = require("winston");
-const { PRODUCTION } = require("../constants");
+import { format, createLogger, transports } from "winston";
+import { PRODUCTION } from "../constants/index.js";
 
-const logger = createLogger({
+export const logger = createLogger({
 	level: "info",
 	format: format.json(),
 });
@@ -25,7 +25,8 @@ if (process.env.NODE_ENV !== PRODUCTION) {
 		}),
 	);
 }
-const requestLogger = (req) => {
+
+export const requestLogger = (req) => {
 	logger.log({
 		level: "info",
 		message: JSON.stringify({
@@ -35,18 +36,4 @@ const requestLogger = (req) => {
 			timestamp: new Date().toISOString(),
 		}),
 	});
-};
-const errorLogger = (error) => {
-	logger.error(
-		JSON.stringify({
-			error,
-			timestamp: new Date().toISOString(),
-		}),
-	);
-};
-
-module.exports = {
-	logger,
-	requestLogger,
-	errorLogger,
 };

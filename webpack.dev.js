@@ -1,12 +1,9 @@
 "use strict";
-const common = require("./webpack.common");
+import common from "./webpack.common.js";
 
-module.exports = {
+export default {
   ...common,
   mode: "development",
   watch: true,
   devtool: "inline-source-map",
-  module: {
-    rules: []
-  }
 };

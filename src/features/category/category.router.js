@@ -1,13 +1,15 @@
-const router = require("express").Router();
-const { TITLES } = require("../../constants");
-const { auth, promisify, isValid } = require("../../middleware");
-const {
+import Router from "express";
+import { TITLES } from "../../constants/index.js";
+import { auth, promisify, isValid } from "../../middleware.js";
+import {
 	validate,
 	category,
 	validateParamsId,
 	validateEditCategory,
-} = require("../../validators");
-const categoryController = require("./category.controller");
+} from "../../validators/index.js";
+import * as categoryController from "./category.controller.js";
+
+const router = Router();
 
 // Categories
 router.get("/", promisify(categoryController.getCategories));
@@ -56,4 +58,4 @@ router.get(
 	promisify(categoryController.getSongsForCategory),
 );
 
-module.exports = router;
+export default router;

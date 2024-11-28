@@ -1,5 +1,5 @@
-const { Schema, model } = require("mongoose");
-const { COLLECTIONS } = require("../constants");
+import { Schema, model } from "mongoose";
+import { COLLECTIONS } from "../constants/index.js";
 
 const opts = {
 	toObject: {
@@ -28,7 +28,6 @@ const userSchema = new Schema(
 		},
 		link: {
 			type: String,
-			unique: true,
 		},
 		verify_sent_at: {
 			type: Date,
@@ -49,4 +48,4 @@ const userSchema = new Schema(
 	opts,
 );
 
-module.exports = model(COLLECTIONS.USER, userSchema);
+export default model(COLLECTIONS.USER, userSchema);

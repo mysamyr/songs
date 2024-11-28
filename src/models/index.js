@@ -1,5 +1,3 @@
-module.exports = {
-	Category: require("./category"),
-	Song: require("./song"),
-	User: require("./user"),
-};
+export { default as Category } from "./category.js";
+export { default as Song } from "./song.js";
+export { default as User } from "./user.js";

@@ -1,10 +1,7 @@
 "use strict";
-const common = require("./webpack.common");
+import common from "./webpack.common.js";
 
-module.exports = {
+export default {
   ...common,
   mode: "production",
-  module: {
-    rules: []
-  }
 };

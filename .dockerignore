@@ -1,0 +1,11 @@
+/.husky
+/assets
+/node_modules
+.dockerignore
+.env.example
+.prettierignore
+.prettierrc
+docker-compose.dev.yml
+docker-compose.yml
+Dockerfile
+README.md

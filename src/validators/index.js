@@ -1,6 +1,6 @@
-const Joi = require("joi");
-const { errorLogger } = require("../services/logger");
-const { makeAddSongUrlAfterError } = require("../features/song/song.helper");
+import Joi from "joi";
+import { logger } from "../services/logger.js";
+import { makeAddSongUrlAfterError } from "../features/song/song.helper.js";
 
 const email = Joi.string().email().required().messages({
 	"any.required": "Введіть email",
@@ -13,10 +13,15 @@ const password = Joi.string().trim().min(8).max(30).required().messages({
 	"string.min": "Мінімальна довжина паролю - 8 символів",
 	"string.max": "Пароль не може бути довшим 30-ти символів",
 });
-const category = Joi.string().trim().lowercase().min(5).max(30).required();
+const categorySchema = Joi.string()
+	.trim()
+	.lowercase()
+	.min(5)
+	.max(30)
+	.required();
 const editCategory = Joi.object({
-	prevValue: category,
-	newValue: category,
+	prevValue: categorySchema,
+	newValue: categorySchema,
 });
 const params = Joi.object({
 	id: Joi.string().hex().length(24).required().messages({
@@ -29,7 +34,7 @@ const song = Joi.object({
 	categories: [
 		Joi.array()
 			.items(
-				category.messages({
+				categorySchema.messages({
 					"any.required": "Виберіть категорію",
 					"string.empty": "Невірна категорія",
 					"string.min": "Виберіть іншу категорію, будь ласка",
@@ -37,7 +42,7 @@ const song = Joi.object({
 				}),
 			)
 			.required(),
-		category.messages({
+		categorySchema.messages({
 			"any.required": "Виберіть категорію",
 			"string.empty": "Невірна категорія",
 			"string.min": "Виберіть іншу категорію, будь ласка",
@@ -56,110 +61,104 @@ const song = Joi.object({
 	}),
 });
 
-module.exports = {
-	validate: (entity, schema, url) => {
-		return (req, res, next) => {
-			const { error, value } = schema.validate(req[entity]);
-			if (!error) {
-				req[entity] = value;
-				return next();
-			}
+export const validate = (entity, schema, url) => (req, res, next) => {
+	const { error, value } = schema.validate(req[entity]);
+	if (!error) {
+		req[entity] = value;
+		return next();
+	}
 
-			const message = error.details[0].message;
-			errorLogger(message);
-			req.flash("err", message);
-			return res.redirect(url);
-		};
-	},
-	validateParamsId: (url) => {
-		return (req, res, next) => {
-			const { error } = params.validate(req.params);
-			if (!error) return next();
+	const message = error.details[0].message;
+	logger.error(message);
+	req.flash("err", message);
+	return res.redirect(url);
+};
+export const validateParamsId = (url) => (req, res, next) => {
+	const { error } = params.validate(req.params);
+	if (!error) return next();
 
-			const message = error.details[0].message;
-			errorLogger(message);
-			req.flash("err", message);
-			return res.redirect(url);
-		};
-	},
-	validateAddSong: (req, res, next) => {
-		const { error, value } = song.validate(req.body);
-		if (!error) {
-			req.body = value;
-			return next();
+	const message = error.details[0].message;
+	logger.error(message);
+	req.flash("err", message);
+	return res.redirect(url);
+};
+export const validateAddSong = (req, res, next) => {
+	const { error, value } = song.validate(req.body);
+	if (!error) {
+		req.body = value;
+		return next();
+	}
+
+	const message = error.details[0].message;
+	logger.error(message);
+	req.flash("err", message);
+	const url = makeAddSongUrlAfterError(req.body);
+	return res.redirect(url);
+};
+export const validateEditSong = (req, res, next) => {
+	const { error: idError } = params.validate(req.params);
+	const { error: bodyError, value } = song.validate(req.body);
+	const errors = [];
+	for (let err of [idError, bodyError]) {
+		if (err) {
+			errors.push(err.details[0].message);
 		}
+	}
+	if (!errors.length) {
+		req.body = value;
+		return next();
+	}
 
-		const message = error.details[0].message;
-		errorLogger(message);
-		req.flash("err", message);
-		const url = makeAddSongUrlAfterError(req.body);
-		return res.redirect(url);
-	},
-	validateEditSong: (req, res, next) => {
-		const { error: idError } = params.validate(req.params);
-		const { error: bodyError, value } = song.validate(req.body);
-		const errors = [];
-		for (let err of [idError, bodyError]) {
-			if (err) {
-				errors.push(err.details[0].message);
-			}
-		}
-		if (!errors.length) {
-			req.body = value;
-			return next();
-		}
+	const message = errors[0];
+	logger.error(message);
+	req.flash("err", message);
+	return res.redirect(`/song/edit/${req.params.id}`);
+};
+export const validateEditCategory = (req, res, next) => {
+	const { error, value } = editCategory.validate(req.body);
+	if (!error) {
+		req.body = value;
+		return next();
+	}
 
-		const message = errors[0];
-		errorLogger(message);
-		req.flash("err", message);
-		return res.redirect(`/song/edit/${req.params.id}`);
-	},
-	validateEditCategory: (req, res, next) => {
-		const { error, value } = editCategory.validate(req.body);
-		if (!error) {
-			req.body = value;
-			return next();
-		}
-
-		const message = error.details[0].message;
-		errorLogger(message);
-		return res.status(400).send();
-	},
-	login: Joi.object({
-		email,
-		password,
+	const message = error.details[0].message;
+	logger.error(message);
+	return res.status(400).send();
+};
+export const login = Joi.object({
+	email,
+	password,
+});
+export const register = Joi.object({
+	name: Joi.string().trim().min(3).max(30).required().messages({
+		"any.required": "Введіть імʼя",
+		"string.empty": "Введіть імʼя",
+		"string.min": "Імʼя занадто коротке",
+		"string.max": "Імʼя занадто довге",
 	}),
-	register: Joi.object({
-		name: Joi.string().trim().min(3).max(30).required().messages({
-			"any.required": "Введіть імʼя",
-			"string.empty": "Введіть імʼя",
-			"string.min": "Імʼя занадто коротке",
-			"string.max": "Імʼя занадто довге",
+	email,
+	password,
+	confirm: Joi.ref("password"),
+});
+export const category = {
+	body: Joi.object({
+		name: categorySchema.messages({
+			"any.required": "Введіть назву категорії",
+			"string.empty": "Введіть назву категорії",
+			"string.min": "Введіть щонайменше 5 символів",
+			"string.max": "Назва категорії занадто довга",
 		}),
+	}).required(),
+};
+export const changeEmail = {
+	body: Joi.object({
 		email,
+	}).required(),
+};
+export const changePassword = {
+	body: Joi.object({
 		password,
-		confirm: Joi.ref("password"),
-	}),
-	category: {
-		body: Joi.object({
-			name: category.messages({
-				"any.required": "Введіть назву категорії",
-				"string.empty": "Введіть назву категорії",
-				"string.min": "Введіть щонайменше 5 символів",
-				"string.max": "Назва категорії занадто довга",
-			}),
-		}).required(),
-	},
-	changeEmail: {
-		body: Joi.object({
-			email,
-		}).required(),
-	},
-	changePassword: {
-		body: Joi.object({
-			password,
-			newPassword: password,
-			confirm: Joi.ref("newPassword"),
-		}).required(),
-	},
+		newPassword: password,
+		confirm: Joi.ref("newPassword"),
+	}).required(),
 };

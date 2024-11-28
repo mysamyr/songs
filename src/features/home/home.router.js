@@ -1,8 +1,8 @@
-const router = require("express").Router();
-const { TITLES } = require("../../constants");
-const { promisify } = require("../../middleware");
+import Router from "express";
+import { TITLES } from "../../constants/index.js";
+import { promisify } from "../../middleware.js";
 
-const { SENDGRID_EMAIL } = require("../../config");
+const router = Router();
 
 // Home page
 router.get(
@@ -11,7 +11,7 @@ router.get(
 		res.render("index", {
 			title: TITLES.HOME,
 			isHome: true,
-			email: SENDGRID_EMAIL,
+			email: process.env.SENDGRID_EMAIL,
 			msg: req.flash("msg"),
 			err: req.flash("err"),
 		}),
@@ -40,4 +40,4 @@ router.get(
 	),
 );
 
-module.exports = router;
+export default router;

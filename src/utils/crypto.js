@@ -1,8 +1,8 @@
-const crypto = require("node:crypto");
+import crypto from "node:crypto";
 
-module.exports.uuid = () => crypto.randomBytes(16).toString("hex");
+export const uuid = () => crypto.randomBytes(16).toString("hex");
 
-module.exports.hash = (string) =>
+export const hash = (string) =>
 	crypto.createHash("sha256").update(string).digest("hex");
 
-module.exports.compare = (string, hash) => module.exports.hash(string) === hash;
+export const compare = (string, hashedString) => hash(string) === hashedString;

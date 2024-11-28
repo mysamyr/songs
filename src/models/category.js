@@ -1,5 +1,5 @@
-const { Schema, model } = require("mongoose");
-const { COLLECTIONS } = require("../constants");
+import { Schema, model } from "mongoose";
+import { COLLECTIONS } from "../constants/index.js";
 
 const opts = {
 	toObject: {
@@ -32,4 +32,4 @@ const categorySchema = new Schema(
 	opts,
 );
 
-module.exports = model(COLLECTIONS.CATEGORY, categorySchema);
+export default model(COLLECTIONS.CATEGORY, categorySchema);

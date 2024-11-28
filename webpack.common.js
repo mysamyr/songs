@@ -1,14 +1,16 @@
 "use strict";
+import path from "node:path";
+import { fileURLToPath } from 'node:url';
 
-module.exports = {
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+export default {
   mode: "production",
   entry: "./public/app.js",
   output: {
     filename: "bundle.js",
-    path: require("path").resolve(__dirname, "public", "dist"),
+    path: path.resolve(__dirname, "public", "dist"),
     clean: true,
-  },
-  module: {
-    rules: []
   }
 };

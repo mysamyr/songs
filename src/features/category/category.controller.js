@@ -1,21 +1,21 @@
-const { TITLES } = require("../../constants");
-const {
+import { TITLES } from "../../constants/index.js";
+import {
 	SUCCESS_CREATE_CATEGORY,
 	SUCCESS_DELETE_CATEGORY,
 	SUCCESS_UPDATE_CATEGORY,
-} = require("../../constants/messages");
-const {
+} from "../../constants/messages.js";
+import {
 	EXISTING_CATEGORY,
 	SONGS_INSIDE_CATEGORY,
 	NO_SUCH_CATEGORY,
 	SAME_CATEGORY,
 	NOT_AUTHOR,
-} = require("../../constants/error-messages");
-const { Category, Song } = require("../../models");
-const { errorLogger } = require("../../services/logger");
-const { capitalize, sortByName, mapCategories } = require("./category.helper");
+} from "../../constants/error-messages.js";
+import { Category, Song } from "../../models/index.js";
+import { logger } from "../../services/logger.js";
+import { capitalize, sortByName, mapCategories } from "./category.helper.js";
 
-module.exports.getCategories = async (req, res) => {
+export const getCategories = async (req, res) => {
 	const categories = await Category.find().select("id name").exec();
 
 	return res.render("categories", {
@@ -27,7 +27,7 @@ module.exports.getCategories = async (req, res) => {
 	});
 };
 
-module.exports.addCategory = async (req, res) => {
+export const addCategory = async (req, res) => {
 	const {
 		body: { name },
 		session: { user },
@@ -35,7 +35,7 @@ module.exports.addCategory = async (req, res) => {
 
 	const isCategoryNameExists = await Category.findOne({ name });
 	if (isCategoryNameExists) {
-		errorLogger(EXISTING_CATEGORY);
+		logger.error(EXISTING_CATEGORY);
 		req.flash("err", EXISTING_CATEGORY);
 		return res.redirect("/category/add");
 	}
@@ -49,7 +49,7 @@ module.exports.addCategory = async (req, res) => {
 	return res.redirect("/category");
 };
 
-module.exports.editCategory = async (req, res) => {
+export const editCategory = async (req, res) => {
 	const {
 		body: { prevValue, newValue },
 		params: { id },
@@ -57,24 +57,24 @@ module.exports.editCategory = async (req, res) => {
 	} = req;
 
 	if (prevValue === newValue) {
-		errorLogger(SAME_CATEGORY);
+		logger.error(SAME_CATEGORY);
 		return res.status(400).send();
 	}
 
 	const category = await Category.findById(id);
 	if (!category) {
-		errorLogger(NO_SUCH_CATEGORY);
+		logger.error(NO_SUCH_CATEGORY);
 		req.flash("err", NO_SUCH_CATEGORY);
 		return res.redirect(`/category/${id}`);
 	}
 	const isNewNameNotUnique = await Category.findOne({ name: newValue });
 	if (isNewNameNotUnique) {
-		errorLogger(EXISTING_CATEGORY);
+		logger.error(EXISTING_CATEGORY);
 		req.flash("err", EXISTING_CATEGORY);
 		return res.redirect(`/category/${id}`);
 	}
 	if (category.author.toString() !== user.id && !isAdmin) {
-		errorLogger(NOT_AUTHOR);
+		logger.error(NOT_AUTHOR);
 		req.flash("err", NOT_AUTHOR);
 		return res.redirect(`/category/${id}`);
 	}
@@ -87,7 +87,7 @@ module.exports.editCategory = async (req, res) => {
 	return res.redirect(`/category/${id}`);
 };
 
-module.exports.deleteCategory = async (req, res) => {
+export const deleteCategory = async (req, res) => {
 	const { id } = req.params;
 
 	const isCategoryNotEmpty = await Song.findOne({
@@ -96,7 +96,7 @@ module.exports.deleteCategory = async (req, res) => {
 	});
 
 	if (isCategoryNotEmpty) {
-		errorLogger(SONGS_INSIDE_CATEGORY);
+		logger.error(SONGS_INSIDE_CATEGORY);
 		req.flash("err", SONGS_INSIDE_CATEGORY);
 		return res.redirect(`/category/${id}`);
 	}
@@ -108,7 +108,7 @@ module.exports.deleteCategory = async (req, res) => {
 	return res.redirect("/category");
 };
 
-module.exports.getSongsForCategory = async (req, res) => {
+export const getSongsForCategory = async (req, res) => {
 	const {
 		params: { id },
 		session: { user },
@@ -127,7 +127,7 @@ module.exports.getSongsForCategory = async (req, res) => {
 		.exec();
 
 	if (!dbCategory) {
-		errorLogger(NO_SUCH_CATEGORY);
+		logger.error(NO_SUCH_CATEGORY);
 		req.flash("err", NO_SUCH_CATEGORY);
 		return res.redirect("/category");
 	}
