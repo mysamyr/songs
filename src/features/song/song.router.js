@@ -1,24 +1,35 @@
 import Router from "express";
-import { auth, promisify, isValid } from "../../middleware.js";
+import { auth, promisify, isAccountValid } from "../../middlewares/index.js";
 import {
-	validateAddSong,
-	validateParamsId,
-	validateEditSong,
+	validateParams,
+	defaultParams,
+	validateQuery,
 } from "../../validators/index.js";
+import {
+	addSongQuery,
+	validateAddSong,
+	validateEditSong,
+} from "./song.validation.js";
 import * as songController from "./song.controller.js";
 
 const router = Router();
 
 // Add new song
-router.get("/add", auth, isValid, promisify(songController.renderAddSong));
+router.get(
+	"/add",
+	auth,
+	isAccountValid,
+	validateQuery(addSongQuery, "/category"),
+	promisify(songController.renderAddSong),
+);
 router.post("/add", auth, validateAddSong, promisify(songController.addSong));
 
 // Edit song
 router.get(
 	"/edit/:id",
 	auth,
-	isValid,
-	validateParamsId("/category"),
+	isAccountValid,
+	validateParams(defaultParams, "/category"),
 	promisify(songController.renderEditSong),
 );
 router.post(
@@ -32,15 +43,15 @@ router.post(
 router.get(
 	"/delete/:id",
 	auth,
-	isValid,
-	validateParamsId("/category"),
+	isAccountValid,
+	validateParams(defaultParams, "/category"),
 	promisify(songController.deleteSong),
 );
 
 // Get song
 router.get(
 	"/:id",
-	validateParamsId("/category"),
+	validateParams(defaultParams, "/category"),
 	promisify(songController.getSong),
 );
 

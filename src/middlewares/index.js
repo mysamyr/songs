@@ -1,10 +1,10 @@
-import { TITLES } from "./constants/index.js";
+import { TITLES } from "../constants/index.js";
 import {
 	VALIDATE_ACCOUNT,
 	LOGGED_IN,
 	LOGIN_PLEASE,
-} from "./constants/error-messages.js";
-import { requestLogger, logger } from "./services/logger.js";
+} from "../constants/error-messages.js";
+import { requestLogger, logger } from "../services/logger.js";
 
 export const auth = (req, res, next) => {
 	if (!req.session.isAuthenticated) {
@@ -41,7 +41,7 @@ export const noAuth = (req, res, next) => {
 	next();
 };
 
-export const isValid = (req, res, next) => {
+export const isAccountValid = (req, res, next) => {
 	if (!req.session.isValidated) {
 		req.flash("err", VALIDATE_ACCOUNT);
 		return res.redirect("/category");

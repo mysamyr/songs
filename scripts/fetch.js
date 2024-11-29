@@ -13,11 +13,6 @@ const transferManager = new TransferManager(bucket);
   fs.mkdirSync(path.join(process.cwd(), 'assets', env, 'initdb'), {
     recursive: true,
   });
-  if (env === 'live') {
-    fs.mkdirSync(path.join(process.cwd(), 'assets', env, 'ssl'), {
-      recursive: true,
-    });
-  }
   await transferManager.downloadManyFiles(env, {
     passthroughOptions: {
       destination: 'assets',

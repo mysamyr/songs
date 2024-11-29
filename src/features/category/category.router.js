@@ -1,13 +1,13 @@
 import Router from "express";
 import { TITLES } from "../../constants/index.js";
-import { auth, promisify, isValid } from "../../middleware.js";
+import { auth, promisify, isAccountValid } from "../../middlewares/index.js";
 import {
-	validate,
-	category,
-	validateParamsId,
-	validateEditCategory,
+	validateBody,
+	validateParams,
+	defaultParams,
 } from "../../validators/index.js";
 import * as categoryController from "./category.controller.js";
+import { categoryBody, validateEditCategory } from "./category.validation.js";
 
 const router = Router();
 
@@ -18,7 +18,7 @@ router.get("/", promisify(categoryController.getCategories));
 router.get(
 	"/add",
 	auth,
-	isValid,
+	isAccountValid,
 	promisify((req, res) =>
 		res.render("new_category", {
 			title: TITLES.ADD_CATEGORY,
@@ -30,14 +30,14 @@ router.get(
 router.post(
 	"/add",
 	auth,
-	validate("body", category.body, "/category/add"),
+	validateBody(categoryBody, "/category/add"),
 	promisify(categoryController.addCategory),
 );
 
 router.post(
 	"/edit/:id",
 	auth,
-	validateParamsId("/category"),
+	validateParams(defaultParams, "/category"),
 	validateEditCategory,
 	promisify(categoryController.editCategory),
 );
@@ -46,15 +46,15 @@ router.post(
 router.get(
 	"/delete/:id",
 	auth,
-	isValid,
-	validateParamsId("/category"),
+	isAccountValid,
+	validateParams(defaultParams, "/category"),
 	promisify(categoryController.deleteCategory),
 );
 
 // Show songs in category
 router.get(
 	"/:id",
-	validateParamsId("/category"),
+	validateParams(defaultParams, "/category"),
 	promisify(categoryController.getSongsForCategory),
 );
 
