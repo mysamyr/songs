@@ -11,7 +11,7 @@ if (!fs.existsSync(folderPath))
   throw new Error(`Folder ${folderPath} does not exist`);
 
 fs.readdirSync(path.join(folderPath)).forEach(file => {
-  if (file === 'initdb' || file === 'ssl') {
+  if (file === 'initdb') {
     fs.cpSync(
       path.join(folderPath, file),
       path.join(process.cwd(), 'assets', file),

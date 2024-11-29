@@ -21,12 +21,13 @@ FROM base AS prod
 RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=package-lock.json,target=package-lock.json \
     --mount=type=cache,target=/root/.npm \
+    npm pkg delete scripts.prepare \
     npm ci --omit=dev \
 
 USER node
 
 COPY . .
 
-EXPOSE 80
+EXPOSE 3000
 
 CMD npm run build && npm run start

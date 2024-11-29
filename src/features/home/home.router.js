@@ -1,6 +1,6 @@
 import Router from "express";
 import { TITLES } from "../../constants/index.js";
-import { promisify } from "../../middleware.js";
+import { promisify } from "../../middlewares/index.js";
 
 const router = Router();
 

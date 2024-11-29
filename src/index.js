@@ -10,17 +10,17 @@ import session from "express-session";
 import connectMongoSession from "connect-mongodb-session";
 import flash from "connect-flash";
 
-import { COLLECTIONS } from "./src/constants/index.js";
-import config from "./src/utils/dotenv.js";
-import { auth, cabinet, category, home, song } from "./src/routes/index.js";
-import { logger } from "./src/services/logger.js";
-import * as helpers from "./src/utils/hbs.helpers.js";
+import { COLLECTIONS } from "./constants/index.js";
+import config from "./utils/dotenv.js";
+import { auth, cabinet, category, home, song } from "./routes/index.js";
+import { logger } from "./services/logger.js";
 import {
 	variable,
 	h404,
 	requestLoggerMiddleware,
 	errorHandler,
-} from "./src/middleware.js";
+} from "./middlewares/index.js";
+import * as helpers from "./utils/hbs.helpers.js";
 
 config();
 const MongoStore = connectMongoSession(session);
@@ -51,7 +51,7 @@ app.set("views", "views");
 app.set("view engine", "hbs");
 
 app.use(express.static(path.join(__dirname, "public")));
-app.use(express.json({ limit: '1mb' }));
+app.use(express.json({ limit: "1mb" }));
 app.use(helmet());
 app.use(cors({ origin: "*" }));
 app.use(compression());
@@ -68,7 +68,7 @@ app.use(
 app.use(variable);
 app.use(requestLoggerMiddleware);
 
-app.get('/ping', (req, res) => {
+app.get("/ping", (req, res) => {
 	res.status(200).send();
 });
 
@@ -102,22 +102,22 @@ const start = async () => {
 start();
 
 process
-	.on('unhandledRejection', err => {
+	.on("unhandledRejection", (err) => {
 		logger.error(err);
 	})
-	.on('uncaughtException', async err => {
+	.on("uncaughtException", async (err) => {
 		logger.error(err);
-		logger.error('!= () APP shutdown ');
+		logger.error("!= () APP shutdown ");
 		await mongoose.disconnect();
 		process.exit(1);
 	})
-	.on('SIGINT', async () => {
-		logger.log('Received SIGINT. Closing connections...');
+	.on("SIGINT", async () => {
+		logger.log("Received SIGINT. Closing connections...");
 		await mongoose.disconnect();
 		process.exit(0);
 	})
-	.on('SIGTERM', async () => {
-		logger.log('Received SIGTERM. Closing connections...');
+	.on("SIGTERM", async () => {
+		logger.log("Received SIGTERM. Closing connections...");
 		await mongoose.disconnect();
 		process.exit(0);
 	});

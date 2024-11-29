@@ -1,7 +1,8 @@
 import Router from "express";
 import { TITLES } from "../../constants/index.js";
-import { auth, promisify, noAuth } from "../../middleware.js";
-import { register, validate, login } from "../../validators/index.js";
+import { auth, promisify, noAuth } from "../../middlewares/index.js";
+import { validateBody } from "../../validators/index.js";
+import { login, registration } from "./auth.validation.js";
 import * as authController from "./auth.controller.js";
 
 const router = Router();
@@ -21,7 +22,7 @@ router.get(
 );
 router.post(
 	"/login",
-	validate("body", login, "/auth/login#login"),
+	validateBody(login, "/auth/login#login"),
 	promisify(authController.login),
 );
 
@@ -36,7 +37,7 @@ router.get(
 router.post(
 	"/register",
 	noAuth,
-	validate("body", register, "/auth/login#register"),
+	validateBody(registration, "/auth/login#register"),
 	promisify(authController.register),
 );
 

@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import path from 'node:path';
 import fs from 'node:fs';
-import { bucket } from './common';
+import { bucket } from './common.js';
 
 const env = process.argv[2];
 if (!env) throw Error("Environment doesn't exist");

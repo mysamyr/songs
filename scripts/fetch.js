@@ -2,7 +2,7 @@
 import path from 'node:path';
 import fs from 'node:fs';
 import { TransferManager } from '@google-cloud/storage';
-import { bucket } from './common';
+import { bucket } from './common.js';
 
 const env = process.argv[2];
 if (!env) throw Error("Environment doesn't exist");
@@ -13,11 +13,6 @@ const transferManager = new TransferManager(bucket);
   fs.mkdirSync(path.join(process.cwd(), 'assets', env, 'initdb'), {
     recursive: true,
   });
-  if (env === 'live') {
-    fs.mkdirSync(path.join(process.cwd(), 'assets', env, 'ssl'), {
-      recursive: true,
-    });
-  }
   await transferManager.downloadManyFiles(env, {
     passthroughOptions: {
       destination: 'assets',
