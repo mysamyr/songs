@@ -4,7 +4,7 @@
 
 /node_modules
 /logs/**
-/public/dist
+/public/dist/**
 
 .env
 /assets/**
