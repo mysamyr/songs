@@ -16,7 +16,7 @@
 <div class="buttons_container">
 	<a href="/category" class="btn blue">До категорій</a>
 	{{#ifor isAuthor isAdmin}}
-		<a href="/song/edit/{{id}}" class="btn">Редагувати</a>
+		<a href="/song/edit/{{../id}}" class="btn">Редагувати</a>
 		<a class="btn red" data-modal="/song/delete/{{id}}">Видалити</a>
 	{{/ifor}}
 </div>

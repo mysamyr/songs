@@ -1,10 +1,9 @@
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 import express from "express";
 import mongoose from "mongoose";
 import helmet from "helmet";
 import compression from "compression";
-import expHbs from "express-handlebars";
+import { create } from "express-handlebars";
 import cors from "cors";
 import session from "express-session";
 import connectMongoSession from "connect-mongodb-session";
@@ -12,6 +11,7 @@ import flash from "connect-flash";
 
 import { COLLECTIONS } from "./constants/index.js";
 import config from "./utils/dotenv.js";
+config();
 import { auth, cabinet, category, home, song } from "./routes/index.js";
 import { logger } from "./services/logger.js";
 import {
@@ -22,10 +22,7 @@ import {
 } from "./middlewares/index.js";
 import * as helpers from "./utils/hbs.helpers.js";
 
-config();
 const MongoStore = connectMongoSession(session);
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const PORT = +process.env.PORT;
 const REQUEST_TIMEOUT = +process.env.REQUEST_TIMEOUT || 5000;
@@ -35,7 +32,7 @@ const SERVER_TIMEOUT = +process.env.SERVER_TIMEOUT || 60000;
 
 const app = express();
 
-const hbs = expHbs.create({
+const hbs = create({
 	defaultLayout: "main",
 	extname: "hbs",
 	helpers,
@@ -50,8 +47,8 @@ app.engine("hbs", hbs.engine);
 app.set("views", "views");
 app.set("view engine", "hbs");
 
-app.use(express.static(path.join(__dirname, "public")));
-app.use(express.json({ limit: "1mb" }));
+app.use(express.static(path.join(process.cwd(), "public")));
+app.use(express.urlencoded({ extended: true }));
 app.use(helmet());
 app.use(cors({ origin: "*" }));
 app.use(compression());
@@ -85,7 +82,7 @@ app.use(h404);
 const start = async () => {
 	try {
 		mongoose.set("strictQuery", false);
-		await mongoose.connect(process.env.MONGODB_URL);
+		await mongoose.connect(process.env.MONGODB_URL, { dbName: "songs" });
 		const server = app.listen(PORT, () => {
 			logger.info(`Server is running on port ${PORT}`);
 		});

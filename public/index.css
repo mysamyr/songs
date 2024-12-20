@@ -207,8 +207,8 @@ a {
 }
 
 pre {
-    font-family: monospace, monospace;
-    font-size: 1em;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    font-size: 1.3em;
 }
 
 i {
@@ -433,6 +433,7 @@ ol {
 
     .container {
         width: 95%;
+        padding-top: 64px;
     }
 }
 
@@ -491,6 +492,9 @@ ol {
 
     nav {
         padding: 0;
+        position: fixed;
+        width: 100vw;
+        top: 0;
     }
 
     .nav-list {

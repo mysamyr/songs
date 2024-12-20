@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-
 const showFlashErr = (msg, elemSelector) => {
 	const elem = document.querySelector(elemSelector);
 	const p = document.createElement("p");
@@ -242,6 +240,7 @@ const cabinet = () => {
 	});
 };
 const sideNav = () => {
+	const navigation = document.querySelector("nav");
 	const trigger = document.querySelector(".sidenav-trigger");
 	const sidebar = document.querySelector(".sidenav");
 	const sidebarCover = document.querySelector("#sidenav-cover");
@@ -252,10 +251,12 @@ const sideNav = () => {
 	};
 	window.addEventListener("scroll", () => {
 		if (!sidebarCover.classList.contains("show")) {
-			if (document.documentElement.scrollTop > 1) {
+			if (document.documentElement.scrollTop > 64) {
 				trigger.classList.add("hide");
+				navigation.classList.add("hide");
 			} else {
 				trigger.classList.remove("hide");
+				navigation.classList.remove("hide");
 			}
 		}
 	});

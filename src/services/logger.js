@@ -4,13 +4,12 @@ import { PRODUCTION } from "../constants/index.js";
 export const logger = createLogger({
 	level: "info",
 	format: format.json(),
+	transports: [
+		new transports.Console({
+			format: format.simple(),
+		}),
+	],
 });
-
-logger.add(
-	new transports.Console({
-		format: format.simple(),
-	}),
-);
 
 if (process.env.NODE_ENV !== PRODUCTION) {
 	logger.add(

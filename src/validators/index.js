@@ -29,7 +29,11 @@ export const categorySchema = Joi.string()
 const validate = (entity, schema, url) => (req, res, next) => {
 	const { error, value } = schema.validate(req[entity]);
 	if (!error) {
-		req[entity] = value;
+		if (entity === "query") {
+			req.validateQuery = value;
+		} else {
+			req[entity] = value;
+		}
 		return next();
 	}
 

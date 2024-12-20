@@ -111,7 +111,7 @@ export const verify = async (req, res) => {
 		logger.error(VERIFY_ERROR);
 		return res.render("verified", {
 			title: VERIFY_ERROR,
-			email: process.env.SENDGRID_EMAIL,
+			email: process.env.SEND_EMAIL,
 		});
 	}
 

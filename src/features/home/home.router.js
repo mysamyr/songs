@@ -11,7 +11,7 @@ router.get(
 		res.render("index", {
 			title: TITLES.HOME,
 			isHome: true,
-			email: process.env.SENDGRID_EMAIL,
+			email: process.env.SEND_EMAIL,
 			msg: req.flash("msg"),
 			err: req.flash("err"),
 		}),

@@ -16,7 +16,7 @@ import { logger } from "../../services/logger.js";
 import { separateCategories } from "./song.helper.js";
 
 export const renderAddSong = async (req, res) => {
-	const { current, name, text } = req.query;
+	const { current, name, text } = req.validateQuery;
 
 	const categories = await Category.find().select("name").exec();
 	if (!categories.length) {
