@@ -1,11 +1,11 @@
 version: "3.9"
 services:
   mongo:
-    container_name: mongo
+    container_name: songpb_mongo
     image: mongo:latest
     restart: always
     ports:
-      - "27017:27017"
+      - "4001:27017"
     environment:
       - MONGO_INITDB_DATABASE=songs
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
@@ -21,7 +21,7 @@ services:
       context: .
       target: prod
     restart: always
-    container_name: api
+    container_name: songbp_api
     ports:
       - "3001:3000"
     environment:

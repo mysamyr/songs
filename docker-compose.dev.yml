@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   mongo:
-    container_name: mongo
+    container_name: songpb_mongo
     image: mongo:latest
     restart: always
     ports:
@@ -21,7 +21,7 @@ services:
       context: .
       target: dev
     restart: always
-    container_name: api
+    container_name: songbp_api
     ports:
       - "3000:3000"
     environment:
