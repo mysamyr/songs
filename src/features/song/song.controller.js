@@ -12,7 +12,7 @@ import {
 	NO_CATEGORIES,
 } from "../../constants/error-messages.js";
 import { Category, Song } from "../../models/index.js";
-import { logger } from "../../services/logger.js";
+import logger from "../../services/logger.js";
 import { separateCategories } from "./song.helper.js";
 
 export const renderAddSong = async (req, res) => {

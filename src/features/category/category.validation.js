@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { logger } from "../../services/logger.js";
+import logger from "../../services/logger.js";
 import { categorySchema } from "../../validators/index.js";
 
 const editCategory = Joi.object({

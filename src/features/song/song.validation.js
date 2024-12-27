@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { logger } from "../../services/logger.js";
+import logger from "../../services/logger.js";
 import { makeAddSongUrlAfterError } from "./song.helper.js";
 import { categorySchema, defaultParams } from "../../validators/index.js";
 

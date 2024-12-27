@@ -21,7 +21,7 @@ services:
       context: .
       target: dev
     restart: always
-    container_name: songbp_api
+    container_name: songpb_api
     ports:
       - "3000:3000"
     environment:

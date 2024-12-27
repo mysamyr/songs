@@ -1,7 +1,7 @@
 import { format, createLogger, transports } from "winston";
 import { PRODUCTION } from "../constants/index.js";
 
-export const logger = createLogger({
+const logger = createLogger({
 	level: "info",
 	format: format.json(),
 	transports: [
@@ -25,13 +25,4 @@ if (process.env.NODE_ENV !== PRODUCTION) {
 	);
 }
 
-export const requestLogger = (req) => {
-	logger.info(
-		JSON.stringify({
-			url: req.url,
-			method: req.method,
-			body: req.body,
-			timestamp: new Date().toISOString(),
-		}),
-	);
-};
+export default logger;

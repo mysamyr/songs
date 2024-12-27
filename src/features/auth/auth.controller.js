@@ -10,7 +10,7 @@ import {
 	VERIFY_ERROR,
 } from "../../constants/error-messages.js";
 import { User } from "../../models/index.js";
-import { logger } from "../../services/logger.js";
+import logger from "../../services/logger.js";
 import { sendAuthorisationEmail } from "../../services/mail.js";
 import { getLinkForVerification } from "../cabinet/cabinet.helper.js";
 import { compare, hash, uuid } from "../../utils/crypto.js";

@@ -16,7 +16,7 @@ import {
 } from "../../constants/error-messages.js";
 import { User } from "../../models/index.js";
 import { transaction } from "../../services/db.js";
-import { logger } from "../../services/logger.js";
+import logger from "../../services/logger.js";
 import {
 	sendUpdateEmail,
 	sendUpdatePassword,
@@ -107,7 +107,7 @@ export const changePassword = async (req, res) => {
 			password: hashPassword,
 		}).session(session);
 
-		await sendUpdatePassword(user.email);
+		await sendUpdatePassword({ email: user.email });
 
 		req.flash("msg", SUCCESS_UPDATE_PASSWORD);
 		return res.redirect("/cabinet");

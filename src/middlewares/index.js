@@ -4,7 +4,7 @@ import {
 	LOGGED_IN,
 	LOGIN_PLEASE,
 } from "../constants/error-messages.js";
-import { requestLogger, logger } from "../services/logger.js";
+import logger from "../services/logger.js";
 
 export const auth = (req, res, next) => {
 	if (!req.session.isAuthenticated) {
@@ -50,7 +50,14 @@ export const isAccountValid = (req, res, next) => {
 };
 
 export const requestLoggerMiddleware = (req, res, next) => {
-	requestLogger(req);
+	logger.info(
+		JSON.stringify({
+			url: req.url,
+			method: req.method,
+			body: req.body,
+			timestamp: new Date().toISOString(),
+		}),
+	);
 	next();
 };
 

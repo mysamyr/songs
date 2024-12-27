@@ -14,7 +14,7 @@ COPY . .
 
 EXPOSE 3000
 
-CMD npm run start:dev & npm run build:dev
+CMD npm run start:debug & npm run build:dev
 
 FROM base AS prod
 

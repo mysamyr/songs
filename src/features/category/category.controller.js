@@ -12,7 +12,7 @@ import {
 	NOT_AUTHOR,
 } from "../../constants/error-messages.js";
 import { Category, Song } from "../../models/index.js";
-import { logger } from "../../services/logger.js";
+import logger from "../../services/logger.js";
 import { capitalize, sortByName, mapCategories } from "./category.helper.js";
 
 export const getCategories = async (req, res) => {

@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { logger } from "../services/logger.js";
+import logger from "../services/logger.js";
 
 export const defaultParams = Joi.object({
 	id: Joi.string().hex().length(24).required().messages({

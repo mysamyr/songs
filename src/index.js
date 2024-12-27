@@ -1,3 +1,4 @@
+import "./utils/dotenv.js";
 import path from "node:path";
 import express from "express";
 import mongoose from "mongoose";
@@ -10,10 +11,8 @@ import connectMongoSession from "connect-mongodb-session";
 import flash from "connect-flash";
 
 import { COLLECTIONS } from "./constants/index.js";
-import config from "./utils/dotenv.js";
-config();
 import { auth, cabinet, category, home, song } from "./routes/index.js";
-import { logger } from "./services/logger.js";
+import logger from "./services/logger.js";
 import {
 	variable,
 	h404,

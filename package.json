@@ -7,6 +7,7 @@
   "scripts": {
     "start": "node src/index.js",
     "start:dev": "nodemon src/index.js",
+    "start:debug": "nodemon --inspect=0.0.0.0:9229 --signal SIGINT --nolazy -L src/index.js",
     "build": "webpack --config webpack.prod.js",
     "build:dev": "webpack --config webpack.dev.js",
     "secrets:fetch": "node scripts/fetch.js",
