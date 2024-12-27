@@ -244,7 +244,7 @@ details[open] summary {
     text-transform: capitalize;
 }
 
-.edit:hover {
+.rename:hover {
     cursor: pointer;
 }
 

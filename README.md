@@ -1,4 +1,4 @@
-# Пісенник (+ текст літургії і панахиди)
+# Пісенник (+ текст літургії й панахиди)
 
 ## Stack
 
@@ -32,5 +32,5 @@
 - new_category `/category/add`
 - song `/song/:id`
 - new_song `/song/add`
-- edit_song `/song/edit/:id`
+- edit_song `/song/:id/edit`
 - 404

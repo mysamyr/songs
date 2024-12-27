@@ -14,7 +14,7 @@
     "secrets:upload": "node scripts/upload.js",
     "setup": "node scripts/copy.js",
     "check-formatting": "npx prettier -l ./src",
-    "format": "prettier --write ./src ./public/app.js",
+    "format": "prettier --write ./src public/source/app.js",
     "check-quality": "eslint src/",
     "prepare": "husky"
   },

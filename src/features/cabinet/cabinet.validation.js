@@ -1,16 +1,16 @@
-import Joi from "joi";
-import { email, password } from "../../validators/index.js";
+import Joi from 'joi';
+import { email, password } from '../../validators/index.js';
 
 export const changeEmail = {
-	body: Joi.object({
-		email,
-	}).required(),
+  body: Joi.object({
+    email,
+  }).required(),
 };
 
 export const changePassword = {
-	body: Joi.object({
-		password,
-		newPassword: password,
-		confirm: Joi.ref("newPassword"),
-	}).required(),
+  body: Joi.object({
+    password,
+    newPassword: password,
+    confirm: Joi.ref('newPassword'),
+  }).required(),
 };

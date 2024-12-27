@@ -1,14 +1,14 @@
-<form action="/category/edit/{{categoryId}}"
+<form action="/category/{{categoryId}}/edit"
 			method="POST"
 			class="category-edit hide">
 	<input name="newValue"
 				 type="text"
-				 minlength="5"
+				 minlength="4"
 				 maxlength="20"
 				 value={{categoryName}}>
 	<input name="prevValue"
 				 type="text"
-				 minlength="5"
+				 minlength="4"
 				 maxlength="20"
 				 hidden
 				 value={{categoryName}}>

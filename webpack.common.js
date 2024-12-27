@@ -7,7 +7,7 @@ const __dirname = path.dirname(__filename);
 
 export default {
   mode: "production",
-  entry: "./public/app.js",
+  entry: "./public/source/app.js",
   output: {
     filename: "bundle.js",
     path: path.resolve(__dirname, "public", "dist"),
