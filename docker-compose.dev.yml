@@ -18,12 +18,12 @@ services:
       - songpb_network
   api:
     build:
-      context: .
+      context: projects/api
       target: dev
     restart: always
     container_name: songpb_api
     ports:
-      - "3000:3000"
+      - "8080:8080"
     environment:
       - NODE_ENV:development
     networks:

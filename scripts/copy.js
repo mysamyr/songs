@@ -22,6 +22,10 @@ fs.readdirSync(path.join(folderPath)).forEach(file => {
       path.join(folderPath, file),
       path.join(process.cwd(), file)
     );
+    fs.copyFileSync(
+      path.join(folderPath, file),
+      path.join(process.cwd(), 'projects', 'api', file)
+    );
   }
 });
 
