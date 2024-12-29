@@ -1,21 +1,21 @@
 import { STATUS_CODES } from '../../constants';
-import { Header, Header2, Div, Button } from '../../components';
+import { Header, Header2, Div, Button, Paragraph } from '../../components';
 import { navigateBack } from '../../utils/navigate';
 
-export default async () => {
+export default () => {
   const { status } = window.history.state;
 
   let errorText;
 
   switch (status) {
     case STATUS_CODES.TOO_MANY_REQUESTS:
-      errorText = 'Too many requests.';
+      errorText = 'Забагато запитів.';
       break;
     case STATUS_CODES.GATEWAY_TIMEOUT:
-      errorText = 'Server cannot handle your request.';
+      errorText = 'Сервер наразі не може опрацювати Ваш запит.';
       break;
     default:
-      errorText = 'Unexpected error occurred.';
+      errorText = 'Виникла неочікувана помилка.';
   }
 
   const container = Div({
@@ -23,12 +23,12 @@ export default async () => {
   });
 
   const buttons = Div({
-    className: 'btns',
+    className: 'buttons_container',
   });
   buttons.append(
     Button({
       onClick: () => navigateBack(),
-      text: 'Back',
+      text: 'Повернутися на головну',
       color: 'blue',
     })
   );
@@ -37,16 +37,11 @@ export default async () => {
     Header2({
       text: errorText,
     }),
-    Header2({
-      text: 'Please wait a little and try again.',
+    Paragraph({
+      text: 'Зачекайте, будь ласка, трохи і спробуйте знову.',
     }),
     buttons
   );
 
-  document.getElementById('root').append(
-    Header({
-      title: 'Error',
-    }),
-    container
-  );
+  document.getElementById('root').append(Header(), container);
 };

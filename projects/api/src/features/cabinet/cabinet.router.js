@@ -22,7 +22,7 @@ router.post(
 );
 
 router.get(
-  '/resend',
+  '/validation',
   authMiddleware,
   promisify(cabinetController.resendVerification)
 );

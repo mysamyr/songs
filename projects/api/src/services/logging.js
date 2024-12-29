@@ -4,10 +4,12 @@ import { PRODUCTION } from '../constants/index.js';
 const logger = createLogger({
   level: 'http',
   format: format.combine(
+    format.errors({ stack: true }),
     format.colorize(),
     format.timestamp(),
     format.printf(
-      ({ timestamp, level, message }) => `${timestamp} ${level}: ${message}`
+      ({ timestamp, level, message, stack }) =>
+        `${timestamp} ${level}: ${message} ${stack || ''}`
     )
   ),
   transports: [new transports.Console()],
@@ -29,9 +31,11 @@ if (process.env.NODE_ENV !== PRODUCTION) {
     new transports.File({
       level: 'error',
       format: format.combine(
+        format.errors({ stack: true }),
         format.timestamp(),
         format.printf(
-          ({ timestamp, level, message }) => `${timestamp} ${level}: ${message}`
+          ({ timestamp, level, message, stack }) =>
+            `${timestamp} ${level}: ${message} ${stack || ''}`
         )
       ),
       filename: 'logs/errors.log',

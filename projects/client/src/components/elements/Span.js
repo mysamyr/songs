@@ -5,6 +5,7 @@ import { isNil } from '../../utils/helpers';
  * @param {string} [props.className]
  * @param {string} [props.text]
  * @param {string} [props.id]
+ * @param {function} [props.onClick]
  * @returns {HTMLSpanElement}
  * */
 export default props => {
@@ -13,6 +14,7 @@ export default props => {
   if (props.className) span.classList.add(...props.className.split(' '));
   if (!isNil(props.text)) span.innerHTML = props.text;
   if (props.id) span.id = props.id;
+  if (props.onClick) span.addEventListener('click', props.onClick);
 
   return span;
 };

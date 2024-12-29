@@ -17,7 +17,7 @@ const tokenSchema = new Schema(
       type: String,
       required: true,
     },
-    user_id: {
+    userId: {
       type: Schema.Types.ObjectId,
       ref: COLLECTIONS.USER,
       required: true,

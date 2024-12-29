@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "start:dev": "nodemon -L src/server.js",
-    "build": "webpack --config webpack.config.js",
-    "build:dev": "webpack --watch --config webpack.dev.config.js"
+    "build": "webpack --config webpack.js",
+    "build:dev": "webpack --watch --config webpack.dev.js"
   },
   "dependencies": {
     "webpack": "^5.97.1",

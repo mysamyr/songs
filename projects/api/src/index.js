@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import helmet from 'helmet';
 import compression from 'compression';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 
 import STATUS_CODES from './constants/status-codes.js';
 import { auth, cabinet, category, song } from './routes/index.js';
@@ -31,6 +32,7 @@ app.use(
   })
 );
 app.use(compression());
+app.use(cookieParser());
 app.use(requestLogger);
 
 app.get('/ping', (req, res) => res.status(STATUS_CODES.OK).send());
@@ -57,7 +59,7 @@ const start = async () => {
     server.keepAliveTimeout = KEEP_ALIVE_TIMEOUT;
     server.setTimeout(SERVER_TIMEOUT);
   } catch (err) {
-    logger.error(err.message);
+    logger.error(err);
   }
 };
 

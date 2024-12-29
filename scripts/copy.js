@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
-import path from 'node:path';
-import fs from 'node:fs';
+const path = require('node:path');
+const fs = require('node:fs');
 
 const env = process.argv[2];
 if (!env) throw Error("Environment doesn't exist");

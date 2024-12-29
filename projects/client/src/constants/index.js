@@ -1,19 +1,20 @@
 export const PAGES = {
-  LOGIN: '/login',
-  LISTS: '/lists',
-  LIST: id => `/lists/${id}`,
-  LIST_URL: '/lists/:listId',
-  LIST_ITEM_DATA: (id, itemId) => `/lists/${id}/items/${itemId}`,
-  LIST_ITEM_URL: '/lists/:listId/items/:listItemId',
-  ERROR: '/error',
-  NEW_LIST: '/lists/new/',
-  CONFIGS: '/configs',
-  CONFIG: id => `/configs/${id}`,
-  CONFIG_URL: '/configs/:configId',
-  NEW_CONFIG: '/configs/new',
+  HOME: '/',
+  AUTH: '/auth',
+  LITURGY: '/lit',
+  PANAKHYDA: '/pan',
   CABINET: '/cabinet',
-  ACTIVATE: '/auth/activate/:activationId',
-  RECOVERY: '/auth/recovery/:activationId',
+  CATEGORIES: '/category',
+  CATEGORY: '/category/:id',
+  CATEGORY_$: id => `/category/${id}`,
+  NEW_CATEGORY: '/category/new',
+  SONG: '/song/:id',
+  SONG_$: id => `/song/${id}`,
+  NEW_SONG: '/song/new',
+  EDIT_SONG: '/song/:id/edit',
+  EDIT_SONG_$: id => `/song/${id}/edit`,
+  ACTIVATED: '/auth/verify/:id',
+  ERROR: '/error',
 };
 
 export const API_URLS = {
@@ -22,65 +23,36 @@ export const API_URLS = {
   SIGNUP: '/auth/signup',
   REFRESH: '/auth/refresh',
   LOGOUT: '/auth/logout',
-  CHECK_ACTIVATION_ID: id => `/auth/check/${id}`,
-  FORGOT_PASSWORD: '/auth/forgot-password',
-  PASSWORD_RECOVER: id => `/auth/recovery/${id}`,
-  CHANGE_EMAIL: '/auth/email',
-  CHANGE_PASSWORD: '/auth/password',
-  DELETE_ACCOUNT: '/auth',
 
-  GET_ROOT_LISTS: '/lists',
-  GET_LISTS_TREE_$: id => `/lists/${id}/tree`,
-  GET_LISTS_$: id => `/lists/${id}`,
-  GET_LIST_ITEM_DATA_$: (id, itemId) => `/lists/${id}/items/${itemId}`,
-  CREATE_NEW_ENTRY_LIST: '/lists',
-  CREATE_NEW_LIST_$: id => `/lists/${id}`,
-  CREATE_NEW_LIST_ITEM_$: id => `/lists/${id}/items`,
-  UPDATE_LIST_$: id => `/lists/${id}`,
-  UPDATE_LIST_ITEM_$: (id, itemId) => `/lists/${id}/items/${itemId}`,
-  MOVE_LIST_$: id => `/lists/${id}/move`,
-  CLEAR_LIST_ITEMS_$: id => `/lists/${id}/clear`,
-  DELETE_LIST_$: id => `/lists/${id}`,
-  DELETE_LIST_ITEM_$: (id, itemId) => `/lists/${id}/items/${itemId}`,
+  CHANGE_EMAIL: '/cabinet/email',
+  CHANGE_PASSWORD: '/cabinet/password',
+  RESEND_VALIDATION: '/cabinet/validation',
+  DELETE_ACCOUNT: '/cabinet',
 
-  GET_CONFIGS: '/configs',
-  GET_CONFIG_DATA_$: id => `/configs/${id}`,
-  CREATE_NEW_CONFIG: '/configs',
-  UPDATE_CONFIG_$: id => `/configs/${id}`,
-  DELETE_CONFIG_$: id => `/configs/${id}`,
-};
+  GET_CATEGORIES: '/category',
+  GET_CATEGORY: id => `/category/${id}`,
+  CREATE_CATEGORY: '/category',
+  RENAME_CATEGORY: id => `/category/${id}`,
+  DELETE_CATEGORY: id => `/category/${id}`,
 
-export const LIST_ITEM_LENGTH = {
-  MIN: 2,
-  MAX: 50,
-};
-
-export const FIELD_TYPES = {
-  STRING: 'str',
-  NUMBER: 'num',
-  BOOLEAN: 'bool',
-};
-
-export const FIELD_TYPE_NAMES = {
-  [FIELD_TYPES.STRING]: 'String',
-  [FIELD_TYPES.NUMBER]: 'Number',
-  [FIELD_TYPES.BOOLEAN]: 'Boolean',
-};
-
-export const SORT_DIRECTIONS = {
-  ASC: 'asc',
-  DESC: 'desc',
-};
-
-export const HEADER_ICONS = {
-  BACK: 'back',
-  MENU: 'menu',
-  SORT: 'sort',
-  EDIT: 'edit',
+  GET_SONG: id => `/song/${id}`,
+  CREATE_SONG: '/song',
+  EDIT_SONG: id => `/song/${id}`,
+  DELETE_SONG: id => `/song/${id}`,
 };
 
 export const PASSWORD = {
   MIN: 8,
+  MAX: 30,
+};
+
+export const CATEGORY = {
+  MIN: 4,
+  MAX: 30,
+};
+
+export const SONG = {
+  MIN: 4,
   MAX: 30,
 };
 

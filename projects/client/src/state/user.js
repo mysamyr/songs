@@ -9,3 +9,5 @@ export const deleteUser = () => {
 };
 
 export const getUser = () => JSON.parse(getValue('user'));
+
+export const getUserName = () => getUser()?.name;

@@ -15,9 +15,8 @@ router.get('/', promisify(categoryController.getCategories));
 
 router.get(
   '/:id',
-  authMiddleware,
   validateParams(defaultParams),
-  promisify(categoryController.getSongsForCategory)
+  promisify(categoryController.getCategory)
 );
 
 router.post(
@@ -27,7 +26,6 @@ router.post(
   promisify(categoryController.addCategory)
 );
 
-// todo normal body validation
 router.put(
   '/:id',
   authMiddleware,

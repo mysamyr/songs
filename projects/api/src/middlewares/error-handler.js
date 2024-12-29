@@ -1,13 +1,13 @@
 import logger from '../services/logging.js';
 import STATUS_CODES from '../constants/status-codes.js';
-import ApiError from '../utils/error';
+import { ApiError } from '../utils/error.js';
 
 export default (err, req, res, next) => {
   if (!err) {
     return res.status(STATUS_CODES.NOT_FOUND).send();
   }
   if (err instanceof ApiError) {
-    logger.error(err.message);
+    logger.error(err);
     return res.status(err.status).json({ message: err.message });
   }
   if (err.code === 11000) {
@@ -18,5 +18,5 @@ export default (err, req, res, next) => {
   logger.error(err);
   return res
     .status(STATUS_CODES.INTERNAL_SERVER_ERROR)
-    .json({ message: 'Unexpected error', stack: err.stack });
+    .json({ message: 'Unexpected error' });
 };

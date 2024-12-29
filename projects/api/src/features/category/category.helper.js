@@ -22,7 +22,7 @@ const mapSongs = songs => {
 };
 
 export const mapCategoryWithSongs = (category, songs) => ({
-  categoryName: category.name,
-  categoryId: category._id.toString(),
+  name: category.name,
+  id: category._id.toString(),
   songs: mapSongs(songs),
 });

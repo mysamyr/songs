@@ -8,7 +8,7 @@ import {
 } from '../../constants/error-messages.js';
 import { Category, Song } from '../../models/index.js';
 import { mapSong } from './song.helper.js';
-import ApiError from '../../utils/error.js';
+import { BadRequest } from '../../utils/error.js';
 
 export const getSong = async (req, res) => {
   const {
@@ -20,7 +20,7 @@ export const getSong = async (req, res) => {
     .populate('author', 'id name')
     .exec();
   if (!song) {
-    throw new ApiError.BadRequest(NOT_EXISTING_SONG);
+    throw BadRequest(NOT_EXISTING_SONG);
   }
 
   return res.status(STATUS_CODES.OK).json(mapSong(song));
@@ -37,7 +37,7 @@ export const addSong = async (req, res) => {
     .select('id name')
     .exec();
   if (!dbCategories.length || catArray.length !== dbCategories.length) {
-    throw new ApiError.BadRequest(EXISTING_CATEGORY);
+    throw BadRequest(EXISTING_CATEGORY);
   }
 
   const isSongExist = await Song.findOne({
@@ -45,7 +45,7 @@ export const addSong = async (req, res) => {
     deleted: false,
   });
   if (isSongExist) {
-    throw new ApiError.BadRequest(EXISTING_SONG);
+    throw BadRequest(EXISTING_SONG);
   }
 
   await Song.create({
@@ -71,7 +71,7 @@ export const editSong = async (req, res) => {
     .select('id')
     .exec();
   if (!dbCategories.length || catArray.length !== dbCategories.length) {
-    throw new ApiError.BadRequest(DELETED_CATEGORY);
+    throw BadRequest(DELETED_CATEGORY);
   }
 
   await Song.findOneAndUpdate(
@@ -95,13 +95,13 @@ export const deleteSong = async (req, res) => {
 
   const song = await Song.findOne({ _id: id }).exec();
   if (!song) {
-    throw new ApiError.BadRequest(NOT_EXISTING_SONG);
+    throw BadRequest(NOT_EXISTING_SONG);
   }
   if (
     !userData.is_admin &&
     userData._id.toString() !== song.author.toString()
   ) {
-    throw new ApiError.BadRequest(NOT_AUTHOR);
+    throw BadRequest(NOT_AUTHOR);
   }
 
   await Song.findByIdAndUpdate(id, {

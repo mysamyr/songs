@@ -4,7 +4,6 @@
 
 - express
 - MongoDB
-- handlebars
 
 ## Features
 
@@ -34,3 +33,12 @@
 - new_song `/song/add`
 - edit_song `/song/:id/edit`
 - 404
+
+## TODO
+
+- add dockerfile for client
+- add client docker compose service
+- finish implementing client
+- clean css
+- edit `README.md`
+- 

@@ -22,7 +22,7 @@ const refreshTokens = async (url, options) => {
     deleteUser();
     removeValue('token');
     clearState();
-    return navigate(PAGES.LOGIN);
+    return navigate(PAGES.HOME);
   }
 
   const { accessToken } = await handleResponse(data);

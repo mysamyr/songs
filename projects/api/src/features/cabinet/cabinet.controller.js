@@ -2,7 +2,6 @@ import STATUS_CODES from '../../constants/status-codes.js';
 import {
   VALIDATE_ACCOUNT,
   EXISTING_EMAIL,
-  PASSWORDS_NOT_MATCH,
   WRONG_PASSWORD,
   PASSWORDS_MATCH,
   ALREADY_ACTIVATED,
@@ -18,7 +17,7 @@ import {
 import { getLinkForVerification } from './cabinet.helper.js';
 import { timeDiff } from '../../utils/time.js';
 import { compare, hash, uuid } from '../../utils/crypto.js';
-import ApiError from '../../utils/error.js';
+import { BadRequest } from '../../utils/error.js';
 
 export const changeEmail = async (req, res) => {
   const {
@@ -28,7 +27,7 @@ export const changeEmail = async (req, res) => {
 
   const currentEmail = userData.email;
   if (email === currentEmail) {
-    throw new ApiError.BadRequest(EXISTING_EMAIL);
+    throw BadRequest(EXISTING_EMAIL);
   }
   const link = uuid();
 
@@ -52,24 +51,21 @@ export const changeEmail = async (req, res) => {
 export const changePassword = async (req, res) => {
   const {
     userData,
-    body: { password, newPassword, confirm },
+    body: { password, newPassword },
   } = req;
 
   if (!userData.verified) {
-    throw new ApiError.BadRequest(VALIDATE_ACCOUNT);
-  }
-  if (newPassword !== confirm) {
-    throw new ApiError.BadRequest(PASSWORDS_NOT_MATCH);
+    throw BadRequest(VALIDATE_ACCOUNT);
   }
   const candidate = await User.findById(userData._id).select('password').exec();
 
   const isPasswordValid = compare(password, candidate.password);
   if (!isPasswordValid) {
-    throw new ApiError.BadRequest(WRONG_PASSWORD);
+    throw BadRequest(WRONG_PASSWORD);
   }
 
   if (compare(newPassword, candidate.password)) {
-    throw new ApiError.BadRequest(PASSWORDS_MATCH);
+    throw BadRequest(PASSWORDS_MATCH);
   }
 
   await User.findByIdAndUpdate(userData._id, {
@@ -85,7 +81,7 @@ export const resendVerification = async (req, res) => {
   const { _id, verified } = req.userData;
 
   if (verified) {
-    throw new ApiError.BadRequest(ALREADY_ACTIVATED);
+    throw BadRequest(ALREADY_ACTIVATED);
   }
 
   const currentTime = new Date();
@@ -93,7 +89,7 @@ export const resendVerification = async (req, res) => {
 
   // if was sent inside 5 minutes
   if (timeDiff(currentTime, DBUser.verify_sent_at) < 300000) {
-    throw new ApiError.BadRequest(VERIFY_TRY_AGAIN);
+    throw BadRequest(VERIFY_TRY_AGAIN);
   }
 
   await User.findByIdAndUpdate(_id, { verify_sent_at: currentTime });
@@ -111,7 +107,7 @@ export const deleteAccount = async (req, res) => {
   const userData = await User.findByIdAndDelete(req.userData._id).exec();
 
   if (!userData) {
-    throw new ApiError.BadRequest(ACCOUNT_NOT_DELETED);
+    throw BadRequest(ACCOUNT_NOT_DELETED);
   }
 
   await Token.findOneAndDelete({ user: userData._id }).exec();

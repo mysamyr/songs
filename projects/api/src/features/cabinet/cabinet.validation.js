@@ -11,6 +11,5 @@ export const changePassword = {
   body: Joi.object({
     password,
     newPassword: password,
-    confirm: Joi.ref('newPassword'),
   }).required(),
 };

@@ -1,9 +1,7 @@
 import { PAGES } from '../../constants';
 import { Header, Button, Div, Paragraph, Header1 } from '../../components';
 import { activate } from '../../api/auth';
-import Snackbar from '../../features/snackbar';
 import { navigate } from '../../utils/navigate';
-import { isLoggedIn } from '../../features/auth';
 
 const getActivationId = () => window.location.pathname.split('/')[3];
 
@@ -11,51 +9,53 @@ export default async () => {
   const id = getActivationId();
   let isActivated = false;
 
-  if (isLoggedIn()) {
-    Snackbar.displayMsg('You cannot activate account while logged in');
-    return navigate(PAGES.LISTS);
-  }
   try {
     if (id) {
       await activate(id);
       isActivated = true;
     }
-    // eslint-disable-next-line no-unused-vars
-  } catch (err) {
-    Snackbar.displayMsg('Account cannot be activated');
-  }
+    // eslint-disable-next-line no-empty
+  } catch {}
 
   const activationContainer = Div({
     className: 'container',
   });
 
   const buttons = Div({
-    className: 'btns',
+    className: 'buttons_container',
   });
-  buttons.append(
+  buttons.appendChild(
     Button({
-      onClick: () => navigate(PAGES.LOGIN),
-      text: 'Go To Login Page',
+      onClick: () => navigate(PAGES.HOME),
+      text: 'Перейти на головну',
       color: 'blue',
     })
   );
 
-  activationContainer.append(
+  activationContainer.appendChild(
     Header1({
-      text: isActivated ? 'Congratulations!' : 'An Error has happened!',
-    }),
-    Paragraph({
-      text: isActivated
-        ? 'Your account has been activated. You can now login and use Lister App.'
-        : 'You have got an error while activating your account. Please try to use a valid activation link or request new account activation.',
-    }),
-    buttons
+      text: isActivated ? 'Вітаємо!' : 'Помилка при активації!',
+    })
   );
 
-  document.getElementById('root').append(
-    Header({
-      title: 'Account activation',
-    }),
-    activationContainer
-  );
+  if (isActivated) {
+    activationContainer.appendChild(
+      Paragraph({
+        text: 'Ви успішно активували обліковий запис і тепер можете створювати, редагувати та видаляти категорії та пісні.',
+      })
+    );
+  } else {
+    activationContainer.append(
+      Paragraph({
+        text: 'Ви не змогли активувати обліковий запис. Активуйте його перейшовши за посиланням, надісланим на Вашу електронну пошту, вказану при реєстрації.',
+      }),
+      Paragraph({
+        text: "Якщо Ви не пам'ятаєте вказану електронну пошту чи виникли проблеми з активацією облікового запису - зверніться в адміністрацію пісенника.",
+      })
+    );
+  }
+
+  activationContainer.appendChild(buttons);
+
+  document.getElementById('root').append(Header(), activationContainer);
 };

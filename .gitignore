@@ -5,10 +5,10 @@
 .env
 service-account.json
 /node_modules
-/logs/**
 /assets/**
 
 /projects/*/node_modules
-/projects/web/public/index.js
+/projects/client/public/index.js
+/projects/api/logs/**
 /projects/*/.env
 /projects/web/build

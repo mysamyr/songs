@@ -8,7 +8,7 @@ import {
 } from '../../constants/error-messages.js';
 import { Category, Song } from '../../models/index.js';
 import { mapCategories, mapCategoryWithSongs } from './category.helper.js';
-import ApiError from '../../utils/error.js';
+import { BadRequest } from '../../utils/error.js';
 
 export const getCategories = async (req, res) => {
   // todo add pagination
@@ -17,7 +17,7 @@ export const getCategories = async (req, res) => {
   return res.status(STATUS_CODES.OK).json(mapCategories(categories));
 };
 
-export const getSongsForCategory = async (req, res) => {
+export const getCategory = async (req, res) => {
   const {
     params: { id },
   } = req;
@@ -28,7 +28,7 @@ export const getSongsForCategory = async (req, res) => {
     .exec();
 
   if (!dbCategory) {
-    throw new ApiError.BadRequest(NO_SUCH_CATEGORY);
+    throw BadRequest(NO_SUCH_CATEGORY);
   }
 
   const songs = await Song.find({
@@ -51,7 +51,7 @@ export const addCategory = async (req, res) => {
 
   const isCategoryNameExists = await Category.findOne({ name }).exec();
   if (isCategoryNameExists) {
-    throw new ApiError.BadRequest(EXISTING_CATEGORY);
+    throw BadRequest(EXISTING_CATEGORY);
   }
 
   await Category.create({
@@ -62,7 +62,6 @@ export const addCategory = async (req, res) => {
   return res.status(STATUS_CODES.CREATED).send();
 };
 
-// todo change new value to new name
 export const renameCategory = async (req, res) => {
   const {
     body: { prevName, newName },
@@ -71,22 +70,22 @@ export const renameCategory = async (req, res) => {
   } = req;
 
   if (prevName === newName) {
-    throw new ApiError.BadRequest(SAME_CATEGORY);
+    throw BadRequest(SAME_CATEGORY);
   }
 
   const category = await Category.findById(id).exec();
   if (!category) {
-    throw new ApiError.BadRequest(NO_SUCH_CATEGORY);
+    throw BadRequest(NO_SUCH_CATEGORY);
   }
   const isNewNameNotUnique = await Category.findOne({ name: newName }).exec();
   if (isNewNameNotUnique) {
-    throw new ApiError.BadRequest(EXISTING_CATEGORY);
+    throw BadRequest(EXISTING_CATEGORY);
   }
   if (
     category.author.toString() !== userData._id.toString() &&
     !userData.is_admin
   ) {
-    throw new ApiError.BadRequest(NOT_AUTHOR);
+    throw BadRequest(NOT_AUTHOR);
   }
 
   await Category.findByIdAndUpdate(id, {
@@ -106,7 +105,7 @@ export const deleteCategory = async (req, res) => {
   }).exec();
 
   if (isCategoryNotEmpty) {
-    throw new ApiError.BadRequest(SONGS_INSIDE_CATEGORY);
+    throw BadRequest(SONGS_INSIDE_CATEGORY);
   }
   await Category.findOneAndDelete({
     _id: id,

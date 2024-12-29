@@ -1,4 +1,4 @@
-import { SUCCESSFUL_REGISTRATION } from '../../constants/messages';
+import { PAGES, PASSWORD } from '../../constants';
 import { signup } from '../../api/auth';
 import {
   Header,
@@ -7,17 +7,14 @@ import {
   Label,
   Span,
   Form,
-  Header1,
-  Header2,
   Input,
-  ForgotPasswordModal,
 } from '../../components';
 import Snackbar from '../../features/snackbar';
 import { login } from '../../features/auth';
-import { showModal } from '../../features/modal';
+import { navigate } from '../../utils/navigate';
 
 const emailLabel = Label({
-  className: 'auth-label',
+  className: 'input-field',
 });
 emailLabel.append(
   Span({
@@ -27,19 +24,23 @@ emailLabel.append(
     type: 'email',
     name: 'email',
     focus: true,
+    required: true,
   })
 );
 
 const passwordLabel = Label({
-  className: 'auth-label',
+  className: 'input-field',
 });
 passwordLabel.append(
   Span({
-    text: 'Password:',
+    text: 'Пароль:',
   }),
   Input({
     type: 'password',
     name: 'password',
+    min: PASSWORD.MIN,
+    max: PASSWORD.MAX,
+    required: true,
   })
 );
 
@@ -50,10 +51,12 @@ const LoginPage = () => {
     const password = e.target.password.value;
 
     if (!email.length) {
-      return Snackbar.displayMsg('Email cannot be empty');
+      return Snackbar.displayMsg('Пошта не може бути порожньою');
     }
-    if (password.length < 8) {
-      return Snackbar.displayMsg('Password must be at least 8 characters');
+    if (password.length < PASSWORD.MIN) {
+      return Snackbar.displayMsg(
+        `Пароль має містити мінімум ${PASSWORD.MIN} символів`
+      );
     }
 
     try {
@@ -62,147 +65,150 @@ const LoginPage = () => {
       Snackbar.displayMsg(e.message);
     }
   };
-  const container = Div({
-    className: 'container',
-  });
-
   const form = Form({
-    className: 'column',
+    className: 'tab_content',
     onSubmit: handleLogin,
   });
 
-  form.append(
-    emailLabel,
-    passwordLabel,
+  const buttonContainer = Div({
+    className: 'buttons_container',
+  });
+  buttonContainer.append(
     Button({
-      text: 'Login',
+      text: 'Увійти',
       type: 'submit',
-      color: 'blue',
+      color: 'green',
     })
   );
 
-  const forgotPassBtn = Div({
-    onClick: () => {
-      showModal(ForgotPasswordModal());
-    },
-  });
-  forgotPassBtn.append(
-    document.createTextNode('Forgot your password? '),
-    Span({
-      text: 'Click here!',
-      className: 'auth-link',
-    })
-  );
+  form.append(emailLabel, passwordLabel, buttonContainer);
 
-  const changeBtn = Div({
-    onClick: () => {
-      document.querySelector('.container').remove();
-      document.querySelector('.header-title').innerText = 'Registration';
-      document.querySelector('.header-container').after(RegistrationPage());
-    },
-  });
-  changeBtn.append(
-    document.createTextNode("Don't have an account? "),
-    Span({
-      text: 'Register',
-      className: 'auth-link',
-    })
-  );
-
-  container.append(
-    Header1({
-      className: 'auth-header',
-      text: 'Hello, Welcome back!',
-    }),
-    Header2({
-      text: 'Happy to see you, please login here.',
-      className: 'auth-subheader',
-    }),
-    form,
-    forgotPassBtn,
-    changeBtn
-  );
-
-  return container;
+  return form;
 };
 
 const RegistrationPage = () => {
-  const showLogin = () => {
-    document.querySelector('.container').remove();
-    document.querySelector('.header-title').innerText = 'Login';
-    document.querySelector('.header-container').after(LoginPage());
-  };
   const handleRegistration = async e => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
+    const confirm = e.target.confirm.value;
 
     if (!email.length) {
       return Snackbar.displayMsg('Email cannot be empty');
     }
-    if (password.length < 8) {
-      return Snackbar.displayMsg('Password must be at least 8 characters');
+    if (password.length < PASSWORD.MIN || confirm.length < PASSWORD.MIN) {
+      return Snackbar.displayMsg(
+        `Пароль має містити мінімум ${PASSWORD.MIN} символів`
+      );
+    }
+    if (password !== confirm) {
+      return Snackbar.displayMsg('Паролі не співпадають');
     }
 
     try {
       await signup({ email, password });
-      Snackbar.displayMsg(SUCCESSFUL_REGISTRATION);
-      showLogin();
+      navigate(PAGES.HOME);
     } catch (e) {
       Snackbar.displayMsg(e.message);
     }
   };
-  const container = Div({
-    className: 'container',
-  });
-
   const form = Form({
-    className: 'column',
+    className: 'tab_content',
     onSubmit: handleRegistration,
   });
 
+  const nameLabel = Label({
+    className: 'input-field',
+  });
+  nameLabel.append(
+    Span({
+      text: "Введіть ім'я:",
+    }),
+    Input({
+      type: 'text',
+      name: 'name',
+      min: 2,
+      max: 20,
+      required: true,
+    })
+  );
+
+  const confirmPassword = Label({
+    className: 'input-field',
+  });
+  confirmPassword.append(
+    Span({
+      text: 'Повторіть пароль:',
+    }),
+    Input({
+      type: 'password',
+      name: 'confirm',
+      min: PASSWORD.MIN,
+      max: PASSWORD.MAX,
+      required: true,
+    })
+  );
+
+  const buttonContainer = Div({
+    className: 'buttons_container',
+  });
+  buttonContainer.append(
+    Button({
+      text: 'Зареєструватися',
+      type: 'submit',
+      color: 'green',
+    })
+  );
+
   form.append(
+    nameLabel,
     emailLabel,
     passwordLabel,
-    Button({
-      text: 'Register',
-      type: 'submit',
-      color: 'blue',
-    })
+    confirmPassword,
+    buttonContainer
   );
 
-  const changeBtn = Div({
-    onClick: showLogin,
-  });
-  changeBtn.append(
-    document.createTextNode('Already have an account? '),
-    Span({
-      text: 'Login',
-      className: 'auth-link',
-    })
-  );
-
-  container.append(
-    Header1({
-      className: 'auth-header',
-      text: 'Hello, Welcome!',
-    }),
-    Header2({
-      text: "First, let's create your account.",
-      className: 'auth-subheader',
-    }),
-    form,
-    changeBtn
-  );
-
-  return container;
+  return form;
 };
 
 export default () => {
-  document.getElementById('root').append(
-    Header({
-      title: 'Login',
-    }),
-    LoginPage()
-  );
+  const container = Div({
+    className: 'container',
+  });
+  const switchButtons = Div({
+    className: 'tab_headers',
+  });
+
+  const loginBtn = Div({
+    id: 'login-btn',
+    className: 'tab tab_active',
+    text: 'Увійти',
+    onClick: e => {
+      if (e.target.classList.contains('tab_active')) return;
+      document
+        .querySelectorAll('.tab')
+        .forEach(tab => tab.classList.toggle('tab_active'));
+      document.querySelector('form').remove();
+      container.append(LoginPage());
+    },
+  });
+  const signupBtn = Div({
+    id: 'signup-btn',
+    className: 'tab',
+    text: 'Зареєструватися',
+    onClick: e => {
+      if (e.target.classList.contains('tab_active')) return;
+      document
+        .querySelectorAll('.tab')
+        .forEach(tab => tab.classList.toggle('tab_active'));
+      document.querySelector('form').remove();
+      container.append(RegistrationPage());
+    },
+  });
+
+  switchButtons.append(loginBtn, signupBtn);
+
+  container.append(switchButtons, LoginPage());
+
+  document.getElementById('root').append(Header(), container);
 };

@@ -8,6 +8,8 @@ import { isNil } from '../../utils/helpers';
  * @param {string} [props.type]
  * @param {string} [props.name]
  * @param {string} [props.value]
+ * @param {number} [props.min]
+ * @param {number} [props.max]
  * @param {string} [props.placeholder]
  * @param {string} [props.step]
  * @param {boolean} [props.checked]
@@ -22,10 +24,25 @@ export default props => {
   const input = document.createElement('input');
   input.type = props?.type || 'text';
   if (!props) return input;
-  if (props.className) input.classList.add(...props.className.split(' '));
+  if (props.className)
+    input.classList.add(...props.className.split(' ').filter(Boolean));
   if (props.id) input.id = props.id;
   if (props.name) input.name = props.name;
   if (!isNil(props.value)) input.value = props.value;
+  if (props.min) {
+    if (input.type === 'number') {
+      input.min = `${props.min}`;
+    } else {
+      input.minLength = props.min;
+    }
+  }
+  if (props.max) {
+    if (input.type === 'number') {
+      input.max = `${props.max}`;
+    } else {
+      input.maxLength = props.max;
+    }
+  }
   if (props.placeholder) input.placeholder = props.placeholder;
   if (props.step) input.step = props.step;
   if (props.hasOwnProperty('checked')) input.checked = props.checked;

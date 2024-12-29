@@ -1,5 +1,5 @@
-import ApiError from '../utils/error';
-import logger from '../services/logging';
+import { BadRequest } from '../utils/error.js';
+import logger from '../services/logging.js';
 
 const validate = (entity, schema) => (req, res, next) => {
   const { error, value } = schema.validate(req[entity]);
@@ -9,8 +9,8 @@ const validate = (entity, schema) => (req, res, next) => {
   }
 
   const message = error.details[0].message;
-  logger.error(message);
-  throw ApiError.BadRequest(message);
+  logger.error(new Error(message));
+  throw BadRequest(message);
 };
 
 export const validateParams = schema => (req, res, next) =>

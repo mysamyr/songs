@@ -1,63 +1,81 @@
-import { HEADER_ICONS } from '../../constants';
-import { SortModal, Back, Menu, Sort, Edit, Div, Header1 } from '../';
-import { clearLists } from '../../state';
-import { navigateBack } from '../../utils/navigate';
-import { showModal } from '../../features/modal';
-import { openSidebar } from '../../features/sidebar';
+import { Div, Menu, UList, ListItem } from '../';
+import { PAGES } from '../../constants';
+import { navigate } from '../../utils/navigate';
+import { isLoggedIn, logout } from '../../features/auth';
 
-const getIcon = (iconName, onClick) => {
-  const config = {
-    [HEADER_ICONS.BACK]: {
-      Icon: Back,
-      fn: () => {
-        clearLists();
-        return navigateBack();
-      },
-    },
-    [HEADER_ICONS.MENU]: {
-      Icon: Menu,
-      fn: () => {
-        openSidebar();
-      },
-    },
-    [HEADER_ICONS.SORT]: {
-      Icon: Sort,
-      fn: () => {
-        showModal(SortModal({ onSubmit: onClick }));
-      },
-    },
-    [HEADER_ICONS.EDIT]: {
-      Icon: Edit,
-      fn: onClick,
-    },
-    '': {
-      Icon: () => Div(),
-    },
-  };
-  return config[iconName];
-};
+const navLinks = [
+  {
+    text: 'Головна',
+    href: PAGES.HOME,
+  },
+  {
+    text: 'Пісенник',
+    href: PAGES.CATEGORIES,
+  },
+  {
+    text: 'Літургія',
+    href: PAGES.LITURGY,
+  },
+  {
+    text: 'Панахида',
+    href: PAGES.PANAKHYDA,
+  },
+];
 
-const HeaderIcon = ({ iconName = '', onClick }) => {
-  const { Icon, fn } = getIcon(iconName, onClick);
-
-  const container = Div({
-    onClick: fn,
-  });
-  container.appendChild(Icon());
-  return container;
-};
-
-export default ({ title, leftContent, rightContent, onClick }) => {
+export default () => {
+  const isAuth = isLoggedIn();
   const container = Div({
     className: 'header-container',
   });
+  const navList = UList({
+    className: 'nav-list',
+  });
+  navLinks.forEach(link => {
+    navList.appendChild(
+      ListItem({
+        text: link.text,
+        className: 'nav-list-item link',
+        onClick: () => navigate(link.href),
+      })
+    );
+  });
+
+  if (isAuth) {
+    navList.appendChild(
+      ListItem({
+        text: 'Кабінет',
+        className: 'nav-list-item link',
+        onClick: () => navigate(PAGES.CABINET),
+      })
+    );
+    navList.appendChild(
+      ListItem({
+        text: 'Вийти',
+        className: 'nav-list-item link',
+        onClick: logout,
+      })
+    );
+  } else {
+    navList.appendChild(
+      ListItem({
+        text: 'Увійти',
+        className: 'nav-list-item link',
+        onClick: () => navigate(PAGES.AUTH),
+      })
+    );
+  }
+
+  const trigger = Menu();
+  trigger.classList.add('sidenav-trigger');
+
   container.append(
-    HeaderIcon({ iconName: leftContent }),
-    Header1({
-      className: 'header-title',
-      text: title,
+    Div({
+      className: 'logo link',
+      text: 'Пісенник',
+      onClick: () => navigate(PAGES.HOME),
     }),
-    HeaderIcon({ iconName: rightContent, onClick })
+    navList,
+    trigger
   );
 
   return container;
