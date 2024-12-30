@@ -36,7 +36,7 @@ export default async () => {
 
     try {
       await createCategory({ name });
-      Snackbar.displayMsg('Категорію успішно додано');
+      Snackbar.displayMsg(`Категорію ${name} додано`);
       navigate(PAGES.CATEGORIES);
     } catch (e) {
       Snackbar.displayMsg(e.message);
@@ -80,6 +80,7 @@ export default async () => {
     Button({
       text: 'Додати категорію',
       type: 'submit',
+      color: 'green',
     }),
     Button({
       text: 'Назад до категорій',

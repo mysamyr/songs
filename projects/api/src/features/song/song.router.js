@@ -4,10 +4,9 @@ import promisify from '../../middlewares/promisify.js';
 import {
   validateBody,
   validateParams,
-  validateQuery,
 } from '../../middlewares/express-validators.js';
 import { defaultParams } from '../../validators/index.js';
-import { addSongBody, addSongQuery, editSongBody } from './song.validation.js';
+import { addSongBody, editSongBody } from './song.validation.js';
 import * as songController from './song.controller.js';
 
 const router = Router();
@@ -20,7 +19,6 @@ router.get(
 
 router.post(
   '/',
-  validateQuery(addSongQuery),
   validateBody(addSongBody),
   authMiddleware,
   promisify(songController.addSong)

@@ -4,7 +4,7 @@ import { navigate } from '../../utils/navigate';
 import { PAGES } from '../../constants';
 import { getCategories as getCategoriesAPI } from '../../api/category';
 import { getCategories, setCategories } from '../../state';
-import { logError } from '../../utils/helpers';
+import { capitalizeFirstLetter, logError } from '../../utils/helpers';
 import Snackbar from '../../features/snackbar';
 
 export default async () => {
@@ -37,7 +37,7 @@ export default async () => {
     categories.forEach(category => {
       const card = Div({
         className: 'card link',
-        text: category.name,
+        text: capitalizeFirstLetter(category.name),
         onClick: () => {
           navigate(PAGES.CATEGORY_$(category.id));
         },

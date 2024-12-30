@@ -1,16 +1,6 @@
 import { Schema, model } from 'mongoose';
 import { COLLECTIONS } from '../constants/index.js';
 
-const opts = {
-  toObject: {
-    virtuals: true,
-  },
-  toJSON: {
-    virtuals: true,
-  },
-  collection: 'user',
-};
-
 const userSchema = new Schema(
   {
     name: {
@@ -45,7 +35,9 @@ const userSchema = new Schema(
       default: false,
     },
   },
-  opts
+  {
+    collection: 'user',
+  }
 );
 
 export default model(COLLECTIONS.USER, userSchema);

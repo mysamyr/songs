@@ -30,6 +30,18 @@ services:
       - songpb_network
     depends_on:
       - mongo
+  client:
+    build:
+      context: projects/client
+      target: prod
+    restart: always
+    container_name: songpb_client
+    ports:
+      - "3000:80"
+    networks:
+      - songpb_network
+    depends_on:
+      - api
 
 networks:
   songpb_network:

@@ -1,4 +1,3 @@
-/* eslint-disable no-prototype-builtins */
 import { isNil } from '../../utils/helpers';
 
 /**
@@ -7,6 +6,7 @@ import { isNil } from '../../utils/helpers';
  * @param {string} [props.id]
  * @param {string} [props.name]
  * @param {string} [props.value]
+ * @param {boolean} [props.multiple]
  * @param {boolean} [props.required]
  * @param {boolean} [props.disabled]
  * @param {function} [props.onChange]
@@ -19,8 +19,9 @@ export default props => {
   if (props.id) select.id = props.id;
   if (props.name) select.name = props.name;
   if (!isNil(props.value)) select.value = props.value;
-  if (props.hasOwnProperty('required')) select.required = props.required;
-  if (props.hasOwnProperty('disabled')) select.disabled = props.disabled;
+  select.multiple = props.multiple;
+  select.required = props.required;
+  select.disabled = props.disabled;
   if (props.onChange) select.addEventListener('change', props.onChange);
 
   return select;

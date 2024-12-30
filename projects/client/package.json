@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start:dev": "nodemon -L src/server.js",
-    "build": "webpack --config webpack.js",
+    "build": "webpack --config webpack.prod.js",
     "build:dev": "webpack --watch --config webpack.dev.js"
   },
   "dependencies": {

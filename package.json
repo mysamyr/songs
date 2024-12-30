@@ -6,8 +6,8 @@
     "secrets:fetch": "node scripts/fetch.js",
     "secrets:upload": "node scripts/upload.js",
     "setup": "node scripts/copy.js",
-    "check-formatting": "npx prettier -l projects",
-    "format": "prettier --write projects",
+    "check-formatting": "npx prettier -l projects scripts",
+    "format": "prettier --write projects scripts",
     "check-quality": "eslint projects",
     "prepare": "husky"
   },

@@ -1,16 +1,6 @@
 import { Schema, model } from 'mongoose';
 import { COLLECTIONS } from '../constants/index.js';
 
-const opts = {
-  toObject: {
-    virtuals: true,
-  },
-  toJSON: {
-    virtuals: true,
-  },
-  collection: 'song',
-};
-
 const songSchema = new Schema(
   {
     name: {
@@ -49,7 +39,9 @@ const songSchema = new Schema(
       type: Date,
     },
   },
-  opts
+  {
+    collection: 'song',
+  }
 );
 
 export default model(COLLECTIONS.SONG, songSchema);

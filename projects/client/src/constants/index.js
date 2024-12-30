@@ -56,6 +56,11 @@ export const SONG = {
   MAX: 30,
 };
 
+export const SONG_TEXT = {
+  MIN: 10,
+  MAX: 4096,
+};
+
 export const STATUS_CODES = {
   OK: 200,
   CREATED: 201,

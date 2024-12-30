@@ -4,7 +4,6 @@ import {
   EXISTING_SONG,
   NOT_EXISTING_SONG,
   NOT_AUTHOR,
-  EXISTING_CATEGORY,
 } from '../../constants/error-messages.js';
 import { Category, Song } from '../../models/index.js';
 import { mapSong } from './song.helper.js';
@@ -33,11 +32,11 @@ export const addSong = async (req, res) => {
   } = req;
   const catArray = Array.isArray(categories) ? categories : [categories];
 
-  const dbCategories = await Category.find({ name: catArray })
+  const dbCategories = await Category.find({ _id: catArray })
     .select('id name')
     .exec();
   if (!dbCategories.length || catArray.length !== dbCategories.length) {
-    throw BadRequest(EXISTING_CATEGORY);
+    throw BadRequest(DELETED_CATEGORY);
   }
 
   const isSongExist = await Song.findOne({
@@ -67,7 +66,7 @@ export const editSong = async (req, res) => {
 
   const catArray = Array.isArray(categories) ? categories : [categories];
 
-  const dbCategories = await Category.find({ name: catArray })
+  const dbCategories = await Category.find({ _id: catArray })
     .select('id')
     .exec();
   if (!dbCategories.length || catArray.length !== dbCategories.length) {

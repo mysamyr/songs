@@ -1,16 +1,6 @@
 import { Schema, model } from 'mongoose';
 import { COLLECTIONS } from '../constants/index.js';
 
-const opts = {
-  toObject: {
-    virtuals: true,
-  },
-  toJSON: {
-    virtuals: true,
-  },
-  collection: 'category',
-};
-
 const categorySchema = new Schema(
   {
     name: {
@@ -28,7 +18,9 @@ const categorySchema = new Schema(
       default: new Date(),
     },
   },
-  opts
+  {
+    collection: 'category',
+  }
 );
 
 export default model(COLLECTIONS.CATEGORY, categorySchema);

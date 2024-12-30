@@ -36,8 +36,6 @@
 
 ## TODO
 
-- add dockerfile for client
-- add client docker compose service
 - finish implementing client
 - clean css
 - edit `README.md`

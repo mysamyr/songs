@@ -1,14 +1,14 @@
 export { default as Button } from './Buttons/Button';
-export { default as Bold } from './elements/Bold';
+// export { default as Bold } from './elements/Bold';
 export { default as Div } from './elements/Div';
 export { default as Form } from './elements/Form';
 export { default as Header1 } from './elements/Header1';
 export { default as Header2 } from './elements/Header2';
 export { default as Input } from './elements/Input';
 export { default as Label } from './elements/Label';
-// export { default as Option } from './elements/Option';
+export { default as Option } from './elements/Option';
 export { default as Paragraph } from './elements/Paragraph';
-// export { default as Select } from './elements/Select';
+export { default as Select } from './elements/Select';
 export { default as Span } from './elements/Span';
 export { default as Pre } from './elements/Pre';
 export { default as UList } from './elements/UList';

@@ -1,16 +1,6 @@
 import { Schema, model } from 'mongoose';
 import { COLLECTIONS } from '../constants/index.js';
 
-const opts = {
-  toObject: {
-    virtuals: true,
-  },
-  toJSON: {
-    virtuals: true,
-  },
-  collection: 'token',
-};
-
 const tokenSchema = new Schema(
   {
     token: {
@@ -28,7 +18,9 @@ const tokenSchema = new Schema(
       default: new Date(),
     },
   },
-  opts
+  {
+    collection: 'token',
+  }
 );
 
 export default model(COLLECTIONS.TOKEN, tokenSchema);
