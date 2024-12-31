@@ -25,6 +25,7 @@ RUN npm ci --omit=dev
 
 COPY public/ public
 COPY src/ src
+COPY webpack.common.js webpack.common.js
 COPY webpack.prod.js webpack.prod.js
 COPY default.conf default.conf
 

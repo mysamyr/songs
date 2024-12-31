@@ -346,9 +346,7 @@ ol {
 }
 
 .tab-active {
-  /*background-color: rgba(246, 178, 181, 0.2);*/
-  /*border-bottom: 1px solid #ee6e73 ;*/
-  background-color: var(--light-green);
+  background-color: var(--yellow);
   border-bottom: 1px solid var(--green);
 }
 

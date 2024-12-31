@@ -14,7 +14,7 @@ COPY . .
 
 EXPOSE 8080
 
-CMD npm run start:debug
+CMD npm run start:dev
 
 FROM base AS prod
 
