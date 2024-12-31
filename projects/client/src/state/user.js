@@ -11,3 +11,9 @@ export const deleteUser = () => {
 export const getUser = () => JSON.parse(getValue('user'));
 
 export const getUserName = () => getUser()?.name;
+
+export const getUserEmail = () => getUser()?.email;
+
+export const isUserAdmin = () => getUser()?.isAdmin;
+
+export const isVerifiedUser = () => getUser()?.verified;

@@ -1,7 +1,7 @@
 const state = {
   categories: [],
   category: {},
-  song: {},
+  song: null,
 };
 
 // Categories
@@ -24,5 +24,5 @@ export const clearState = () => {
   state.categories = [];
   state.category = {};
   state.songs = [];
-  state.song = {};
+  state.song = null;
 };

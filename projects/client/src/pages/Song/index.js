@@ -17,11 +17,11 @@ import { getSong, setSong } from '../../state';
 import { capitalizeFirstLetter, logError } from '../../utils/helpers';
 import Snackbar from '../../features/snackbar';
 import { showModal } from '../../features/modal';
-import { getUser } from '../../state/user';
+import { isUserAdmin } from '../../state/user';
 
 export default async () => {
-  const user = getUser();
   const songId = window.location.pathname.split('/')[2];
+  const isAdmin = isUserAdmin();
 
   const onDeleteSong = async id => {
     try {
@@ -59,12 +59,12 @@ export default async () => {
     })
   );
 
-  if (song.author) {
+  if (song.isAuthor) {
     container.appendChild(Paragraph({ className: 'right', text: song.author }));
   }
 
   const buttons = Div({
-    className: 'buttons_container',
+    className: 'btns',
   });
   buttons.append(
     Button({
@@ -78,8 +78,8 @@ export default async () => {
       color: 'blue',
     })
   );
-  // todo add author or admin
-  if (user?.id === song.author) {
+
+  if (song.isAuthor || isAdmin) {
     buttons.append(
       Button({
         onClick: () => navigate(PAGES.EDIT_SONG_$(songId)),
@@ -91,7 +91,7 @@ export default async () => {
           showModal(
             SubmitModal({
               onConfirm: () => onDeleteSong(songId),
-              question: 'Ви впевнені, що хочете видалити категорію?',
+              question: 'Ви впевнені, що хочете видалити пісню?',
             })
           ),
         text: 'Видалити',

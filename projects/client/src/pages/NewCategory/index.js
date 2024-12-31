@@ -74,7 +74,7 @@ export default async () => {
   );
 
   const buttonContainer = Div({
-    className: 'buttons_container',
+    className: 'btns',
   });
   buttonContainer.append(
     Button({

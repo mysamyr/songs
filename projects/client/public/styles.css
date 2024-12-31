@@ -170,7 +170,6 @@ body {
 /*DIALOG*/
 dialog:modal {
   margin: auto;
-  max-width: 80%;
   color: var(--black);
   background-color: var(--white);
 }
@@ -230,7 +229,7 @@ pre {
 }
 
 /*BUTTONS*/
-.buttons_container {
+.btns {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -391,7 +390,7 @@ ol {
     width: 540px;
   }
 
-  .buttons_container {
+  .btns {
     flex-direction: row;
   }
 }
@@ -460,7 +459,7 @@ ol {
 }
 
 @media only screen and (max-width: 768px) {
-  .buttons_container {
+  .btns {
     flex-direction: column;
     align-items: center;
   }

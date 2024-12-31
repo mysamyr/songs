@@ -12,7 +12,7 @@ import { BadRequest } from '../../utils/error.js';
 
 export const getCategories = async (req, res) => {
   // todo add pagination
-  const categories = await Category.find().select('id name').exec();
+  const categories = await Category.find().select('name').exec();
 
   return res.status(STATUS_CODES.OK).json(mapCategories(categories));
 };
@@ -24,7 +24,7 @@ export const getCategory = async (req, res) => {
   const dbCategory = await Category.findOne({
     _id: id,
   })
-    .select('id name author')
+    .select('name author')
     .exec();
 
   if (!dbCategory) {
@@ -35,7 +35,7 @@ export const getCategory = async (req, res) => {
     categories: id,
     deleted: false,
   })
-    .select('name id')
+    .select('name')
     .exec();
 
   return res

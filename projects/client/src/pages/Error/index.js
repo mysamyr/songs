@@ -23,7 +23,7 @@ export default () => {
   });
 
   const buttons = Div({
-    className: 'buttons_container',
+    className: 'btns',
   });
   buttons.append(
     Button({

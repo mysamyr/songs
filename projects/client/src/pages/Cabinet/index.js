@@ -16,19 +16,32 @@ import { hideModal, showModal } from '../../features/modal';
 import {
   changeEmail,
   changePassword,
-  // resendVerification,
+  resendVerification,
   deleteAccount,
 } from '../../api/cabinet';
 import Snackbar from '../../features/snackbar';
-import { getUser } from '../../state/user';
+import { getUserEmail, isVerifiedUser } from '../../state/user';
 import { logout } from '../../features/auth';
 
 const EmailChangeForm = () => {
-  // todo add resend verification email
-  const user = getUser();
+  const email = getUserEmail();
+  const isVerified = isVerifiedUser();
   const onChangeEmail = async email => {
     try {
       await changeEmail({ email });
+      hideModal();
+    } catch (e) {
+      Snackbar.displayMsg(e.message);
+      return hideModal();
+    }
+    await logout();
+  };
+  const onResendValidation = async () => {
+    try {
+      await resendVerification();
+      Snackbar.displayMsg(
+        'Інструкція з активації облікового запису надіслана на Вашу електронну пошту'
+      );
       hideModal();
     } catch (e) {
       Snackbar.displayMsg(e.message);
@@ -42,8 +55,7 @@ const EmailChangeForm = () => {
     const newEmail = e.target.email.value;
     if (!newEmail.length)
       return Snackbar.displayMsg('Електронна пошта не може бути пустою');
-    if (newEmail === user.email)
-      return Snackbar.displayMsg('Введіть нову пошту');
+    if (newEmail === email) return Snackbar.displayMsg('Введіть нову пошту');
     showModal(
       SubmitModal({
         onConfirm: () => onChangeEmail(newEmail),
@@ -57,8 +69,32 @@ const EmailChangeForm = () => {
     onSubmit: onSubmitChangeEmail,
   });
 
+  form.append(
+    Header2({
+      text: 'Електронна пошта',
+    }),
+    Input({
+      name: 'email',
+      type: 'email',
+      value: email,
+    })
+  );
+
+  if (!isVerified) {
+    const paragraph = Paragraph();
+    paragraph.append(
+      document.createTextNode('Електронна пошта не підтверджена. '),
+      Span({
+        text: 'Надіслати інструкцію на електронну пошту',
+        className: 'link',
+        onClick: onResendValidation,
+      })
+    );
+    form.appendChild(paragraph);
+  }
+
   const buttonContainer = Div({
-    className: 'buttons_container',
+    className: 'btns',
   });
   buttonContainer.append(
     Button({
@@ -67,18 +103,7 @@ const EmailChangeForm = () => {
       color: 'green',
     })
   );
-
-  form.append(
-    Header2({
-      text: 'Електронна пошта',
-    }),
-    Input({
-      name: 'email',
-      type: 'email',
-      value: user.email,
-    }),
-    buttonContainer
-  );
+  form.appendChild(buttonContainer);
 
   return form;
 };
@@ -164,7 +189,7 @@ const PasswordChangeForm = () => {
   );
 
   const buttonContainer = Div({
-    className: 'buttons_container',
+    className: 'btns',
   });
   buttonContainer.append(
     Button({
@@ -215,7 +240,7 @@ const AccountDeleteSection = () => {
   });
 
   const buttonContainer = Div({
-    className: 'buttons_container',
+    className: 'btns',
   });
   buttonContainer.append(
     Button({

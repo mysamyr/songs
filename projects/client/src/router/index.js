@@ -9,6 +9,7 @@ import CategoryPage from '../pages/Category';
 import SongPage from '../pages/Song';
 import NewCategoryPage from '../pages/NewCategory';
 import NewSongPage from '../pages/NewSong';
+import EditSongPage from '../pages/EditSong';
 import ActivationPage from '../pages/Activation';
 import CabinetPage from '../pages/Cabinet';
 import { compareURL, navigate } from '../utils/navigate';
@@ -28,7 +29,7 @@ export default url => {
     if (compareURL(url, PAGES.CABINET)) return CabinetPage();
     if (compareURL(url, PAGES.NEW_CATEGORY)) return NewCategoryPage();
     if (compareURL(url, PAGES.NEW_SONG)) return NewSongPage();
-    // if (compareURL(url, PAGES.EDIT_SONG)) return EditSongPage();
+    if (compareURL(url, PAGES.EDIT_SONG)) return EditSongPage();
   } else {
     // not logged in pages
     if (compareURL(url, PAGES.AUTH)) return AuthPage();

@@ -10,8 +10,8 @@ const generateAccessToken = data =>
 const generateRefreshToken = data =>
   jwt.sign(data, JWT_REFRESH_KEY, { expiresIn: '15d' });
 
-export const generateTokens = async (id, email) => {
-  const accessToken = generateAccessToken({ id, email });
+export const generateTokens = async id => {
+  const accessToken = generateAccessToken({ id });
   const refreshToken = generateRefreshToken({ id });
 
   await Token.create({ token: refreshToken, userId: id });
@@ -23,7 +23,7 @@ export const generateTokens = async (id, email) => {
 };
 
 export const checkRefreshToken = async token => {
-  const userData = jwt.verify(token, process.env.JWT_REFRESH_KEY);
+  const userData = jwt.verify(token, JWT_REFRESH_KEY);
   if (!userData) {
     throw UnauthorizedError();
   }

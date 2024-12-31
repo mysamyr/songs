@@ -12,17 +12,18 @@ import { BadRequest } from '../../utils/error.js';
 export const getSong = async (req, res) => {
   const {
     params: { id },
+    userData,
   } = req;
 
   const song = await Song.findById(id)
-    .select('id name text')
-    .populate('author', 'id name')
+    .select('name text')
+    .populate('author', 'name')
     .exec();
   if (!song) {
     throw BadRequest(NOT_EXISTING_SONG);
   }
 
-  return res.status(STATUS_CODES.OK).json(mapSong(song));
+  return res.status(STATUS_CODES.OK).json(mapSong(song, userData));
 };
 
 export const addSong = async (req, res) => {
@@ -33,7 +34,7 @@ export const addSong = async (req, res) => {
   const catArray = Array.isArray(categories) ? categories : [categories];
 
   const dbCategories = await Category.find({ _id: catArray })
-    .select('id name')
+    .select('name')
     .exec();
   if (!dbCategories.length || catArray.length !== dbCategories.length) {
     throw BadRequest(DELETED_CATEGORY);
@@ -47,14 +48,14 @@ export const addSong = async (req, res) => {
     throw BadRequest(EXISTING_SONG);
   }
 
-  await Song.create({
+  const song = await Song.create({
     name,
     text,
     author: userData._id,
     categories: dbCategories.map(i => i._id),
   });
 
-  return res.status(STATUS_CODES.CREATED).send();
+  return res.status(STATUS_CODES.CREATED).json({ id: song._id.toString() });
 };
 
 export const editSong = async (req, res) => {
@@ -66,9 +67,7 @@ export const editSong = async (req, res) => {
 
   const catArray = Array.isArray(categories) ? categories : [categories];
 
-  const dbCategories = await Category.find({ _id: catArray })
-    .select('id')
-    .exec();
+  const dbCategories = await Category.find({ _id: catArray }).exec();
   if (!dbCategories.length || catArray.length !== dbCategories.length) {
     throw BadRequest(DELETED_CATEGORY);
   }

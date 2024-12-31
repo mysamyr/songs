@@ -12,12 +12,12 @@ import {
   Option,
 } from '../../components';
 import { getCategories as getCategoriesAPI } from '../../api/category';
-import { createSong } from '../../api/song';
+import { createSong, getSong as getSongAPI } from '../../api/song';
 import Snackbar from '../../features/snackbar';
-import { getCategories, setCategories } from '../../state';
+import { getCategories, getSong, setCategories, setSong } from '../../state';
 import { navigate, navigateBack } from '../../utils/navigate';
 
-const categorySelect = () => {
+const categorySelect = selectedCategories => {
   const categories = getCategories();
 
   if (!categories.length) {
@@ -35,10 +35,11 @@ const categorySelect = () => {
   });
 
   categories.forEach(category => {
-    select.append(
+    select.appendChild(
       Option({
         value: category.id,
         text: category.name,
+        selected: selectedCategories.includes(category.id),
       })
     );
   });
@@ -139,6 +140,14 @@ export default async () => {
   };
 
   // todo handle error ???
+  if (!getSong()) {
+    try {
+      const song = await getSongAPI();
+      setSong(song);
+    } catch (e) {
+      Snackbar.displayMsg(e.message);
+    }
+  }
   if (!getCategories().length) {
     try {
       const categories = await getCategoriesAPI();

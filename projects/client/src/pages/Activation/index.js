@@ -2,6 +2,8 @@ import { PAGES } from '../../constants';
 import { Header, Button, Div, Paragraph, Header1 } from '../../components';
 import { activate } from '../../api/auth';
 import { navigate } from '../../utils/navigate';
+import { isLoggedIn } from '../../features/auth';
+import { getUser, saveUser } from '../../state/user';
 
 const getActivationId = () => window.location.pathname.split('/')[3];
 
@@ -12,6 +14,14 @@ export default async () => {
   try {
     if (id) {
       await activate(id);
+
+      if (isLoggedIn()) {
+        const user = getUser();
+        saveUser({
+          ...user,
+          verified: true,
+        });
+      }
       isActivated = true;
     }
     // eslint-disable-next-line no-empty
@@ -22,7 +32,7 @@ export default async () => {
   });
 
   const buttons = Div({
-    className: 'buttons_container',
+    className: 'btns',
   });
   buttons.appendChild(
     Button({

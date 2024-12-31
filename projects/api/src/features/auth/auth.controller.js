@@ -30,10 +30,7 @@ export const login = async (req, res) => {
     throw BadRequest(WRONG_EMAIL_OR_PASSWORD);
   }
 
-  const { accessToken, refreshToken } = await generateTokens(
-    candidate._id,
-    email
-  );
+  const { accessToken, refreshToken } = await generateTokens(candidate._id);
 
   res.cookie('refreshToken', refreshToken, {
     maxAge: 30 * 24 * 60 * 60 * 1000,
@@ -41,9 +38,12 @@ export const login = async (req, res) => {
     secure: true,
   });
 
-  return res
-    .status(STATUS_CODES.OK)
-    .json({ name: candidate.name, accessToken, refreshToken });
+  return res.status(STATUS_CODES.OK).json({
+    name: candidate.name,
+    isAdmin: candidate.is_admin,
+    verified: candidate.verified,
+    accessToken,
+  });
 };
 
 export const register = async (req, res) => {
@@ -84,13 +84,10 @@ export const refresh = async (req, res) => {
   }
 
   const candidate = await User.findById(userData.id)
-    .select('id name email')
+    .select('name email')
     .exec();
 
-  const { accessToken, refreshToken } = await generateTokens(
-    candidate._id,
-    candidate.email
-  );
+  const { accessToken, refreshToken } = await generateTokens(candidate._id);
 
   res.cookie('refreshToken', refreshToken, {
     maxAge: 30 * 24 * 60 * 60 * 1000,
@@ -98,9 +95,7 @@ export const refresh = async (req, res) => {
     secure: true,
   });
 
-  res
-    .status(STATUS_CODES.OK)
-    .json({ name: candidate.name, accessToken, refreshToken });
+  res.status(STATUS_CODES.OK).json({ accessToken });
 };
 
 export const logout = async (req, res) => {

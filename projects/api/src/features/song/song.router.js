@@ -1,5 +1,6 @@
 import Router from 'express';
 import authMiddleware from '../../middlewares/auth-check.js';
+import getUserMiddleware from '../../middlewares/get-user.js';
 import promisify from '../../middlewares/promisify.js';
 import {
   validateBody,
@@ -14,6 +15,8 @@ const router = Router();
 router.get(
   '/:id',
   validateParams(defaultParams),
+  getUserMiddleware,
+  authMiddleware,
   promisify(songController.getSong)
 );
 

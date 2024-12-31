@@ -1,4 +1,4 @@
-import { Button, Div, Paragraph } from '../';
+import { Button, Div, Header3 } from '../';
 import { hideModal } from '../../features/modal';
 
 export default ({
@@ -29,7 +29,7 @@ export default ({
   );
 
   container.append(
-    Paragraph({
+    Header3({
       text: question,
     }),
     buttons
