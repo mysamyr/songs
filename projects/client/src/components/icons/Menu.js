@@ -1,8 +1,16 @@
 import { Line } from './common';
 
-export default (color = 'var(--white)') => {
+/**
+ * @param {Object} [props]
+ * @param {string} [props.className]
+ * @param {function} [props.onClick]
+ * @returns {HTMLDivElement}
+ * */
+export default ({ color = 'var(--white)', className, onClick }) => {
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   svg.id = 'menu';
+  if (className) svg.classList.add(...className.split(' ').filter(Boolean));
+  if (onClick) svg.addEventListener('click', onClick);
   svg.setAttribute('width', '24');
   svg.setAttribute('height', '20');
   svg.setAttribute('viewBox', '0 0 24 20');

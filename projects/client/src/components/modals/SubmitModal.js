@@ -1,15 +1,15 @@
-import { Button, Div, Header3 } from '../';
+import { Button, Div, Paragraph } from '../';
 import { hideModal } from '../../features/modal';
 
 export default ({
   onConfirm,
   question,
-  confirmText = 'Confirm',
-  cancelText = 'Cancel',
+  confirmText = 'Підтвердити',
+  cancelText = 'Скасувати',
   inverseColors = false,
 }) => {
   const container = Div({
-    className: 'container',
+    className: 'modal-content',
   });
 
   const buttons = Div({
@@ -29,8 +29,9 @@ export default ({
   );
 
   container.append(
-    Header3({
+    Paragraph({
       text: question,
+      className: 'modal-header',
     }),
     buttons
   );

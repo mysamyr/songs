@@ -1,4 +1,3 @@
-/* eslint-disable no-prototype-builtins */
 import { isNil } from '../../utils/helpers';
 
 /**
@@ -45,9 +44,9 @@ export default props => {
   }
   if (props.placeholder) input.placeholder = props.placeholder;
   if (props.step) input.step = props.step;
-  if (props.hasOwnProperty('checked')) input.checked = props.checked;
-  if (props.hasOwnProperty('required')) input.required = props.required;
-  if (props.hasOwnProperty('disabled')) input.disabled = props.disabled;
+  input.checked = !!props.checked;
+  input.required = !!props.required;
+  input.disabled = !!props.disabled;
   if (props.focus)
     setTimeout(() => {
       input.focus();

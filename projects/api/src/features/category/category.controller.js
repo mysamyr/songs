@@ -3,6 +3,7 @@ import {
   EXISTING_CATEGORY,
   SONGS_INSIDE_CATEGORY,
   NO_SUCH_CATEGORY,
+  NOT_AUTHOR,
 } from '../../constants/error-messages.js';
 import { Category, Song } from '../../models/index.js';
 import { mapCategories, mapCategoryWithSongs } from './category.helper.js';
@@ -58,6 +59,36 @@ export const addCategory = async (req, res) => {
   });
 
   return res.status(STATUS_CODES.CREATED).send();
+};
+
+export const renameCategory = async (req, res) => {
+  const {
+    body: { name },
+    params: { id },
+    userData,
+  } = req;
+
+  const category = await Category.findById(id).exec();
+  if (!category) {
+    throw BadRequest(NO_SUCH_CATEGORY);
+  }
+  const isNewNameNotUnique = await Category.findOne({ name }).exec();
+  if (isNewNameNotUnique) {
+    throw BadRequest(EXISTING_CATEGORY);
+  }
+  if (
+    category.author.toString() !== userData._id.toString() &&
+    !userData.is_admin
+  ) {
+    throw BadRequest(NOT_AUTHOR);
+  }
+
+  await Category.findByIdAndUpdate(id, {
+    name,
+    author: userData._id,
+  });
+
+  return res.status(STATUS_CODES.OK).send();
 };
 
 export const deleteCategory = async (req, res) => {

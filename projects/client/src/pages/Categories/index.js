@@ -63,18 +63,22 @@ export default async () => {
     })
   );
   if (isAuth) {
-    buttons.append(
+    buttons.appendChild(
       Button({
         onClick: () => navigate(PAGES.NEW_CATEGORY),
         text: 'Додати категорію',
         color: 'green',
-      }),
-      Button({
-        onClick: () => navigate(PAGES.NEW_SONG),
-        text: 'Додати пісню',
-        color: 'green',
       })
     );
+    if (categories.length) {
+      buttons.appendChild(
+        Button({
+          onClick: () => navigate(PAGES.NEW_SONG),
+          text: 'Додати пісню',
+          color: 'green',
+        })
+      );
+    }
   }
 
   container.append(header, categoriesBlock, buttons);

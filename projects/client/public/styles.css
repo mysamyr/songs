@@ -33,10 +33,7 @@
 body {
   background-color: var(--white);
   color: var(--font-color);
-}
-
-.active {
-  background-color: rgba(0, 0, 0, 0.1);
+  font-size: 12px;
 }
 
 /*COLORS*/
@@ -65,6 +62,9 @@ body {
 }
 
 .arr-top {
+  position: fixed;
+  bottom: 50px;
+  right: 50px;
   height: 45px;
   width: 45px;
   color: var(--grey);
@@ -72,11 +72,8 @@ body {
   border-radius: 50%;
   text-align: center;
   line-height: 36px;
-  position: fixed;
-  bottom: 50px;
-  right: 50px;
   cursor: pointer;
-  font-size: 24px;
+  font-size: 1.5rem;
 }
 
 .link {
@@ -103,12 +100,14 @@ body {
 
 /*NAVIGATION*/
 .logo {
-  position: absolute;
   font-size: 2.1rem;
   color: var(--white);
 }
 
 .header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   background-color: var(--green);
   padding: 0 2rem;
   height: 64px;
@@ -127,7 +126,25 @@ body {
 }
 
 /*SIDENAV*/
-.sidenav {
+.backdrop {
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  background-color: hsla(0, 0%, 0%, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.slide-in {
+  animation-duration: 0.25s;
+  animation-name: slidein;
+}
+
+.sidebar {
   position: fixed;
   top: 0;
   left: 0;
@@ -135,33 +152,28 @@ body {
   width: 260px;
   background: var(--dark-green);
   z-index: 3;
-  transition: all 0.5s ease;
+  transition: all 0.25s ease;
 }
 
-#sidenav-cover {
-  z-index: 2;
+.sidebar-trigger {
+  color: var(--white);
+  cursor: pointer;
 }
 
-.sidenav ul {
+.sidebar-list {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.sidenav ul li {
-  text-align: center;
+.sidebar-list-item {
+  list-style-type: none;
+  color: var(--white);
+  line-height: 64px;
+  width: 100%;
 }
 
 .sidenav ul li a {
-  line-height: 64px;
-}
-
-.sidenav.close {
-  width: 0;
-}
-
-.sidenav.close ul {
-  display: none;
 }
 
 /*DIALOG*/
@@ -169,10 +181,23 @@ dialog:modal {
   margin: auto;
   color: var(--black);
   background-color: var(--white);
+  border: none;
+  border-radius: 5px;
 }
 
 dialog::backdrop {
   background-color: hsla(0, 0%, 0%, 0.5);
+}
+
+.modal-content {
+  padding: 1rem;
+  background-color: var(--white);
+}
+
+.modal-header {
+  font-size: 1.3em;
+  text-indent: 0;
+  text-align: center;
 }
 
 /*TEXT*/
@@ -194,6 +219,16 @@ p {
   margin: 1rem 0;
 }
 
+b {
+  font-weight: bold;
+}
+
+pre {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+  font-size: 1.3rem;
+}
+
 span {
   font-style: italic;
 }
@@ -204,12 +239,6 @@ p,
 span,
 b {
   text-indent: 20px;
-}
-
-pre {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
-  font-size: 1.3em;
 }
 
 .italic {
@@ -223,6 +252,7 @@ pre {
 .center {
   text-align: center;
 }
+
 .right {
   text-align: right;
 }
@@ -230,8 +260,9 @@ pre {
 /*BUTTONS*/
 .btns {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: space-around;
+  gap: 10px;
   padding: 20px;
 }
 
@@ -276,6 +307,7 @@ option {
 
 textarea {
   height: 10rem;
+  resize: vertical;
 }
 
 input:invalid,
@@ -290,26 +322,8 @@ textarea:valid {
   box-shadow: 0 1px 0 0 var(--green);
 }
 
-/*MODAL*/
-.modal-content {
-  padding: 1rem;
-  background-color: var(--white);
-}
-
-.modal-header {
-  text-indent: 0;
-  text-align: center;
-}
-
 ol {
   padding-left: 40px;
-}
-
-#search {
-  display: block;
-  width: 200px;
-  text-align: right;
-  margin: 0 0 0 auto;
 }
 
 /*TABS*/
@@ -347,9 +361,8 @@ ol {
 /*SNACKBAR*/
 .snackbar-container {
   position: fixed;
-  top: 5%;
-  left: 50%;
-  transform: translate(-50%);
+  bottom: 5%;
+  right: 5%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -375,6 +388,22 @@ ol {
 }
 
 /*OTHER*/
+#search {
+  display: block;
+  width: 200px;
+  text-align: right;
+  margin: 0 0 0 auto;
+}
+
+.rename-icon {
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.active {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
 .show {
   display: block;
 }
@@ -383,15 +412,17 @@ ol {
   display: none;
 }
 
-.active {
-  background-color: rgba(0, 0, 0, 0.1);
+/*KEYFRAMES*/
+@keyframes slidein {
+  from {
+    left: -80%;
+  }
+  to {
+    left: 0;
+  }
 }
 
 @media only screen and (min-width: 0) {
-  html {
-    font-size: 14px;
-  }
-
   pre {
     text-align: left;
   }
@@ -405,19 +436,11 @@ ol {
   .container {
     width: 540px;
   }
-
-  .card {
-    font-size: 1.1em;
-  }
-
-  .btns {
-    flex-direction: row;
-  }
 }
 
 @media only screen and (min-width: 768px) {
-  html {
-    font-size: 15px;
+  body {
+    font-size: 1.1rem;
   }
 
   .container {
@@ -430,16 +453,12 @@ ol {
     width: 960px;
   }
 
-  .sidenav-trigger {
-    display: none;
-  }
-
   .sidenav {
     display: none;
   }
 
-  .card {
-    font-size: 1.2em;
+  .sidebar-trigger {
+    display: none;
   }
 
   pre {
@@ -448,8 +467,8 @@ ol {
 }
 
 @media only screen and (min-width: 1200px) {
-  html {
-    font-size: 16px;
+  body {
+    font-size: 1.2rem;
   }
 
   .container {
@@ -458,22 +477,12 @@ ol {
 }
 
 @media only screen and (max-width: 992px) {
-  .logo {
-    left: 45%;
-  }
-
-  .nav-list {
+  .nav-list-item {
     display: none;
   }
 
-  .sidenav-trigger {
-    color: var(--white);
-    cursor: pointer;
-    transition: all 0.5s ease;
-  }
-
-  .sidenav-trigger.open {
-    margin-left: 118px;
+  .sidebar-trigger {
+    display: block;
   }
 
   .arr-top {
@@ -483,22 +492,30 @@ ol {
 }
 
 @media only screen and (max-width: 768px) {
+  body {
+    font-size: 1rem;
+  }
+
   .btns {
     flex-direction: column;
     align-items: center;
   }
-
-  .btn {
-    margin: 10px;
-  }
 }
 
 @media only screen and (max-width: 576px) {
-  .logo {
-    left: 35%;
+  body {
+    font-size: 1.1rem;
   }
 
   ol {
     padding-left: 20px;
+  }
+
+  .snackbar-container {
+    height: fit-content;
+    position: fixed;
+    top: 66px;
+    left: 50%;
+    transform: translate(-50%);
   }
 }

@@ -9,13 +9,14 @@ import {
   Label,
   Span,
   Select,
+  Textarea,
   Option,
 } from '../../components';
 import { getCategories as getCategoriesAPI } from '../../api/category';
 import { editSong, getSong as getSongAPI } from '../../api/song';
 import Snackbar from '../../features/snackbar';
 import { getCategories, getSong, setCategories, setSong } from '../../state';
-import { navigateBack, replace } from '../../utils/navigate';
+import { navigate, navigateBack } from '../../utils/navigate';
 import { validateSong } from '../../utils/helpers';
 
 const categorySelect = selectedCategories => {
@@ -83,7 +84,7 @@ const textAreaInput = text => {
     Span({
       text: 'Текст пісні:',
     }),
-    Input({
+    Textarea({
       value: text,
       type: 'textarea',
       name: 'text',
@@ -111,7 +112,11 @@ export default async () => {
     try {
       await editSong(songId, { categories, name, text });
       Snackbar.displayMsg('Пісню змінено');
-      replace(PAGES.SONG_$(songId));
+      if (history.length > 2) {
+        navigateBack();
+      } else {
+        navigate(PAGES.SONG_$(songId));
+      }
     } catch (e) {
       Snackbar.displayMsg(e.message);
     }
@@ -150,7 +155,13 @@ export default async () => {
     Button({
       text: 'Назад',
       color: 'blue',
-      onClick: () => navigateBack(),
+      onClick: () => {
+        if (history.length > 2) {
+          navigateBack();
+        } else {
+          navigate(PAGES.SONG_$(songId));
+        }
+      },
     })
   );
 

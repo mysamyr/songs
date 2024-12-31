@@ -27,7 +27,11 @@ export default async () => {
   const onDeleteSong = async id => {
     try {
       await deleteSongAPI(id);
-      navigate(PAGES.CATEGORIES);
+      if (history.length > 2) {
+        navigateBack();
+      } else {
+        navigate(PAGES.CATEGORIES);
+      }
     } catch (e) {
       logError(e);
       Snackbar.displayMsg(e.message);
@@ -104,6 +108,7 @@ export default async () => {
             SubmitModal({
               onConfirm: () => onDeleteSong(songId),
               question: 'Ви впевнені, що хочете видалити пісню?',
+              inverseColors: true,
             })
           ),
         text: 'Видалити',

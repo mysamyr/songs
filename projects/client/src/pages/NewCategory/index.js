@@ -12,20 +12,7 @@ import { navigate } from '../../utils/navigate';
 import { CATEGORY, PAGES } from '../../constants';
 import { createCategory } from '../../api/category';
 import Snackbar from '../../features/snackbar';
-
-const validateCategory = name => {
-  if (!name.length) {
-    return 'Назва категорії не може бути порожньою';
-  }
-
-  if (name.length < CATEGORY.MIN) {
-    return `Назва категорії має містити мінімум ${CATEGORY.MIN} символів`;
-  }
-
-  if (name.length > CATEGORY.MAX) {
-    return `Назва категорії має містити максимум ${CATEGORY.MAX} символів`;
-  }
-};
+import { validateCategory } from '../../utils/helpers';
 
 const nameInput = () => {
   const nameLabel = Label({

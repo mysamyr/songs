@@ -11,3 +11,21 @@ export const Line = (x1, y1, x2, y2, color) => {
   line.setAttribute('stroke-width', '4');
   return line;
 };
+
+export const Path = ({
+  d,
+  fill,
+  stroke,
+  strokeLineCap,
+  strokeLinejoin,
+  strokeWidth,
+}) => {
+  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  path.setAttribute('d', d);
+  if (fill) path.setAttribute('fill', fill);
+  if (stroke) path.setAttribute('stroke', stroke);
+  if (strokeLineCap) path.setAttribute('stroke-linecap', strokeLineCap);
+  if (strokeLinejoin) path.setAttribute('stroke-linejoin', strokeLinejoin);
+  if (strokeWidth) path.setAttribute('stroke-width', strokeWidth);
+  return path;
+};

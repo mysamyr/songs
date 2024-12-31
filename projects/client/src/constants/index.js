@@ -32,6 +32,7 @@ export const API_URLS = {
   GET_CATEGORIES: '/category',
   GET_CATEGORY: id => `/category/${id}`,
   CREATE_CATEGORY: '/category',
+  RENAME_CATEGORY: id => `/category/${id}`,
   DELETE_CATEGORY: id => `/category/${id}`,
 
   GET_SONG: id => `/song/${id}`,

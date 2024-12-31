@@ -1,4 +1,4 @@
-import { SONG, SONG_TEXT } from '../constants';
+import { CATEGORY, SONG, SONG_TEXT } from '../constants';
 
 // eslint-disable-next-line no-console
 export const logError = e => console.error(e);
@@ -8,6 +8,24 @@ export const isNil = value => value == null; // null or undefined
 
 export const capitalizeFirstLetter = value =>
   value.charAt(0).toUpperCase() + value.slice(1);
+
+export const validateCategory = (name, oldName) => {
+  if (!name.length) {
+    return 'Назва категорії не може бути порожньою';
+  }
+
+  if (oldName && name === oldName) {
+    return 'Назва категорії не змінилась';
+  }
+
+  if (name.length < CATEGORY.MIN) {
+    return `Назва категорії має містити мінімум ${CATEGORY.MIN} символів`;
+  }
+
+  if (name.length > CATEGORY.MAX) {
+    return `Назва категорії має містити максимум ${CATEGORY.MAX} символів`;
+  }
+};
 
 export const validateSong = (categories, name, text) => {
   if (!name.length || !text.length) {

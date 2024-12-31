@@ -15,7 +15,7 @@ import { getCategories as getCategoriesAPI } from '../../api/category';
 import { createSong } from '../../api/song';
 import Snackbar from '../../features/snackbar';
 import { getCategories, setCategories } from '../../state';
-import { navigate, navigateBack, replace } from '../../utils/navigate';
+import { navigate, navigateBack } from '../../utils/navigate';
 import { validateSong } from '../../utils/helpers';
 
 const categorySelect = () => {
@@ -107,7 +107,11 @@ export default async () => {
     try {
       const { id } = await createSong({ categories, name, text });
       Snackbar.displayMsg('Пісню додано');
-      replace(PAGES.SONG_$(id));
+      if (history.length > 2) {
+        navigateBack();
+      } else {
+        navigate(PAGES.SONG_$(id));
+      }
     } catch (e) {
       Snackbar.displayMsg(e.message);
     }
