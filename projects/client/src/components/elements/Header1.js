@@ -10,7 +10,8 @@ import { isNil } from '../../utils/helpers';
 export default props => {
   const h1 = document.createElement('h1');
   if (!props) return h1;
-  if (props.className) h1.classList.add(...props.className.split(' '));
+  if (props.className)
+    h1.classList.add(...props.className.split(' ').filter(Boolean));
   if (!isNil(props.text)) h1.innerHTML = props.text;
   if (props.id) h1.id = props.id;
 

@@ -11,7 +11,8 @@ import { isNil } from '../../utils/helpers';
 export default props => {
   const form = document.createElement('form');
   if (!props) return form;
-  if (props.className) form.classList.add(...props.className.split(' '));
+  if (props.className)
+    form.classList.add(...props.className.split(' ').filter(Boolean));
   if (!isNil(props.text)) form.innerHTML = props.text;
   if (props.id) form.id = props.id;
   if (props.onSubmit) form.addEventListener('submit', props.onSubmit);

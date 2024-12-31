@@ -2,7 +2,7 @@ import { Div } from '../.';
 
 export default () =>
   Div({
-    className: 'arr_top',
+    className: 'arr-top',
     text: '🡡',
     onClick: () =>
       window.scrollTo({

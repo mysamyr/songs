@@ -6,7 +6,7 @@ import {
   validateParams,
 } from '../../middlewares/express-validators.js';
 import { defaultParams } from '../../validators/index.js';
-import { createCategoryBody, editCategoryBody } from './category.validation.js';
+import { createCategoryBody } from './category.validation.js';
 import * as categoryController from './category.controller.js';
 
 const router = Router();
@@ -24,14 +24,6 @@ router.post(
   authMiddleware,
   validateBody(createCategoryBody),
   promisify(categoryController.addCategory)
-);
-
-router.put(
-  '/:id',
-  authMiddleware,
-  validateParams(defaultParams),
-  validateBody(editCategoryBody),
-  promisify(categoryController.renameCategory)
 );
 
 router.delete(

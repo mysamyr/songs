@@ -5,10 +5,8 @@ import { navigate } from '../../utils/navigate';
 import { isLoggedIn } from '../../features/auth';
 import { getUser, saveUser } from '../../state/user';
 
-const getActivationId = () => window.location.pathname.split('/')[3];
-
 export default async () => {
-  const id = getActivationId();
+  const id = window.location.pathname.split('/')[3];
   let isActivated = false;
 
   try {

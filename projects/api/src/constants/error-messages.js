@@ -14,7 +14,6 @@ export const NOT_AUTHOR = 'Тільки автор може це зробити'
 export const ACCOUNT_NOT_DELETED = 'Профіль не видалено. Сталася помилка';
 export const SONGS_INSIDE_CATEGORY = 'В категорії ще є пісні';
 export const EXISTING_CATEGORY = 'Категорія вже існує';
-export const SAME_CATEGORY = 'Назви категорій співпадають';
 export const NO_SUCH_CATEGORY = 'Такої категорії не існує';
 export const DELETED_CATEGORY = 'Категорія була видалена. Виберіть іншу';
 export const EXISTING_SONG = 'Пісня з такою назвою вже існує';

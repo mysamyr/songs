@@ -34,7 +34,7 @@ const communionList = [
 
 export default () => {
   const container = Div({
-    className: 'modal_content',
+    className: 'modal-content',
     onClick: hideModal,
   });
 

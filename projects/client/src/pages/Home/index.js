@@ -34,7 +34,7 @@ export default async () => {
   }
 
   const callToMail = Paragraph({
-    className: 'italic',
+    className: 'italic center',
     text: 'Якщо у Вас є питання або пропозиції, пишіть на пошту: ',
   });
   const emailLink = Span({

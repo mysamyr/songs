@@ -19,7 +19,7 @@ export const PAGES = {
 
 export const API_URLS = {
   ACTIVATE_$: id => `/auth/activate/${id}`,
-  SIGNIN: '/auth/login',
+  LOGIN: '/auth/login',
   SIGNUP: '/auth/signup',
   REFRESH: '/auth/refresh',
   LOGOUT: '/auth/logout',
@@ -32,7 +32,6 @@ export const API_URLS = {
   GET_CATEGORIES: '/category',
   GET_CATEGORY: id => `/category/${id}`,
   CREATE_CATEGORY: '/category',
-  RENAME_CATEGORY: id => `/category/${id}`,
   DELETE_CATEGORY: id => `/category/${id}`,
 
   GET_SONG: id => `/song/${id}`,

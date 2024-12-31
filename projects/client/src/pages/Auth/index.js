@@ -66,7 +66,7 @@ const LoginPage = () => {
     }
   };
   const form = Form({
-    className: 'tab_content',
+    className: 'tab-content',
     onSubmit: handleLogin,
   });
 
@@ -113,7 +113,7 @@ const RegistrationPage = () => {
     }
   };
   const form = Form({
-    className: 'tab_content',
+    className: 'tab-content',
     onSubmit: handleRegistration,
   });
 
@@ -176,18 +176,18 @@ export default () => {
     className: 'container',
   });
   const switchButtons = Div({
-    className: 'tab_headers',
+    className: 'tab-headers',
   });
 
   const loginBtn = Div({
     id: 'login-btn',
-    className: 'tab tab_active',
+    className: 'tab tab-active',
     text: 'Увійти',
     onClick: e => {
-      if (e.target.classList.contains('tab_active')) return;
+      if (e.target.classList.contains('tab-active')) return;
       document
         .querySelectorAll('.tab')
-        .forEach(tab => tab.classList.toggle('tab_active'));
+        .forEach(tab => tab.classList.toggle('tab-active'));
       document.querySelector('form').remove();
       container.append(LoginPage());
     },
@@ -197,10 +197,10 @@ export default () => {
     className: 'tab',
     text: 'Зареєструватися',
     onClick: e => {
-      if (e.target.classList.contains('tab_active')) return;
+      if (e.target.classList.contains('tab-active')) return;
       document
         .querySelectorAll('.tab')
-        .forEach(tab => tab.classList.toggle('tab_active'));
+        .forEach(tab => tab.classList.toggle('tab-active'));
       document.querySelector('form').remove();
       container.append(RegistrationPage());
     },

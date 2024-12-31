@@ -18,6 +18,7 @@ export const getSong = async (req, res) => {
   const song = await Song.findById(id)
     .select('name text')
     .populate('author', 'name')
+    .populate('categories', '_id')
     .exec();
   if (!song) {
     throw BadRequest(NOT_EXISTING_SONG);

@@ -10,7 +10,8 @@ import { isNil } from '../../utils/helpers';
 export default props => {
   const label = document.createElement('label');
   if (!props) return label;
-  if (props.className) label.classList.add(...props.className.split(' '));
+  if (props.className)
+    label.classList.add(...props.className.split(' ').filter(Boolean));
   if (!isNil(props.text)) label.innerHTML = props.text;
   if (props.id) label.id = props.id;
 

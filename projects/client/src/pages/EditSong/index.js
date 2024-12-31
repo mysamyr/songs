@@ -1,4 +1,4 @@
-import { CATEGORY, PAGES, SONG, SONG_TEXT } from '../../constants';
+import { PAGES, SONG, SONG_TEXT } from '../../constants';
 import {
   Button,
   Div,
@@ -12,10 +12,11 @@ import {
   Option,
 } from '../../components';
 import { getCategories as getCategoriesAPI } from '../../api/category';
-import { createSong, getSong as getSongAPI } from '../../api/song';
+import { editSong, getSong as getSongAPI } from '../../api/song';
 import Snackbar from '../../features/snackbar';
 import { getCategories, getSong, setCategories, setSong } from '../../state';
-import { navigate, navigateBack } from '../../utils/navigate';
+import { navigateBack, replace } from '../../utils/navigate';
+import { validateSong } from '../../utils/helpers';
 
 const categorySelect = selectedCategories => {
   const categories = getCategories();
@@ -46,7 +47,7 @@ const categorySelect = selectedCategories => {
 
   container.append(
     Span({
-      text: 'Виберіть категорію:',
+      text: 'Виберіть категорії:',
     }),
     select
   );
@@ -54,15 +55,16 @@ const categorySelect = selectedCategories => {
   return container;
 };
 
-const nameInput = () => {
+const nameInput = name => {
   const nameLabel = Label({
     className: 'input-field',
   });
   nameLabel.append(
     Span({
-      text: 'Назва категорії:',
+      text: 'Назва пісні:',
     }),
     Input({
+      value: name,
       type: 'text',
       name: 'name',
       min: SONG.MIN,
@@ -73,7 +75,7 @@ const nameInput = () => {
   return nameLabel;
 };
 
-const textAreaInput = () => {
+const textAreaInput = text => {
   const textLabel = Label({
     className: 'input-field',
   });
@@ -82,6 +84,7 @@ const textAreaInput = () => {
       text: 'Текст пісні:',
     }),
     Input({
+      value: text,
       type: 'textarea',
       name: 'text',
       min: SONG_TEXT.MIN,
@@ -93,7 +96,8 @@ const textAreaInput = () => {
 };
 
 export default async () => {
-  const onAddNewSong = async e => {
+  const songId = window.location.pathname.split('/')[2];
+  const onEditSong = async e => {
     e.preventDefault();
     const categories = [...e.target.categories.options]
       .filter(option => option.selected)
@@ -101,69 +105,37 @@ export default async () => {
     const name = e.target.name.value;
     const text = e.target.text.value;
 
-    if (!name.length || !text.length) {
-      return Snackbar.displayMsg("Всі поля є обов'язковими");
-    }
-    if (!categories.length) {
-      return Snackbar.displayMsg('Виберіть щонайменше одну категорію');
-    }
-
-    if (name.length < SONG.MIN) {
-      return Snackbar.displayMsg(
-        `Назва пісні має містити мінімум ${CATEGORY.MIN} символів`
-      );
-    }
-    if (name.length > SONG.MAX) {
-      return Snackbar.displayMsg(
-        `Назва пісні має містити максимум ${CATEGORY.MAX} символів`
-      );
-    }
-
-    if (name.length < CATEGORY.MIN) {
-      return Snackbar.displayMsg(
-        `Текст пісні має містити мінімум ${CATEGORY.MIN} символів`
-      );
-    }
-    if (name.length > CATEGORY.MAX) {
-      return Snackbar.displayMsg(
-        `Текст пісні має містити максимум ${CATEGORY.MAX} символів`
-      );
-    }
+    const validationErr = validateSong(categories, name, text);
+    if (validationErr) return Snackbar.displayMsg(validationErr);
 
     try {
-      const { id } = await createSong({ categories, name, text });
-      Snackbar.displayMsg('Пісню додано');
-      navigate(PAGES.SONG_$(id));
+      await editSong(songId, { categories, name, text });
+      Snackbar.displayMsg('Пісню змінено');
+      replace(PAGES.SONG_$(songId));
     } catch (e) {
       Snackbar.displayMsg(e.message);
     }
   };
 
   // todo handle error ???
-  if (!getSong()) {
-    try {
-      const song = await getSongAPI();
-      setSong(song);
-    } catch (e) {
-      Snackbar.displayMsg(e.message);
-    }
+  try {
+    const song = await getSongAPI(songId);
+    setSong(song);
+    const categories = await getCategoriesAPI();
+    setCategories(categories);
+  } catch (e) {
+    Snackbar.displayMsg(e.message);
   }
-  if (!getCategories().length) {
-    try {
-      const categories = await getCategoriesAPI();
-      setCategories(categories);
-    } catch (e) {
-      Snackbar.displayMsg(e.message);
-    }
-  }
+
+  const song = getSong();
 
   const container = Div({
     className: 'container',
   });
 
   const form = Form({
-    className: 'tab_content',
-    onSubmit: onAddNewSong,
+    className: 'tab-content',
+    onSubmit: onEditSong,
   });
 
   const buttonContainer = Div({
@@ -171,22 +143,27 @@ export default async () => {
   });
   buttonContainer.append(
     Button({
+      text: 'Зберегти',
+      type: 'submit',
+      color: 'green',
+    }),
+    Button({
       text: 'Назад',
       color: 'blue',
       onClick: () => navigateBack(),
-    }),
-    Button({
-      text: 'Додати пісню',
-      type: 'submit',
-      color: 'green',
     })
   );
 
-  form.append(categorySelect(), nameInput(), textAreaInput(), buttonContainer);
+  form.append(
+    categorySelect(song.categories),
+    nameInput(song.name),
+    textAreaInput(song.text),
+    buttonContainer
+  );
 
   container.append(
     Header1({
-      text: 'Додати нову пісню',
+      text: `Редагувати ${song.name}`,
     }),
     form
   );

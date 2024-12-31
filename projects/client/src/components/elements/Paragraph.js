@@ -11,7 +11,8 @@ import { isNil } from '../../utils/helpers';
 export default props => {
   const p = document.createElement('p');
   if (!props) return p;
-  if (props.className) p.classList.add(...props.className.split(' '));
+  if (props.className)
+    p.classList.add(...props.className.split(' ').filter(Boolean));
   if (!isNil(props.text)) p.innerHTML = props.text;
   if (props.id) p.id = props.id;
   if (props.onClick) p.addEventListener('click', props.onClick);

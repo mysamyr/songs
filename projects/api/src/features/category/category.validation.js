@@ -7,11 +7,6 @@ export const categorySchema = Joi.string()
   .max(30)
   .required();
 
-export const editCategoryBody = Joi.object({
-  prevName: categorySchema,
-  newName: categorySchema,
-});
-
 export const createCategoryBody = Joi.object({
   name: categorySchema.messages({
     'any.required': 'Введіть назву категорії',

@@ -5,6 +5,7 @@ import {
   Header1,
   Paragraph,
   Pre,
+  Span,
   SubmitModal,
 } from '../../components';
 import { navigate, navigateBack } from '../../utils/navigate';
@@ -60,7 +61,12 @@ export default async () => {
   );
 
   if (song.isAuthor) {
-    container.appendChild(Paragraph({ className: 'right', text: song.author }));
+    const author = Paragraph({
+      className: 'right',
+      text: 'Додано користувачем ',
+    });
+    author.appendChild(Span({ className: 'bold', text: song.author }));
+    container.appendChild(author);
   }
 
   const buttons = Div({
@@ -68,7 +74,13 @@ export default async () => {
   });
   buttons.append(
     Button({
-      onClick: () => navigateBack(),
+      onClick: () => {
+        if (history.length > 2) {
+          navigateBack();
+        } else {
+          navigate(PAGES.CATEGORIES);
+        }
+      },
       text: 'Назад',
       color: 'blue',
     }),
@@ -84,7 +96,7 @@ export default async () => {
       Button({
         onClick: () => navigate(PAGES.EDIT_SONG_$(songId)),
         text: 'Редагувати',
-        color: 'blue',
+        color: 'green',
       }),
       Button({
         onClick: () =>

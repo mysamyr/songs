@@ -2,16 +2,16 @@ import { Div } from '../';
 
 export default ({ msg, onClose }) => {
   const container = Div({
-    className: 'snackbar_container',
+    className: 'snackbar-container',
   });
 
   container.append(
     Div({
-      className: 'snackbar_label',
+      className: 'snackbar-label',
       text: msg,
     }),
     Div({
-      className: 'snackbar_dismiss',
+      className: 'snackbar-dismiss',
       text: '&times;',
       onClick: onClose,
     })

@@ -39,4 +39,6 @@
 - finish implementing client
 - clean css
 - edit `README.md`
-- 
+- add search
+- add sidebar
+- header-container to flex

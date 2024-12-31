@@ -13,26 +13,47 @@ import { CATEGORY, PAGES } from '../../constants';
 import { createCategory } from '../../api/category';
 import Snackbar from '../../features/snackbar';
 
+const validateCategory = name => {
+  if (!name.length) {
+    return 'Назва категорії не може бути порожньою';
+  }
+
+  if (name.length < CATEGORY.MIN) {
+    return `Назва категорії має містити мінімум ${CATEGORY.MIN} символів`;
+  }
+
+  if (name.length > CATEGORY.MAX) {
+    return `Назва категорії має містити максимум ${CATEGORY.MAX} символів`;
+  }
+};
+
+const nameInput = () => {
+  const nameLabel = Label({
+    className: 'input-field',
+  });
+  nameLabel.append(
+    Span({
+      text: 'Назва категорії:',
+    }),
+    Input({
+      type: 'text',
+      name: 'name',
+      min: CATEGORY.MIN,
+      max: CATEGORY.MAX,
+      focus: true,
+      required: true,
+    })
+  );
+  return nameLabel;
+};
+
 export default async () => {
   const onAddNewCategory = async e => {
     e.preventDefault();
     const name = e.target.name.value;
 
-    if (!name.length) {
-      return Snackbar.displayMsg('Назва категорії не може бути порожньою');
-    }
-
-    if (name.length < CATEGORY.MIN) {
-      return Snackbar.displayMsg(
-        `Назва категорії має містити мінімум ${CATEGORY.MIN} символів`
-      );
-    }
-
-    if (name.length > CATEGORY.MAX) {
-      return Snackbar.displayMsg(
-        `Назва категорії має містити максимум ${CATEGORY.MAX} символів`
-      );
-    }
+    const errors = validateCategory(name);
+    if (errors) return Snackbar.displayMsg(errors);
 
     try {
       await createCategory({ name });
@@ -52,26 +73,9 @@ export default async () => {
   });
 
   const form = Form({
-    className: 'tab_content',
+    className: 'tab-content',
     onSubmit: onAddNewCategory,
   });
-
-  const nameLabel = Label({
-    className: 'input-field',
-  });
-  nameLabel.append(
-    Span({
-      text: 'Назва категорії:',
-    }),
-    Input({
-      type: 'text',
-      name: 'name',
-      min: CATEGORY.MIN,
-      max: CATEGORY.MAX,
-      focus: true,
-      required: true,
-    })
-  );
 
   const buttonContainer = Div({
     className: 'btns',
@@ -89,7 +93,7 @@ export default async () => {
     })
   );
 
-  form.append(nameLabel, buttonContainer);
+  form.append(nameInput(), buttonContainer);
 
   container.append(header, form);
 

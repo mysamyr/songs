@@ -6,6 +6,6 @@ export const activate = async (id, params) =>
 
 export const signup = async body => postRequest(API_URLS.SIGNUP, body);
 
-export const login = async body => postRequest(API_URLS.SIGNIN, body);
+export const login = async body => postRequest(API_URLS.LOGIN, body);
 
 export const logout = async () => getRequest(API_URLS.LOGOUT);

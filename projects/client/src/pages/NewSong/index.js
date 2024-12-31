@@ -1,4 +1,4 @@
-import { CATEGORY, PAGES, SONG, SONG_TEXT } from '../../constants';
+import { PAGES, SONG, SONG_TEXT } from '../../constants';
 import {
   Button,
   Div,
@@ -15,7 +15,8 @@ import { getCategories as getCategoriesAPI } from '../../api/category';
 import { createSong } from '../../api/song';
 import Snackbar from '../../features/snackbar';
 import { getCategories, setCategories } from '../../state';
-import { navigate, navigateBack } from '../../utils/navigate';
+import { navigate, navigateBack, replace } from '../../utils/navigate';
+import { validateSong } from '../../utils/helpers';
 
 const categorySelect = () => {
   const categories = getCategories();
@@ -45,7 +46,7 @@ const categorySelect = () => {
 
   container.append(
     Span({
-      text: 'Виберіть категорію:',
+      text: 'Виберіть категорії:',
     }),
     select
   );
@@ -59,7 +60,7 @@ const nameInput = () => {
   });
   nameLabel.append(
     Span({
-      text: 'Назва категорії:',
+      text: 'Назва пісні:',
     }),
     Input({
       type: 'text',
@@ -100,52 +101,24 @@ export default async () => {
     const name = e.target.name.value;
     const text = e.target.text.value;
 
-    if (!name.length || !text.length) {
-      return Snackbar.displayMsg("Всі поля є обов'язковими");
-    }
-    if (!categories.length) {
-      return Snackbar.displayMsg('Виберіть щонайменше одну категорію');
-    }
-
-    if (name.length < SONG.MIN) {
-      return Snackbar.displayMsg(
-        `Назва пісні має містити мінімум ${CATEGORY.MIN} символів`
-      );
-    }
-    if (name.length > SONG.MAX) {
-      return Snackbar.displayMsg(
-        `Назва пісні має містити максимум ${CATEGORY.MAX} символів`
-      );
-    }
-
-    if (name.length < CATEGORY.MIN) {
-      return Snackbar.displayMsg(
-        `Текст пісні має містити мінімум ${CATEGORY.MIN} символів`
-      );
-    }
-    if (name.length > CATEGORY.MAX) {
-      return Snackbar.displayMsg(
-        `Текст пісні має містити максимум ${CATEGORY.MAX} символів`
-      );
-    }
+    const validationErr = validateSong(categories, name, text);
+    if (validationErr) return Snackbar.displayMsg(validationErr);
 
     try {
       const { id } = await createSong({ categories, name, text });
       Snackbar.displayMsg('Пісню додано');
-      navigate(PAGES.SONG_$(id));
+      replace(PAGES.SONG_$(id));
     } catch (e) {
       Snackbar.displayMsg(e.message);
     }
   };
 
   // todo handle error ???
-  if (!getCategories().length) {
-    try {
-      const categories = await getCategoriesAPI();
-      setCategories(categories);
-    } catch (e) {
-      Snackbar.displayMsg(e.message);
-    }
+  try {
+    const categories = await getCategoriesAPI();
+    setCategories(categories);
+  } catch (e) {
+    Snackbar.displayMsg(e.message);
   }
 
   const container = Div({
@@ -153,7 +126,7 @@ export default async () => {
   });
 
   const form = Form({
-    className: 'tab_content',
+    className: 'tab-content',
     onSubmit: onAddNewSong,
   });
 
@@ -164,7 +137,13 @@ export default async () => {
     Button({
       text: 'Назад',
       color: 'blue',
-      onClick: () => navigateBack(),
+      onClick: () => {
+        if (history.length > 2) {
+          navigateBack();
+        } else {
+          navigate(PAGES.CATEGORIES);
+        }
+      },
     }),
     Button({
       text: 'Додати пісню',

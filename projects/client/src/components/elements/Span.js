@@ -11,7 +11,8 @@ import { isNil } from '../../utils/helpers';
 export default props => {
   const span = document.createElement('span');
   if (!props) return span;
-  if (props.className) span.classList.add(...props.className.split(' '));
+  if (props.className)
+    span.classList.add(...props.className.split(' ').filter(Boolean));
   if (!isNil(props.text)) span.innerHTML = props.text;
   if (props.id) span.id = props.id;
   if (props.onClick) span.addEventListener('click', props.onClick);

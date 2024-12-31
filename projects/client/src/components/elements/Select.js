@@ -15,7 +15,8 @@ import { isNil } from '../../utils/helpers';
 export default props => {
   const select = document.createElement('select');
   if (!props) return select;
-  if (props.className) select.classList.add(...props.className.split(' '));
+  if (props.className)
+    select.classList.add(...props.className.split(' ').filter(Boolean));
   if (props.id) select.id = props.id;
   if (props.name) select.name = props.name;
   if (!isNil(props.value)) select.value = props.value;
