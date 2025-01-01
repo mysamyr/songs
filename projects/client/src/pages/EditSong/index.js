@@ -18,13 +18,23 @@ import Snackbar from '../../features/snackbar';
 import { getCategories, getSong, setCategories, setSong } from '../../state';
 import { navigate, navigateBack } from '../../utils/navigate';
 import { validateSong } from '../../utils/helpers';
+import {
+  CHOOSE_CATEGORIES,
+  HEADER,
+  NO_CATEGORIES,
+  SAVE,
+  SONG_CHANGED,
+  SONG_NAME_HEADER,
+  SONG_TEXT_HEADER,
+} from './messages';
+import { BACK } from '../../constants/messages';
 
 const categorySelect = selectedCategories => {
   const categories = getCategories();
 
   if (!categories.length) {
     return Div({
-      text: 'Немає категорій',
+      text: NO_CATEGORIES,
     });
   }
   const container = Label({
@@ -48,7 +58,7 @@ const categorySelect = selectedCategories => {
 
   container.append(
     Span({
-      text: 'Виберіть категорії:',
+      text: CHOOSE_CATEGORIES,
     }),
     select
   );
@@ -62,7 +72,7 @@ const nameInput = name => {
   });
   nameLabel.append(
     Span({
-      text: 'Назва пісні:',
+      text: SONG_NAME_HEADER,
     }),
     Input({
       value: name,
@@ -82,7 +92,7 @@ const textAreaInput = text => {
   });
   textLabel.append(
     Span({
-      text: 'Текст пісні:',
+      text: SONG_TEXT_HEADER,
     }),
     Textarea({
       value: text,
@@ -111,7 +121,7 @@ export default async () => {
 
     try {
       await editSong(songId, { categories, name, text });
-      Snackbar.displayMsg('Пісню змінено');
+      Snackbar.displayMsg(SONG_CHANGED);
       if (history.length > 2) {
         navigateBack();
       } else {
@@ -148,12 +158,12 @@ export default async () => {
   });
   buttonContainer.append(
     Button({
-      text: 'Зберегти',
+      text: SAVE,
       type: 'submit',
       color: 'green',
     }),
     Button({
-      text: 'Назад',
+      text: BACK,
       color: 'blue',
       onClick: () => {
         if (history.length > 2) {
@@ -174,7 +184,7 @@ export default async () => {
 
   container.append(
     Header1({
-      text: 'Редагувати пісню',
+      text: HEADER,
     }),
     form
   );

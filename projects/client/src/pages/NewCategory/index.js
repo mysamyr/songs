@@ -13,6 +13,13 @@ import { CATEGORY, PAGES } from '../../constants';
 import { createCategory } from '../../api/category';
 import Snackbar from '../../features/snackbar';
 import { validateCategory } from '../../utils/helpers';
+import {
+  ADD_NEW_CATEGORY,
+  BACK_TO_CATEGORIES,
+  CATEGORY_ADDED_$,
+  CATEGORY_HEADER,
+  HEADER,
+} from './messages';
 
 const nameInput = () => {
   const nameLabel = Label({
@@ -20,7 +27,7 @@ const nameInput = () => {
   });
   nameLabel.append(
     Span({
-      text: 'Назва категорії:',
+      text: CATEGORY_HEADER,
     }),
     Input({
       type: 'text',
@@ -44,7 +51,7 @@ export default async () => {
 
     try {
       await createCategory({ name });
-      Snackbar.displayMsg(`Категорію ${name} додано`);
+      Snackbar.displayMsg(CATEGORY_ADDED_$);
       navigate(PAGES.CATEGORIES);
     } catch (e) {
       Snackbar.displayMsg(e.message);
@@ -56,7 +63,7 @@ export default async () => {
   });
 
   const header = Header1({
-    text: 'Додати нову категорію',
+    text: HEADER,
   });
 
   const form = Form({
@@ -69,12 +76,12 @@ export default async () => {
   });
   buttonContainer.append(
     Button({
-      text: 'Додати категорію',
+      text: ADD_NEW_CATEGORY,
       type: 'submit',
       color: 'green',
     }),
     Button({
-      text: 'Назад до категорій',
+      text: BACK_TO_CATEGORIES,
       color: 'blue',
       onClick: () => navigate(PAGES.CATEGORIES),
     })

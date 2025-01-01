@@ -4,6 +4,13 @@ import { activate } from '../../api/auth';
 import { navigate } from '../../utils/navigate';
 import { isLoggedIn } from '../../features/auth';
 import { getUser, saveUser } from '../../state/user';
+import {
+  HEADER_FAIL,
+  HEADER_SUCCESS,
+  MESSAGE_FAIL,
+  MESSAGE_SUCCESS,
+} from './messages';
+import { BACK_HOME } from '../../constants/messages';
 
 export default async () => {
   const id = window.location.pathname.split('/')[3];
@@ -35,31 +42,26 @@ export default async () => {
   buttons.appendChild(
     Button({
       onClick: () => navigate(PAGES.HOME),
-      text: 'Перейти на головну',
+      text: BACK_HOME,
       color: 'blue',
     })
   );
 
   activationContainer.appendChild(
     Header1({
-      text: isActivated ? 'Вітаємо!' : 'Помилка при активації!',
+      text: isActivated ? HEADER_SUCCESS : HEADER_FAIL,
     })
   );
 
   if (isActivated) {
     activationContainer.appendChild(
       Paragraph({
-        text: 'Ви успішно активували обліковий запис і тепер можете створювати, редагувати та видаляти категорії та пісні.',
+        text: MESSAGE_SUCCESS,
       })
     );
   } else {
     activationContainer.append(
-      Paragraph({
-        text: 'Ви не змогли активувати обліковий запис. Активуйте його перейшовши за посиланням, надісланим на Вашу електронну пошту, вказану при реєстрації.',
-      }),
-      Paragraph({
-        text: "Якщо Ви не пам'ятаєте вказану електронну пошту чи виникли проблеми з активацією облікового запису - зверніться в адміністрацію пісенника.",
-      })
+      ...MESSAGE_FAIL.map(message => Paragraph({ text: message }))
     );
   }
 

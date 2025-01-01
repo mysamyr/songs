@@ -7,7 +7,7 @@ import {
   validateParams,
 } from '../../middlewares/express-validators.js';
 import { defaultParams } from '../../validators/index.js';
-import { addSongBody, editSongBody } from './song.validation.js';
+import { songBody } from './song.validation.js';
 import * as songController from './song.controller.js';
 
 const router = Router();
@@ -21,7 +21,7 @@ router.get(
 
 router.post(
   '/',
-  validateBody(addSongBody),
+  validateBody(songBody),
   authMiddleware,
   promisify(songController.addSong)
 );
@@ -29,7 +29,7 @@ router.post(
 router.put(
   '/:id',
   validateParams(defaultParams),
-  validateBody(editSongBody),
+  validateBody(songBody),
   authMiddleware,
   promisify(songController.editSong)
 );

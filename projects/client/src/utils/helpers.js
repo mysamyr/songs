@@ -1,4 +1,16 @@
 import { CATEGORY, SONG, SONG_TEXT } from '../constants';
+import {
+  ALL_FIELDS_REQUIRED,
+  EMPTY_CATEGORY_NAME,
+  LONG_CATEGORY_NAME,
+  LONG_SONG_NAME,
+  LONG_SONG_TEXT,
+  NO_CATEGORY_SELECTED,
+  SAME_CATEGORY_NAME,
+  SHORT_CATEGORY_NAME,
+  SHORT_SONG_NAME,
+  SHORT_SONG_TEXT,
+} from '../constants/messages';
 
 // eslint-disable-next-line no-console
 export const logError = e => console.error(e);
@@ -14,41 +26,41 @@ export const capitalizeFirstLetter = value =>
 
 export const validateCategory = (name, oldName) => {
   if (!name.length) {
-    return 'Назва категорії не може бути порожньою';
+    return EMPTY_CATEGORY_NAME;
   }
 
   if (oldName && name === oldName) {
-    return 'Назва категорії не змінилась';
+    return SAME_CATEGORY_NAME;
   }
 
   if (name.length < CATEGORY.MIN) {
-    return `Назва категорії має містити мінімум ${CATEGORY.MIN} символів`;
+    return SHORT_CATEGORY_NAME;
   }
 
   if (name.length > CATEGORY.MAX) {
-    return `Назва категорії має містити максимум ${CATEGORY.MAX} символів`;
+    return LONG_CATEGORY_NAME;
   }
 };
 
 export const validateSong = (categories, name, text) => {
   if (!name.length || !text.length) {
-    return "Всі поля є обов'язковими";
+    return ALL_FIELDS_REQUIRED;
   }
   if (!categories.length) {
-    return 'Виберіть щонайменше одну категорію';
+    return NO_CATEGORY_SELECTED;
   }
 
   if (name.length < SONG.MIN) {
-    return `Назва пісні має містити мінімум ${SONG.MIN} символів`;
+    return SHORT_SONG_NAME;
   }
   if (name.length > SONG.MAX) {
-    return `Назва пісні має містити максимум ${SONG.MAX} символів`;
+    return LONG_SONG_NAME;
   }
 
   if (text.length < SONG_TEXT.MIN) {
-    return `Текст пісні має містити мінімум ${SONG_TEXT.MIN} символів`;
+    return SHORT_SONG_TEXT;
   }
   if (text.length > SONG_TEXT.MAX) {
-    return `Текст пісні має містити максимум ${SONG_TEXT.MAX} символів`;
+    return LONG_SONG_TEXT;
   }
 };

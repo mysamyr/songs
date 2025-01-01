@@ -35,7 +35,6 @@ const refreshTokens = async (url, options) => {
   }).then(handleResponse);
 };
 
-// todo fix issue with accessToken after refresh
 const handleResponse = async (data, url, options) => {
   if (
     [STATUS_CODES.FORBIDDEN, STATUS_CODES.UNAUTHORIZED].includes(data.status) &&

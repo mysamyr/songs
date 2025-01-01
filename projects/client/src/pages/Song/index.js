@@ -19,6 +19,8 @@ import { capitalizeFirstLetter, logError } from '../../utils/helpers';
 import Snackbar from '../../features/snackbar';
 import { showModal } from '../../features/modal';
 import { isUserAdmin } from '../../state/user';
+import { ADDED_BY, DELETE, DELETE_SONG_QUESTION, EDIT } from './messages';
+import { BACK, BACK_TO_CATEGORIES } from '../../constants/messages';
 
 export default async () => {
   const songId = window.location.pathname.split('/')[2];
@@ -68,7 +70,7 @@ export default async () => {
   if (song.isAuthor) {
     const author = Paragraph({
       className: 'right',
-      text: 'Додано користувачем ',
+      text: ADDED_BY,
     });
     author.appendChild(Span({ className: 'bold', text: song.author }));
     container.appendChild(author);
@@ -86,12 +88,12 @@ export default async () => {
           navigate(PAGES.CATEGORIES);
         }
       },
-      text: 'Назад',
+      text: BACK,
       color: 'blue',
     }),
     Button({
       onClick: () => navigate(PAGES.CATEGORIES),
-      text: 'До списку категорій',
+      text: BACK_TO_CATEGORIES,
       color: 'blue',
     })
   );
@@ -100,7 +102,7 @@ export default async () => {
     buttons.append(
       Button({
         onClick: () => navigate(PAGES.EDIT_SONG_$(songId)),
-        text: 'Редагувати',
+        text: EDIT,
         color: 'green',
       }),
       Button({
@@ -108,11 +110,11 @@ export default async () => {
           showModal(
             SubmitModal({
               onConfirm: () => onDeleteSong(songId),
-              question: 'Ви впевнені, що хочете видалити пісню?',
+              question: DELETE_SONG_QUESTION,
               inverseColors: true,
             })
           ),
-        text: 'Видалити',
+        text: DELETE,
         color: 'red',
       })
     );

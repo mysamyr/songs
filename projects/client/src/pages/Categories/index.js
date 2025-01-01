@@ -14,6 +14,13 @@ import Snackbar from '../../features/snackbar';
 import { getCategories, setCategories } from '../../state';
 import { navigate } from '../../utils/navigate';
 import { capitalizeFirstLetter, logError } from '../../utils/helpers';
+import {
+  ADD_NEW_CATEGORY,
+  ADD_NEW_SONG,
+  HEADER,
+  NO_CATEGORIES,
+} from './messages';
+import { BACK_HOME } from '../../constants/messages';
 
 const headerBlock = onSearch => {
   const container = Div({ className: 'category-header-container' });
@@ -27,7 +34,7 @@ const headerBlock = onSearch => {
 
   container.append(
     Header1({
-      text: 'Категорії',
+      text: HEADER,
       className: 'category-header',
     }),
     searchContainer
@@ -55,7 +62,7 @@ const categoriesBlock = categories => {
   } else {
     container.append(
       Paragraph({
-        text: 'Категорій немає',
+        text: NO_CATEGORIES,
       })
     );
   }
@@ -105,7 +112,7 @@ export default async () => {
   buttons.append(
     Button({
       onClick: () => navigate(PAGES.HOME),
-      text: 'На головну',
+      text: BACK_HOME,
       color: 'blue',
     })
   );
@@ -113,7 +120,7 @@ export default async () => {
     buttons.appendChild(
       Button({
         onClick: () => navigate(PAGES.NEW_CATEGORY),
-        text: 'Додати категорію',
+        text: ADD_NEW_CATEGORY,
         color: 'green',
       })
     );
@@ -121,7 +128,7 @@ export default async () => {
       buttons.appendChild(
         Button({
           onClick: () => navigate(PAGES.NEW_SONG),
-          text: 'Додати пісню',
+          text: ADD_NEW_SONG,
           color: 'green',
         })
       );

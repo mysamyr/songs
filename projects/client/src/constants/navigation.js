@@ -1,6 +1,7 @@
 import { PAGES } from './index';
-import { navigate } from '../utils/navigate';
 import { isLoggedIn, logout } from '../features/auth';
+import Snackbar from '../features/snackbar';
+import { navigate } from '../utils/navigate';
 
 export default [
   {
@@ -32,7 +33,10 @@ export default [
   {
     text: 'Вийти',
     visible: () => isLoggedIn(),
-    onClick: logout,
+    onClick: async () => {
+      await logout();
+      Snackbar.displayMsg('Ви вийшли з облікового запису');
+    },
   },
   {
     text: 'Увійти',

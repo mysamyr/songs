@@ -36,10 +36,10 @@
 
 ## TODO
 
-- finish implementing client
+- implement pagination
 - edit `README.md`
 - Abort Controller???
-- track jwt from client
+- move all messages in client to constants
 - add `robots.txt`
 - add `sitemap.xml`
 - add `favicon.ico`

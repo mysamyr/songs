@@ -17,13 +17,23 @@ import Snackbar from '../../features/snackbar';
 import { getCategories, setCategories } from '../../state';
 import { navigate, navigateBack } from '../../utils/navigate';
 import { validateSong } from '../../utils/helpers';
+import {
+  ADD_NEW_SONG,
+  CHOOSE_CATEGORIES,
+  HEADER,
+  NO_CATEGORIES,
+  SONG_ADDED_$,
+  SONG_NAME_HEADER,
+  SONG_TEXT_HEADER,
+} from './messages';
+import { BACK } from '../../constants/messages';
 
 const categorySelect = activeCategory => {
   const categories = getCategories();
 
   if (!categories.length) {
     return Div({
-      text: 'Немає категорій',
+      text: NO_CATEGORIES,
     });
   }
   const container = Label({
@@ -47,7 +57,7 @@ const categorySelect = activeCategory => {
 
   container.append(
     Span({
-      text: 'Виберіть категорії:',
+      text: CHOOSE_CATEGORIES,
     }),
     select
   );
@@ -61,7 +71,7 @@ const nameInput = () => {
   });
   nameLabel.append(
     Span({
-      text: 'Назва пісні:',
+      text: SONG_NAME_HEADER,
     }),
     Input({
       type: 'text',
@@ -80,7 +90,7 @@ const textAreaInput = () => {
   });
   textLabel.append(
     Span({
-      text: 'Текст пісні:',
+      text: SONG_TEXT_HEADER,
     }),
     Input({
       type: 'textarea',
@@ -108,7 +118,7 @@ export default async () => {
 
     try {
       const { id } = await createSong({ categories, name, text });
-      Snackbar.displayMsg('Пісню додано');
+      Snackbar.displayMsg(SONG_ADDED_$(name));
       if (history.length > 2) {
         navigateBack();
       } else {
@@ -141,7 +151,7 @@ export default async () => {
   });
   buttonContainer.append(
     Button({
-      text: 'Назад',
+      text: BACK,
       color: 'blue',
       onClick: () => {
         if (history.length > 2) {
@@ -152,7 +162,7 @@ export default async () => {
       },
     }),
     Button({
-      text: 'Додати пісню',
+      text: ADD_NEW_SONG,
       type: 'submit',
       color: 'green',
     })
@@ -167,7 +177,7 @@ export default async () => {
 
   container.append(
     Header1({
-      text: 'Додати нову пісню',
+      text: HEADER,
     }),
     form
   );

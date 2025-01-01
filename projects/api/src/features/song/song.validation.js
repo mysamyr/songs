@@ -2,7 +2,7 @@ import Joi from 'joi';
 import { categorySchema } from '../category/category.validation.js';
 import { nameRegex } from '../../validators/index.js';
 
-const song = Joi.object({
+export const songBody = Joi.object({
   categories: Joi.array()
     .items(
       categorySchema.messages({
@@ -31,8 +31,3 @@ const song = Joi.object({
     'string.empty': 'Текст пісні не можу бути пустим',
   }),
 });
-
-// todo update messages
-export const addSongBody = song;
-
-export const editSongBody = song;

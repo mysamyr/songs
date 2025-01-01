@@ -27,6 +27,13 @@ import Snackbar from '../../features/snackbar';
 import { isLoggedIn } from '../../features/auth';
 import { showModal } from '../../features/modal';
 import { isUserAdmin } from '../../state/user';
+import {
+  ADD_NEW_SONG,
+  DELETE_CATEGORY,
+  DELETE_CATEGORY_QUESTION,
+  NO_SONGS,
+} from './messages';
+import { BACK_TO_CATEGORIES } from '../../constants/messages';
 
 const headerBlock = ({ isAdmin, name, onRenameCategory, onSearch }) => {
   const container = Div({ className: 'category-header-container' });
@@ -79,7 +86,7 @@ const songsBlock = songs => {
   } else {
     container.append(
       Paragraph({
-        text: 'Поки пісень для даної категорії немає',
+        text: NO_SONGS,
       })
     );
   }
@@ -154,7 +161,7 @@ export default async () => {
   buttons.appendChild(
     Button({
       onClick: () => navigate(PAGES.CATEGORIES),
-      text: 'До списку категорій',
+      text: BACK_TO_CATEGORIES,
       color: 'blue',
     })
   );
@@ -162,7 +169,7 @@ export default async () => {
     buttons.appendChild(
       Button({
         onClick: () => navigate(PAGES.NEW_SONG, { categoryId }),
-        text: 'Додати пісню',
+        text: ADD_NEW_SONG,
         color: 'green',
       })
     );
@@ -174,11 +181,11 @@ export default async () => {
           showModal(
             SubmitModal({
               onConfirm: () => onDeleteCategory(categoryId),
-              question: 'Ви впевнені, що хочете видалити категорію?',
+              question: DELETE_CATEGORY_QUESTION,
               inverseColors: true,
             })
           ),
-        text: 'Видалити категорію',
+        text: DELETE_CATEGORY,
         color: 'red',
       })
     );

@@ -3,6 +3,16 @@ import { Header, Header1, Div, Paragraph, Span } from '../../components';
 import { isLoggedIn } from '../../features/auth';
 import { navigate } from '../../utils/navigate';
 import { getUserName } from '../../state/user';
+import {
+  CALL_TO_ACTION,
+  CALL_TO_ACTION_REGISTER,
+  CALL_TO_ACTION_YOU_NEED_TO,
+  CALL_TO_MAIL,
+  EMAIL,
+  GREETING_INFO,
+  GREETINGS,
+  WISH,
+} from './messages';
 
 const links = [
   { href: PAGES.CATEGORIES, text: 'Пісенник' },
@@ -19,13 +29,13 @@ export default async () => {
   });
 
   const callToAction = Paragraph({
-    text: `Також Ви можете докластися до спільної справи, додаючи нові пісні та категорії в пісенник. `,
+    text: CALL_TO_ACTION,
   });
   if (!isAuth) {
     callToAction.append(
-      document.createTextNode('Для цього Вам потрібно '),
+      document.createTextNode(CALL_TO_ACTION_YOU_NEED_TO),
       Span({
-        text: 'зареєструватися',
+        text: CALL_TO_ACTION_REGISTER,
         className: 'link',
         onClick: () => navigate(PAGES.AUTH),
       }),
@@ -35,12 +45,12 @@ export default async () => {
 
   const callToMail = Paragraph({
     className: 'italic center',
-    text: 'Якщо у Вас є питання або пропозиції, пишіть на пошту: ',
+    text: CALL_TO_MAIL,
   });
   const emailLink = Span({
-    text: 'liubomyr.mysak14@gmail.com',
+    text: EMAIL,
     className: 'link',
-    onClick: () => window.open('mailto:liubomyr.mysak14@gmail.com'),
+    onClick: () => window.open(`mailto:${EMAIL}`),
   });
   callToMail.appendChild(emailLink);
 
@@ -56,14 +66,14 @@ export default async () => {
 
   container.append(
     Header1({
-      text: `Вітаємо Вас на сайті${isAuth ? `, ${userName}` : ''}!`,
+      text: GREETINGS(isAuth ? `, ${userName}` : ''),
     }),
     Paragraph({
-      text: 'Тут Ви можете знайти різні пісні, розділені по категоріях, текст Літургії св. Івана Золотоустого та текст Панахиди.',
+      text: GREETING_INFO,
     }),
     callToAction,
     Paragraph({
-      text: 'Гарного перебування на сайті!',
+      text: WISH,
     }),
     cards,
     callToMail

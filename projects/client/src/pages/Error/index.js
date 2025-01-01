@@ -1,6 +1,13 @@
 import { STATUS_CODES } from '../../constants';
+import { BACK_HOME } from '../../constants/messages';
 import { Header, Header2, Div, Button, Paragraph } from '../../components';
 import { navigateBack } from '../../utils/navigate';
+import {
+  GATEWAY_TIMEOUT,
+  TOO_MANY_REQUESTS,
+  UNEXPECTED_ERROR,
+  WAIT,
+} from './messages';
 
 export default () => {
   const { status } = window.history.state;
@@ -9,13 +16,13 @@ export default () => {
 
   switch (status) {
     case STATUS_CODES.TOO_MANY_REQUESTS:
-      errorText = 'Забагато запитів.';
+      errorText = TOO_MANY_REQUESTS;
       break;
     case STATUS_CODES.GATEWAY_TIMEOUT:
-      errorText = 'Сервер наразі не може опрацювати Ваш запит.';
+      errorText = GATEWAY_TIMEOUT;
       break;
     default:
-      errorText = 'Виникла неочікувана помилка.';
+      errorText = UNEXPECTED_ERROR;
   }
 
   const container = Div({
@@ -28,7 +35,7 @@ export default () => {
   buttons.append(
     Button({
       onClick: () => navigateBack(),
-      text: 'Повернутися на головну',
+      text: BACK_HOME,
       color: 'blue',
     })
   );
@@ -38,7 +45,7 @@ export default () => {
       text: errorText,
     }),
     Paragraph({
-      text: 'Зачекайте, будь ласка, трохи і спробуйте знову.',
+      text: WAIT,
     }),
     buttons
   );

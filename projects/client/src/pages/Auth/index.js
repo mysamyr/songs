@@ -1,4 +1,9 @@
 import { PAGES, PASSWORD } from '../../constants';
+import {
+  EMPTY_EMAIL,
+  SHORT_PASSWORD,
+  NOT_SAME_PASSWORDS,
+} from '../../constants/messages';
 import { signup } from '../../api/auth';
 import {
   Header,
@@ -12,6 +17,7 @@ import {
 import Snackbar from '../../features/snackbar';
 import { login } from '../../features/auth';
 import { navigate } from '../../utils/navigate';
+import { LOGIN_SUCCESS, REGISTRATION_SUCCESS } from './messages';
 
 const emailLabel = Label({
   className: 'input-field',
@@ -51,17 +57,15 @@ const LoginPage = () => {
     const password = e.target.password.value;
 
     if (!email.length) {
-      return Snackbar.displayMsg('Пошта не може бути порожньою');
+      return Snackbar.displayMsg(EMPTY_EMAIL);
     }
     if (password.length < PASSWORD.MIN) {
-      return Snackbar.displayMsg(
-        `Пароль має містити мінімум ${PASSWORD.MIN} символів`
-      );
+      return Snackbar.displayMsg(SHORT_PASSWORD);
     }
 
     try {
       await login({ email, password });
-      Snackbar.displayMsg('Ви успішно увійшли');
+      Snackbar.displayMsg(LOGIN_SUCCESS);
     } catch (e) {
       Snackbar.displayMsg(e.message);
     }
@@ -95,22 +99,18 @@ const RegistrationPage = () => {
     const confirm = e.target.confirm.value;
 
     if (!email.length) {
-      return Snackbar.displayMsg('Email cannot be empty');
+      return Snackbar.displayMsg(EMPTY_EMAIL);
     }
     if (password.length < PASSWORD.MIN || confirm.length < PASSWORD.MIN) {
-      return Snackbar.displayMsg(
-        `Пароль має містити мінімум ${PASSWORD.MIN} символів`
-      );
+      return Snackbar.displayMsg(SHORT_PASSWORD);
     }
     if (password !== confirm) {
-      return Snackbar.displayMsg('Паролі не співпадають');
+      return Snackbar.displayMsg(NOT_SAME_PASSWORDS);
     }
 
     try {
       await signup({ email, password });
-      Snackbar.displayMsg(
-        'Реєстрація пройшла успішно. Верифікуйте профіль посиланням, надісланим на email'
-      );
+      Snackbar.displayMsg(REGISTRATION_SUCCESS);
       navigate(PAGES.HOME);
     } catch (e) {
       Snackbar.displayMsg(e.message);

@@ -12,6 +12,12 @@ import {
   Span,
 } from '../../components';
 import { PASSWORD } from '../../constants';
+import {
+  ALL_FIELDS_REQUIRED,
+  EMPTY_EMAIL,
+  NOT_SAME_PASSWORDS,
+  SHORT_PASSWORD,
+} from '../../constants/messages';
 import { hideModal, showModal } from '../../features/modal';
 import {
   changeEmail,
@@ -22,6 +28,17 @@ import {
 import Snackbar from '../../features/snackbar';
 import { getUserEmail, isVerifiedUser } from '../../state/user';
 import { logout } from '../../features/auth';
+import {
+  CHANGE_EMAIL_QUESTION,
+  CHANGE_PASSWORD_QUESTION,
+  DELETE_ACCOUNT_MESSAGE,
+  DELETE_ACCOUNT_QUESTION,
+  RESEND_SUCCESS,
+  RESENT_VERIFICATION,
+  RESENT_VERIFICATION_BTN,
+  SAME_EMAIL,
+  SAME_PASSWORD,
+} from './messages';
 
 const EmailChangeForm = () => {
   const email = getUserEmail();
@@ -39,9 +56,7 @@ const EmailChangeForm = () => {
   const onResendValidation = async () => {
     try {
       await resendVerification();
-      Snackbar.displayMsg(
-        'Інструкція з активації облікового запису надіслана на Вашу електронну пошту'
-      );
+      Snackbar.displayMsg(RESEND_SUCCESS);
       hideModal();
     } catch (e) {
       Snackbar.displayMsg(e.message);
@@ -53,13 +68,12 @@ const EmailChangeForm = () => {
   const onSubmitChangeEmail = e => {
     e.preventDefault();
     const newEmail = e.target.email.value;
-    if (!newEmail.length)
-      return Snackbar.displayMsg('Електронна пошта не може бути пустою');
-    if (newEmail === email) return Snackbar.displayMsg('Введіть нову пошту');
+    if (!newEmail.length) return Snackbar.displayMsg(EMPTY_EMAIL);
+    if (newEmail === email) return Snackbar.displayMsg(SAME_EMAIL);
     showModal(
       SubmitModal({
         onConfirm: () => onChangeEmail(newEmail),
-        question: 'Ви впевнені, що хочете змінити електронну пошту?',
+        question: CHANGE_EMAIL_QUESTION,
       })
     );
   };
@@ -83,9 +97,9 @@ const EmailChangeForm = () => {
   if (!isVerified) {
     const paragraph = Paragraph();
     paragraph.append(
-      document.createTextNode('Електронна пошта не підтверджена. '),
+      document.createTextNode(RESENT_VERIFICATION),
       Span({
-        text: 'Надіслати інструкцію на електронну пошту',
+        text: RESENT_VERIFICATION_BTN,
         className: 'link',
         onClick: onResendValidation,
       })
@@ -126,19 +140,16 @@ const PasswordChangeForm = () => {
     const newPassword = e.target.newPassword.value;
     const repeatNewPassword = e.target.confirm.value;
     if (!oldPassword.length || !newPassword.length || !repeatNewPassword.length)
-      return Snackbar.displayMsg("Всі поля є обов'язковими");
-    if (oldPassword === newPassword)
-      return Snackbar.displayMsg('Новий пароль не може бути таким самим');
+      return Snackbar.displayMsg(ALL_FIELDS_REQUIRED);
+    if (oldPassword === newPassword) return Snackbar.displayMsg(SAME_PASSWORD);
     if (newPassword !== repeatNewPassword)
-      return Snackbar.displayMsg('Паролі не співпадають');
-    if (newPassword.length < PASSWORD.MIN || newPassword.length > PASSWORD.MAX)
-      return Snackbar.displayMsg(
-        `Пароль має містити від ${PASSWORD.MIN} до ${PASSWORD.MAX} символів`
-      );
+      return Snackbar.displayMsg(NOT_SAME_PASSWORDS);
+    if (newPassword.length < PASSWORD.MIN)
+      return Snackbar.displayMsg(SHORT_PASSWORD);
     showModal(
       SubmitModal({
         onConfirm: () => onChangePassword(oldPassword, newPassword),
-        question: 'Ви впевнені, що хочете змінити пароль?',
+        question: CHANGE_PASSWORD_QUESTION,
       })
     );
   };
@@ -228,7 +239,7 @@ const AccountDeleteSection = () => {
     showModal(
       SubmitModal({
         onConfirm: onDeleteAccount,
-        question: 'Ви впевнені, що хочете видалити свій профіль?',
+        question: DELETE_ACCOUNT_QUESTION,
         confirmText: 'Так, видалити',
         inverseColors: true,
       })
@@ -255,7 +266,7 @@ const AccountDeleteSection = () => {
       text: 'Видалення профілю',
     }),
     Paragraph({
-      text: 'Після видалення вашого профілю Ви втратите можливість створювати нові пісні чи категорії чи редагувати створені Вами пісні. Ваша електронна пошта буде вільна для подальшої реєстрації.',
+      text: DELETE_ACCOUNT_MESSAGE,
     }),
     buttonContainer
   );
