@@ -1,5 +1,6 @@
 import Joi from 'joi';
 import { categorySchema } from '../category/category.validation.js';
+import { nameRegex } from '../../validators/index.js';
 
 const song = Joi.object({
   categories: Joi.array()
@@ -12,12 +13,19 @@ const song = Joi.object({
       })
     )
     .required(),
-  name: Joi.string().trim().min(4).max(30).required().messages({
-    'any.required': 'Введіть назву пісні',
-    'string.empty': 'Назва пісні не можу бути пустою',
-    'string.min': 'Назва пісні має містити як мінімум 4 символи',
-    'string.max': 'Назва пісні занадто довга',
-  }),
+  name: Joi.string()
+    .trim()
+    .min(4)
+    .max(30)
+    .regex(nameRegex)
+    .required()
+    .messages({
+      'any.required': 'Введіть назву пісні',
+      'string.empty': 'Назва пісні не можу бути пустою',
+      'string.min': 'Назва пісні має містити як мінімум 4 символи',
+      'string.max': 'Назва пісні занадто довга',
+      'string.pattern.base': 'Введено недозволені символи',
+    }),
   text: Joi.string().required().messages({
     'any.required': 'Введіть текст пісні',
     'string.empty': 'Текст пісні не можу бути пустим',

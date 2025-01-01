@@ -37,7 +37,12 @@
 ## TODO
 
 - finish implementing client
-- clean css
 - edit `README.md`
-- add search
 - Abort Controller???
+- track jwt from client
+- add `robots.txt`
+- add `sitemap.xml`
+- add `favicon.ico`
+- add `manifest.json`
+- add `service-worker.js`
+- 

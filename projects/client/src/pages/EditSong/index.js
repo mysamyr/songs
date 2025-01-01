@@ -174,7 +174,7 @@ export default async () => {
 
   container.append(
     Header1({
-      text: `Редагувати ${song.name}`,
+      text: 'Редагувати пісню',
     }),
     form
   );

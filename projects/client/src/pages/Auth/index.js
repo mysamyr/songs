@@ -61,6 +61,7 @@ const LoginPage = () => {
 
     try {
       await login({ email, password });
+      Snackbar.displayMsg('Ви успішно увійшли');
     } catch (e) {
       Snackbar.displayMsg(e.message);
     }
@@ -107,6 +108,9 @@ const RegistrationPage = () => {
 
     try {
       await signup({ email, password });
+      Snackbar.displayMsg(
+        'Реєстрація пройшла успішно. Верифікуйте профіль посиланням, надісланим на email'
+      );
       navigate(PAGES.HOME);
     } catch (e) {
       Snackbar.displayMsg(e.message);

@@ -2,7 +2,6 @@
 :root {
   --white: #fff;
   --black: #000;
-  --grey: #ccc;
   --yellow: #edf1d6;
   --light-green: #9dc08b;
   --green: #609966;
@@ -67,8 +66,8 @@ body {
   right: 50px;
   height: 45px;
   width: 45px;
-  color: var(--grey);
-  border: 2px solid var(--grey);
+  color: var(--light-green);
+  border: 2px solid var(--light-green);
   border-radius: 50%;
   text-align: center;
   line-height: 36px;
@@ -386,11 +385,29 @@ ol {
 }
 
 /*OTHER*/
-#search {
-  display: block;
-  width: 200px;
-  text-align: right;
-  margin: 0 0 0 auto;
+.category-header-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.category-header {
+  font-size: 2.5rem;
+  margin: 2rem 0 1.5rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.dropdown {
+  position: absolute;
+}
+
+.search {
+  border: 1px solid var(--light-green);
+  background-color: var(--yellow);
+  min-height: 2em;
 }
 
 .rename-icon {

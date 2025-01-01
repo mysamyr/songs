@@ -18,7 +18,7 @@ import { getCategories, setCategories } from '../../state';
 import { navigate, navigateBack } from '../../utils/navigate';
 import { validateSong } from '../../utils/helpers';
 
-const categorySelect = () => {
+const categorySelect = activeCategory => {
   const categories = getCategories();
 
   if (!categories.length) {
@@ -40,6 +40,7 @@ const categorySelect = () => {
       Option({
         value: category.id,
         text: category.name,
+        selected: category.id === activeCategory,
       })
     );
   });
@@ -93,6 +94,7 @@ const textAreaInput = () => {
 };
 
 export default async () => {
+  const { categoryId } = window.history.state;
   const onAddNewSong = async e => {
     e.preventDefault();
     const categories = [...e.target.categories.options]
@@ -156,7 +158,12 @@ export default async () => {
     })
   );
 
-  form.append(categorySelect(), nameInput(), textAreaInput(), buttonContainer);
+  form.append(
+    categorySelect(categoryId),
+    nameInput(),
+    textAreaInput(),
+    buttonContainer
+  );
 
   container.append(
     Header1({

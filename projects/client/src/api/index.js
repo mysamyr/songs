@@ -3,6 +3,7 @@ import { API_URLS, PAGES, STATUS_CODES } from '../constants';
 import { navigate } from '../utils/navigate';
 import { deleteUser } from '../state/user';
 import { clearState } from '../state';
+import { isLoggedIn } from '../features/auth';
 
 const API_URL = '/api';
 
@@ -34,11 +35,12 @@ const refreshTokens = async (url, options) => {
   }).then(handleResponse);
 };
 
+// todo fix issue with accessToken after refresh
 const handleResponse = async (data, url, options) => {
   if (
     [STATUS_CODES.FORBIDDEN, STATUS_CODES.UNAUTHORIZED].includes(data.status) &&
     url &&
-    ![API_URL + API_URLS.SIGNIN, API_URL + API_URLS.SIGNUP].includes(url)
+    isLoggedIn()
   ) {
     return refreshTokens(url, options);
   }

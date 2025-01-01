@@ -58,6 +58,7 @@ export default async () => {
   container.append(
     Header1({
       text: capitalizeFirstLetter(song.name),
+      className: 'category-header',
     }),
     Pre({
       text: song.text,

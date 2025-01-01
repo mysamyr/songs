@@ -16,7 +16,6 @@ router.get(
   '/:id',
   validateParams(defaultParams),
   getUserMiddleware,
-  authMiddleware,
   promisify(songController.getSong)
 );
 

@@ -52,7 +52,7 @@ export default props => {
       input.focus();
     }, 0);
   if (props.onClick) input.addEventListener('click', props.onClick);
-  if (props.onChange) input.addEventListener('change', props.onChange);
+  if (props.onChange) input.addEventListener('keyup', props.onChange);
 
   return input;
 };

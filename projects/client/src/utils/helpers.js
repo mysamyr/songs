@@ -7,7 +7,10 @@ export const logError = e => console.error(e);
 export const isNil = value => value == null; // null or undefined
 
 export const capitalizeFirstLetter = value =>
-  value.charAt(0).toUpperCase() + value.slice(1);
+  value
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
 
 export const validateCategory = (name, oldName) => {
   if (!name.length) {

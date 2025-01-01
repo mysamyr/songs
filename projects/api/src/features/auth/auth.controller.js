@@ -30,7 +30,9 @@ export const login = async (req, res) => {
     throw BadRequest(WRONG_EMAIL_OR_PASSWORD);
   }
 
-  const { accessToken, refreshToken } = await generateTokens(candidate._id);
+  const { accessToken, refreshToken } = await generateTokens(
+    candidate._id.toString()
+  );
 
   res.cookie('refreshToken', refreshToken, {
     maxAge: 30 * 24 * 60 * 60 * 1000,
@@ -87,7 +89,9 @@ export const refresh = async (req, res) => {
     .select('name email')
     .exec();
 
-  const { accessToken, refreshToken } = await generateTokens(candidate._id);
+  const { accessToken, refreshToken } = await generateTokens(
+    candidate._id.toString()
+  );
 
   res.cookie('refreshToken', refreshToken, {
     maxAge: 30 * 24 * 60 * 60 * 1000,

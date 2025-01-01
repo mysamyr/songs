@@ -6,13 +6,15 @@ import {
   Header1,
   Paragraph,
   RenameModal,
+  Search,
+  Searchbar,
   SubmitModal,
 } from '../../components';
 import { navigate } from '../../utils/navigate';
 import { PAGES } from '../../constants';
 import {
-  getCategory as getCategoryAPI,
   deleteCategory as deleteCategoryAPI,
+  getCategory as getCategoryAPI,
   renameCategory as renameCategoryAPI,
 } from '../../api/category';
 import { getCategory, setCategory } from '../../state';
@@ -26,6 +28,42 @@ import { isLoggedIn } from '../../features/auth';
 import { showModal } from '../../features/modal';
 import { isUserAdmin } from '../../state/user';
 
+const headerBlock = ({ isAdmin, name, onRenameCategory, onSearch }) => {
+  const container = Div({ className: 'category-header-container' });
+  const nameContainer = Div({ className: 'category-header-container' });
+  nameContainer.appendChild(
+    Header1({
+      text: capitalizeFirstLetter(name),
+      className: 'category-header',
+    })
+  );
+  if (isAdmin) {
+    nameContainer.appendChild(
+      Edit({
+        className: 'rename-icon',
+        onClick: () =>
+          showModal(
+            RenameModal({
+              name,
+              onSubmit: onRenameCategory(name),
+            })
+          ),
+      })
+    );
+  }
+
+  const searchContainer = Searchbar({
+    container,
+    onSearch,
+  });
+
+  searchContainer.appendChild(Search({}));
+
+  container.append(nameContainer, searchContainer);
+
+  return container;
+};
+
 const songsBlock = songs => {
   const container = Div({ id: 'songs' });
 
@@ -33,7 +71,7 @@ const songsBlock = songs => {
     songs.forEach(song => {
       const card = Div({
         className: 'card link',
-        text: song.name,
+        text: capitalizeFirstLetter(song.name),
         onClick: () => navigate(PAGES.SONG_$(song.id)),
       });
       container.appendChild(card);
@@ -49,7 +87,6 @@ const songsBlock = songs => {
   return container;
 };
 
-// todo here!!!
 export default async () => {
   const isAuth = isLoggedIn();
   const isAdmin = isUserAdmin();
@@ -78,12 +115,21 @@ export default async () => {
       Snackbar.displayMsg(e.message);
     }
   };
-  // const onTypeSearch = e => {
-  //   e.preventDefault();
-  //   const searchValue = e.target.value.toLowerCase();
-  //   const songs = document.querySelectorAll('.song');
-  //
-  // };
+  const onTypeSearch = e => {
+    const value = e.target.value.toLowerCase().trim();
+    const { songs } = getCategory();
+    if (!songs.length) {
+      return;
+    }
+    const filteredSongs = songs.filter(song =>
+      song.name.toLowerCase().includes(value)
+    );
+
+    document.getElementById('songs').remove();
+    document
+      .querySelector('.category-header-container')
+      .after(songsBlock(filteredSongs));
+  };
 
   try {
     const category = await getCategoryAPI(categoryId);
@@ -101,29 +147,6 @@ export default async () => {
   const container = Div({
     className: 'container',
   });
-
-  // const headingContainer = Div({
-  //
-  // });
-
-  const header = Header1({
-    text: capitalizeFirstLetter(name),
-  });
-  if (isAdmin) {
-    header.appendChild(
-      Edit({
-        color: 'var(--black)',
-        className: 'rename-icon',
-        onClick: () =>
-          showModal(
-            RenameModal({
-              name,
-              onSubmit: onRenameCategory(name),
-            })
-          ),
-      })
-    );
-  }
 
   const buttons = Div({
     className: 'btns',
@@ -161,50 +184,11 @@ export default async () => {
     );
   }
 
-  container.append(header, songsBlock(songs), buttons);
+  container.append(
+    headerBlock({ isAdmin, name, onRenameCategory, onSearch: onTypeSearch }),
+    songsBlock(songs),
+    buttons
+  );
 
   document.getElementById('root').append(Header(), container);
-};
-
-// todo
-// eslint-disable-next-line no-unused-vars
-const search = () => {
-  const searchField = document.querySelector('#search');
-  const songsContainer = document.querySelector('.songs');
-  const songs = document.querySelectorAll('.song');
-  const makeSongsContainer = song => {
-    const songCard = document.createElement('div');
-    songCard.classList.add('card');
-    songCard.append(song);
-
-    return songCard;
-  };
-  if (searchField) {
-    searchField.addEventListener('input', () => {
-      if (songs.length) {
-        const searchValue = searchField.value.toLowerCase();
-        const filteredSongs = [];
-        songs.forEach(song => {
-          if (song.text.toLowerCase().includes(searchValue)) {
-            filteredSongs.push(song);
-          }
-        });
-        if (!filteredSongs.length) {
-          songsContainer.innerHTML = 'Пісень не знайдено';
-        } else if (!searchValue.length) {
-          songsContainer.innerHTML = '';
-          songs.forEach(song => {
-            const songCard = makeSongsContainer(song);
-            songsContainer.appendChild(songCard);
-          });
-        } else {
-          songsContainer.innerHTML = '';
-          filteredSongs.forEach(song => {
-            const songCard = makeSongsContainer(song);
-            songsContainer.appendChild(songCard);
-          });
-        }
-      }
-    });
-  }
 };

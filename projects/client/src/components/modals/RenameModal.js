@@ -1,3 +1,4 @@
+import { CATEGORY } from '../../constants';
 import { Button, Div, Paragraph, Form, Input } from '../';
 import { hideModal } from '../../features/modal';
 
@@ -32,6 +33,8 @@ export default ({ name, onSubmit }) => {
       type: 'text',
       name: 'name',
       value: name,
+      min: CATEGORY.MIN,
+      max: CATEGORY.MAX,
       required: true,
       focus: true,
     }),

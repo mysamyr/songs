@@ -18,3 +18,5 @@ export const password = Joi.string().trim().min(8).max(30).required().messages({
   'string.min': 'Мінімальна довжина паролю - 8 символів',
   'string.max': 'Пароль не може бути довшим 30-ти символів',
 });
+
+export const nameRegex = /^[A-Za-zА-Яа-яІіЇїЄєҐґ 0-9_.,!]*$/;
