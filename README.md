@@ -38,11 +38,7 @@
 
 - implement pagination
 - edit `README.md`
-- Abort Controller???
+- Abort Controller ???
 - move all messages in client to constants
-- add `robots.txt`
-- add `sitemap.xml`
-- add `favicon.ico`
-- add `manifest.json`
-- add `service-worker.js`
+- add `service-worker.js` ???
 - 

@@ -3,14 +3,13 @@ import logger from '../services/logging.js';
 
 const validate = (entity, schema) => (req, res, next) => {
   const { error, value } = schema.validate(req[entity]);
-  if (!error) {
-    req[entity] = value;
-    return next();
+  if (error) {
+    logger.error(error);
+    const message = error.details[0].message;
+    throw BadRequest(message);
   }
-
-  const message = error.details[0].message;
-  logger.error(new Error(message));
-  throw BadRequest(message);
+  req[entity] = value;
+  return next();
 };
 
 export const validateParams = schema => (req, res, next) =>

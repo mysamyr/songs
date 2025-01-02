@@ -1,5 +1,6 @@
 import { format, createLogger, transports } from 'winston';
 import { PRODUCTION } from '../constants/index.js';
+import { ApiError } from '../utils/error.js';
 
 const logger = createLogger({
   level: 'http',
@@ -7,10 +8,15 @@ const logger = createLogger({
     format.errors({ stack: true }),
     format.colorize(),
     format.timestamp(),
-    format.printf(
-      ({ timestamp, level, message, stack }) =>
-        `${timestamp} ${level}: ${message} ${stack || ''}`
-    )
+    format.printf(info => {
+      if (info instanceof ApiError) {
+        return `${info.timestamp} ${info.level}: ${info.message}`;
+      }
+      if (info instanceof Error) {
+        return `${info.timestamp} ${info.level}: ${info.message} ${info.stack || ''}`;
+      }
+      return `${info.timestamp} ${info.level}: ${info.message}`;
+    })
   ),
   transports: [new transports.Console()],
 });

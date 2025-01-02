@@ -1,4 +1,3 @@
-/*VARIABLES*/
 :root {
   --white: #fff;
   --black: #000;
@@ -13,8 +12,6 @@
   --font-color: rgba(0, 0, 0, 0.87);
   --border: 1px solid var(--light-green);
 }
-
-/*COMMON*/
 *,
 *::after,
 *::before {
@@ -28,35 +25,29 @@
   -moz-osx-font-smoothing: grayscale;
   font-weight: normal;
 }
-
 body {
   background-color: var(--white);
   color: var(--font-color);
   font-size: 12px;
 }
-
-/*COLORS*/
 .blue {
   background-color: var(--blue) !important;
 }
 .blue:hover {
   background-color: var(--light-blue) !important;
 }
-
 .red {
   background-color: var(--red) !important;
 }
 .red:hover {
   background-color: var(--light-red) !important;
 }
-
 .green {
   background-color: var(--green) !important;
 }
 .green:hover {
   background-color: var(--light-green) !important;
 }
-
 .arr-top {
   position: fixed;
   bottom: 50px;
@@ -71,18 +62,14 @@ body {
   cursor: pointer;
   font-size: 1.5rem;
 }
-
 .link {
   text-decoration: none;
   color: var(--blue);
   cursor: pointer;
 }
-
-/*CONTAINERS*/
 .container {
   margin: 0 auto;
 }
-
 .card {
   padding: 24px;
   margin: 0.5rem 0 1rem;
@@ -93,13 +80,10 @@ body {
     0 3px 1px -2px rgba(0, 0, 0, 0.12),
     0 1px 5px 0 rgba(0, 0, 0, 0.2);
 }
-
-/*NAVIGATION*/
 .logo {
   font-size: 2.1rem;
   color: var(--white);
 }
-
 .header-container {
   display: flex;
   justify-content: space-between;
@@ -109,19 +93,15 @@ body {
   height: 64px;
   line-height: 64px;
 }
-
 .nav-list {
   float: right;
 }
-
 .nav-list-item {
   list-style-type: none;
   float: left;
   color: var(--white);
   padding: 0 15px;
 }
-
-/*SIDENAV*/
 .backdrop {
   position: absolute;
   z-index: 1;
@@ -134,12 +114,10 @@ body {
   align-items: center;
   justify-content: center;
 }
-
 .slide-in {
   animation-duration: 0.25s;
   animation-name: slidein;
 }
-
 .sidebar {
   position: fixed;
   top: 0;
@@ -150,26 +128,21 @@ body {
   z-index: 3;
   transition: all 0.25s ease;
 }
-
 .sidebar-trigger {
   color: var(--white);
   cursor: pointer;
 }
-
 .sidebar-list {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-
 .sidebar-list-item {
   list-style-type: none;
   color: var(--white);
   line-height: 64px;
   width: 100%;
 }
-
-/*DIALOG*/
 dialog:modal {
   margin: auto;
   color: var(--black);
@@ -177,55 +150,43 @@ dialog:modal {
   border: none;
   border-radius: 5px;
 }
-
 dialog::backdrop {
   background-color: hsla(0, 0%, 0%, 0.5);
 }
-
 .modal-content {
   padding: 1rem;
   background-color: var(--white);
 }
-
 .modal-header {
   font-size: 1.3em;
   text-indent: 0;
   text-align: center;
 }
-
-/*TEXT*/
 h1 {
   font-size: 2.5rem;
   margin: 2rem 0 1.5rem;
 }
-
 h2 {
   font-size: 2rem;
 }
-
 h3 {
   font-size: 1.5rem;
 }
-
 p {
   box-sizing: inherit;
   margin: 1rem 0;
 }
-
 b {
   font-weight: bold;
 }
-
 pre {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
   font-size: 1.3rem;
 }
-
 span {
   font-style: italic;
 }
-
 b,
 h2,
 h3,
@@ -233,24 +194,18 @@ p,
 span {
   text-indent: 20px;
 }
-
 .italic {
   font-style: italic;
 }
-
 .bold {
   font-weight: bold;
 }
-
 .center {
   text-align: center;
 }
-
 .right {
   text-align: right;
 }
-
-/*BUTTONS*/
 .btns {
   display: flex;
   flex-direction: row;
@@ -258,7 +213,6 @@ span {
   gap: 10px;
   padding: 20px;
 }
-
 .btn {
   color: var(--white);
   text-align: center;
@@ -270,12 +224,9 @@ span {
   text-transform: uppercase;
   width: fit-content;
 }
-
-/*INPUTS*/
 .input-field {
   margin: 1rem 0;
 }
-
 input,
 select,
 textarea {
@@ -287,17 +238,14 @@ textarea {
   outline: none;
   font-size: 1rem;
 }
-
 select {
   border: var(--border);
   border-radius: 0.25em;
 }
-
 option {
   padding: 8px;
   color: var(--font-color);
 }
-
 textarea {
   height: 10rem;
   resize: vertical;
@@ -312,18 +260,14 @@ textarea:valid {
   border-bottom-color: var(--green);
   box-shadow: 0 1px 0 0 var(--green);
 }
-
 ol {
   padding-left: 40px;
 }
-
-/*TABS*/
 .tab-headers {
   display: flex;
   margin: 2rem auto;
   width: 100%;
 }
-
 .tab {
   display: block;
   width: 50%;
@@ -335,19 +279,15 @@ ol {
   text-transform: uppercase;
   cursor: pointer;
 }
-
 .tab-active {
   background-color: var(--yellow);
   border-bottom: 1px solid var(--green);
 }
-
 .tab-content {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
-
-/*SNACKBAR*/
 .snackbar-container {
   position: fixed;
   bottom: 5%;
@@ -363,11 +303,9 @@ ol {
   animation: 300ms ease-out forwards slide-up;
   z-index: 10;
 }
-
 .snackbar-label {
   padding: 12px 8px;
 }
-
 .snackbar-dismiss {
   color: var(--red);
   font-weight: bold;
@@ -375,15 +313,12 @@ ol {
   cursor: pointer;
   padding: 8px;
 }
-
-/*OTHER*/
 .category-header-container {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
 }
-
 .category-header {
   font-size: 2.5rem;
   margin: 2rem 0 1.5rem;
@@ -391,35 +326,27 @@ ol {
   white-space: nowrap;
   overflow: hidden;
 }
-
 .dropdown {
   position: absolute;
 }
-
 .search {
   border: 1px solid var(--light-green);
   background-color: var(--yellow);
   min-height: 2em;
 }
-
 .rename-icon {
   cursor: pointer;
   margin-left: 10px;
 }
-
 .active {
   background-color: rgba(0, 0, 0, 0.1);
 }
-
 .show {
   display: block;
 }
-
 .hide {
   display: none;
 }
-
-/*KEYFRAMES*/
 @keyframes slidein {
   from {
     left: -80%;
@@ -432,7 +359,6 @@ ol {
   pre {
     text-align: left;
   }
-
   .container {
     width: 95%;
   }
@@ -446,7 +372,6 @@ ol {
   body {
     font-size: 1.1rem;
   }
-
   .container {
     width: 720px;
   }
@@ -455,15 +380,12 @@ ol {
   .container {
     width: 960px;
   }
-
   .sidenav {
     display: none;
   }
-
   .sidebar-trigger {
     display: none;
   }
-
   pre {
     text-align: center;
   }
@@ -472,7 +394,6 @@ ol {
   body {
     font-size: 1.2rem;
   }
-
   .container {
     max-width: 1140px;
   }
@@ -481,11 +402,9 @@ ol {
   .nav-list-item {
     display: none;
   }
-
   .sidebar-trigger {
     display: block;
   }
-
   .arr-top {
     bottom: 20px;
     right: 20px;
@@ -495,7 +414,6 @@ ol {
   body {
     font-size: 1rem;
   }
-
   .btns {
     flex-direction: column;
     align-items: center;
@@ -505,11 +423,9 @@ ol {
   body {
     font-size: 1.1rem;
   }
-
   ol {
     padding-left: 20px;
   }
-
   .snackbar-container {
     height: fit-content;
     position: fixed;

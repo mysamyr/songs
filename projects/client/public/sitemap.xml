@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <sitemap>
+        <loc>https://songpb.mysamyr.xyz/</loc>
+        <lastmod>2025-01-02</lastmod>
+    </sitemap>
+    <sitemap>
+        <loc>https://songpb.mysamyr.xyz/auth</loc>
+        <lastmod>2025-01-02</lastmod>
+    </sitemap>
+    <sitemap>
+        <loc>https://songpb.mysamyr.xyz/lit</loc>
+        <lastmod>2025-01-02</lastmod>
+    </sitemap>
+    <sitemap>
+        <loc>https://songpb.mysamyr.xyz/pan</loc>
+        <lastmod>2025-01-02</lastmod>
+    </sitemap>
+    <sitemap>
+        <loc>https://songpb.mysamyr.xyz/category</loc>
+        <lastmod>2025-01-02</lastmod>
+    </sitemap>
+    <sitemap>
+        <loc>https://songpb.mysamyr.xyz/category/new</loc>
+        <lastmod>2025-01-02</lastmod>
+    </sitemap>
+    <sitemap>
+        <loc>https://songpb.mysamyr.xyz/song/new</loc>
+        <lastmod>2025-01-02</lastmod>
+    </sitemap>
+    <sitemap>
+        <loc>https://songpb.mysamyr.xyz/error</loc>
+        <lastmod>2025-01-02</lastmod>
+    </sitemap>
+</sitemapindex>

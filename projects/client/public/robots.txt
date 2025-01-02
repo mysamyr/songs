@@ -1,0 +1,49 @@
+#       o     O
+#    __|_____|___
+#   |    --    --|
+#   |  ( o )   ( o )
+#   |        /   |
+#   |     [wwww]  < *Exterminate all humans* >
+#   |____________|           ||
+#       |   |              /V  vv
+#  _____|___|____          |___/
+# /______________\_________/  |
+# |              |___________/
+# | ( * )  ( * ) |
+# |              |
+# | [ -vVWWVv-]  |
+# |______________|
+# \______________/
+#
+User-agent: *
+Disallow: /
+Crawl-delay: 30
+
+User-agent: Googlebot
+Allow: /auth
+Allow: /lit
+Allow: /pan
+Allow: /category
+Allow: /category/*
+Allow: /song/*
+Allow: /error
+Disallow: /cabinet
+Disallow: /category/new
+Disallow: /song/new
+Disallow: /configs
+
+User-agent: DuckDuckBot
+Allow: /auth
+Allow: /lit
+Allow: /pan
+Allow: /category
+Allow: /category/*
+Allow: /song/*
+Allow: /error
+Disallow: /cabinet
+Disallow: /category/new
+Disallow: /song/new
+Disallow: /configs
+Crawl-delay: 30
+
+Sitemap: https://
