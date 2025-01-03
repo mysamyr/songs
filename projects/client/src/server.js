@@ -66,7 +66,12 @@ const server = http.createServer((request, response) => {
     response.end();
   } else {
     // get static files
-    const staticFiles = ['/favicon.ico', '/index.js', '/styles.css'];
+    const staticFiles = [
+      '/favicon.ico',
+      '/index.js',
+      '/styles.css',
+      '/styles.min.css',
+    ];
 
     if (staticFiles.includes(request.url)) {
       fs.readFile(

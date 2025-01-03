@@ -1,4 +1,11 @@
 import {
+  ADD_NEW_CATEGORY,
+  CATEGORY_ADDED_$,
+  CATEGORY_HEADER,
+  HEADER,
+} from './messages';
+import { BACK_TO_CATEGORIES } from '../../constants/messages';
+import {
   Button,
   Div,
   Form,
@@ -13,13 +20,6 @@ import { CATEGORY, PAGES } from '../../constants';
 import { createCategory } from '../../api/category';
 import Snackbar from '../../features/snackbar';
 import { validateCategory } from '../../utils/helpers';
-import {
-  ADD_NEW_CATEGORY,
-  BACK_TO_CATEGORIES,
-  CATEGORY_ADDED_$,
-  CATEGORY_HEADER,
-  HEADER,
-} from './messages';
 
 const nameInput = () => {
   const nameLabel = Label({

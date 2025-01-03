@@ -24,6 +24,9 @@ services:
     container_name: songpb_api
     ports:
       - "8080:8080"
+      - "9229:9229"
+    volumes:
+      - ./projects/api/src/:/opt/app/src
     environment:
       - NODE_ENV:development
     networks:
