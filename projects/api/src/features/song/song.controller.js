@@ -8,6 +8,38 @@ import {
 import { Category, Song } from '../../models/index.js';
 import { mapSong } from './song.helper.js';
 import { BadRequest } from '../../utils/error.js';
+import { mapCategoryWithSongs } from '../category/category.helper.js';
+
+export const getAllSongs = async (req, res) => {
+  const {
+    query: { skip, limit },
+  } = req;
+
+  const songs = limit
+    ? await Song.find({ deleted: false })
+        .select('name text')
+        .populate('author', 'name')
+        .populate('categories', '_id')
+        .skip(skip)
+        .limit(limit)
+        .sort('name')
+        .exec()
+    : await Song.find({ deleted: false })
+        .select('name text')
+        .populate('author', 'name')
+        .populate('categories', '_id')
+        .exec();
+
+  return res.status(STATUS_CODES.OK).json(
+    mapCategoryWithSongs(
+      {
+        name: 'Всі пісні',
+        _id: 'all',
+      },
+      songs
+    )
+  );
+};
 
 export const getSong = async (req, res) => {
   const {
@@ -103,10 +135,12 @@ export const deleteSong = async (req, res) => {
     throw BadRequest(NOT_AUTHOR);
   }
 
-  await Song.findByIdAndUpdate(id, {
-    deleted: true,
-    deleted_at: new Date(),
-  });
+  if (!song.deleted) {
+    await Song.findByIdAndUpdate(id, {
+      deleted: true,
+      deleted_at: new Date(),
+    });
+  }
 
   return res.status(STATUS_CODES.OK).send();
 };

@@ -2,7 +2,7 @@ import { CATEGORY, PASSWORD, SONG, SONG_TEXT } from './index';
 
 export const BACK_HOME = 'На головну';
 export const BACK = 'Назад';
-export const BACK_TO_CATEGORIES = 'Назад до категорій';
+export const BACK_TO_CATEGORIES = 'До категорій';
 export const EMPTY_CATEGORY_NAME = 'Назва категорії не може бути порожньою';
 export const SAME_CATEGORY_NAME = 'Назва категорії не змінилась';
 export const SHORT_CATEGORY_NAME = `Назва категорії має містити мінімум ${CATEGORY.MIN} символів`;

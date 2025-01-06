@@ -4,18 +4,27 @@ import promisify from '../../middlewares/promisify.js';
 import {
   validateBody,
   validateParams,
+  validateQuery,
 } from '../../middlewares/express-validators.js';
-import { defaultParams } from '../../validators/index.js';
+import {
+  defaultParams,
+  defaultPaginationQuery,
+} from '../../validators/index.js';
 import { categoryBody } from './category.validation.js';
 import * as categoryController from './category.controller.js';
 
 const router = Router();
 
-router.get('/', promisify(categoryController.getCategories));
+router.get(
+  '/',
+  validateQuery(defaultPaginationQuery),
+  promisify(categoryController.getCategories)
+);
 
 router.get(
   '/:id',
   validateParams(defaultParams),
+  validateQuery(defaultPaginationQuery),
   promisify(categoryController.getCategory)
 );
 

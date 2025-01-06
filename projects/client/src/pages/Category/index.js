@@ -1,12 +1,12 @@
 import {
   Button,
   Div,
-  Edit,
+  EditIcon,
   Header,
   Header1,
   Paragraph,
   RenameModal,
-  Search,
+  SearchIcon,
   Searchbar,
   SubmitModal,
 } from '../../components';
@@ -34,8 +34,27 @@ import {
   NO_SONGS,
 } from './messages';
 import { BACK_TO_CATEGORIES } from '../../constants/messages';
+import { getAllSongs } from '../../api/song';
 
-const headerBlock = ({ isAdmin, name, onRenameCategory, onSearch }) => {
+const onTypeSearch = e => {
+  const value = e.target.value.toLowerCase().trim();
+  const { songs } = getCategory();
+  if (!songs.length) {
+    return;
+  }
+  const filteredSongs = songs.filter(song =>
+    song.name.toLowerCase().includes(value)
+  );
+
+  renderSongs(songsBlock(filteredSongs));
+};
+
+const renderSongs = list => {
+  document.getElementById('songs')?.remove();
+  document.querySelector('.category-header-container').after(list);
+};
+
+const headerBlock = ({ isAdmin, name, onRenameCategory }) => {
   const container = Div({ className: 'category-header-container' });
   const nameContainer = Div({ className: 'category-header-container' });
   nameContainer.appendChild(
@@ -44,9 +63,9 @@ const headerBlock = ({ isAdmin, name, onRenameCategory, onSearch }) => {
       className: 'category-header',
     })
   );
-  if (isAdmin) {
+  if (isAdmin && onRenameCategory) {
     nameContainer.appendChild(
-      Edit({
+      EditIcon({
         className: 'rename-icon',
         onClick: () =>
           showModal(
@@ -61,17 +80,18 @@ const headerBlock = ({ isAdmin, name, onRenameCategory, onSearch }) => {
 
   const searchContainer = Searchbar({
     container,
-    onSearch,
+    onSearch: onTypeSearch,
+    onClose: () => renderSongs(songsBlock()),
   });
 
-  searchContainer.appendChild(Search({}));
+  searchContainer.appendChild(SearchIcon({}));
 
   container.append(nameContainer, searchContainer);
 
   return container;
 };
 
-const songsBlock = songs => {
+const songsBlock = (songs = getCategory().songs) => {
   const container = Div({ id: 'songs' });
 
   if (songs.length) {
@@ -94,10 +114,9 @@ const songsBlock = songs => {
   return container;
 };
 
-export default async () => {
+const renderCommonCategory = async categoryId => {
   const isAuth = isLoggedIn();
   const isAdmin = isUserAdmin();
-  const categoryId = window.location.pathname.split('/')[2];
 
   const onDeleteCategory = async id => {
     try {
@@ -122,21 +141,6 @@ export default async () => {
       Snackbar.displayMsg(e.message);
     }
   };
-  const onTypeSearch = e => {
-    const value = e.target.value.toLowerCase().trim();
-    const { songs } = getCategory();
-    if (!songs.length) {
-      return;
-    }
-    const filteredSongs = songs.filter(song =>
-      song.name.toLowerCase().includes(value)
-    );
-
-    document.getElementById('songs').remove();
-    document
-      .querySelector('.category-header-container')
-      .after(songsBlock(filteredSongs));
-  };
 
   try {
     const category = await getCategoryAPI(categoryId);
@@ -146,7 +150,8 @@ export default async () => {
     setCategory(category);
   } catch (e) {
     logError(e);
-    return Snackbar.displayMsg(e.message);
+    Snackbar.displayMsg(e.message);
+    return navigate(PAGES.HOME);
   }
 
   const { name, songs } = getCategory();
@@ -192,10 +197,61 @@ export default async () => {
   }
 
   container.append(
-    headerBlock({ isAdmin, name, onRenameCategory, onSearch: onTypeSearch }),
+    headerBlock({ isAdmin, name, onRenameCategory }),
     songsBlock(songs),
     buttons
   );
 
   document.getElementById('root').append(Header(), container);
+};
+
+export default async () => {
+  const isAuth = isLoggedIn();
+  const isAdmin = isUserAdmin();
+  const categoryId = window.location.pathname.split('/')[2];
+
+  if (categoryId !== 'all') {
+    return renderCommonCategory(categoryId);
+  }
+
+  try {
+    const allSongsCategory = await getAllSongs();
+    setCategory(allSongsCategory);
+  } catch (e) {
+    logError(e);
+    Snackbar.displayMsg(e.message);
+    return navigate(PAGES.HOME);
+  }
+
+  const { name } = getCategory();
+
+  const container = Div({
+    className: 'container',
+  });
+
+  const buttons = Div({
+    className: 'btns',
+  });
+  buttons.appendChild(
+    Button({
+      onClick: () => navigate(PAGES.CATEGORIES),
+      text: BACK_TO_CATEGORIES,
+      color: 'blue',
+    })
+  );
+  if (isAuth) {
+    buttons.appendChild(
+      Button({
+        onClick: () => navigate(PAGES.NEW_SONG),
+        text: ADD_NEW_SONG,
+        color: 'green',
+      })
+    );
+  }
+
+  container.append(headerBlock({ isAdmin, name }), buttons);
+
+  document.getElementById('root').append(Header(), container);
+
+  renderSongs(songsBlock());
 };

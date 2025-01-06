@@ -1,4 +1,4 @@
-import { Div, Menu, UList, ListItem } from '../';
+import { Div, MenuIcon, UList, ListItem } from '../';
 import { PAGES } from '../../constants';
 import navigationLinks from '../../constants/navigation';
 import { navigate } from '../../utils/navigate';
@@ -24,7 +24,7 @@ export default () => {
     );
   });
 
-  const trigger = Menu({
+  const trigger = MenuIcon({
     color: 'var(--white)',
     className: 'sidebar-trigger',
     onClick: openSidebar,

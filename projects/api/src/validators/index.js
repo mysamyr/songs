@@ -7,6 +7,10 @@ export const defaultParams = Joi.object({
     'string.length': 'Невірний ідентифікатор',
   }),
 });
+export const defaultPaginationQuery = Joi.object({
+  skip: Joi.number().integer().optional(),
+  limit: Joi.number().integer().min(1).optional(),
+});
 export const email = Joi.string().email().required().messages({
   'any.required': 'Введіть email',
   'string.empty': 'Введіть email',

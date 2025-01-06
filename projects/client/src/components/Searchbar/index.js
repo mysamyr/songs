@@ -1,18 +1,19 @@
-import { Cancel, Div } from '../';
+import { CancelIcon, SearchIcon, Div } from '../';
 import Dropdown from './Dropdown';
-import { navigate } from '../../utils/navigate';
 
-export default ({ container, onSearch }) => {
+export default ({ container, onSearch, onClose }) => {
   const searchContainer = Div({
     className: 'link',
     onClick: () => {
       const dropdown = document.querySelector('.dropdown');
       if (dropdown) {
-        // clear search input and results
-        navigate(window.location.pathname);
+        onClose();
+        document.querySelector('.dropdown').remove();
+        searchContainer.innerText = '';
+        searchContainer.appendChild(SearchIcon({}));
       } else {
         searchContainer.innerText = '';
-        searchContainer.appendChild(Cancel({}));
+        searchContainer.appendChild(CancelIcon({}));
         const dropdown = Dropdown({
           onSearch,
         });

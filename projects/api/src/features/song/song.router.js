@@ -4,13 +4,24 @@ import getUserMiddleware from '../../middlewares/get-user.js';
 import promisify from '../../middlewares/promisify.js';
 import {
   validateBody,
+  validateQuery,
   validateParams,
 } from '../../middlewares/express-validators.js';
-import { defaultParams } from '../../validators/index.js';
+import {
+  defaultParams,
+  defaultPaginationQuery,
+} from '../../validators/index.js';
 import { songBody } from './song.validation.js';
 import * as songController from './song.controller.js';
 
 const router = Router();
+
+router.get(
+  '/',
+  validateQuery(defaultPaginationQuery),
+  getUserMiddleware,
+  promisify(songController.getAllSongs)
+);
 
 router.get(
   '/:id',

@@ -6,7 +6,7 @@ export default (req, res, next) => {
 
   res.on('finish', () =>
     logging.http(
-      `${req.method} ${req.url} ${res.statusCode} ${timestamp() - start}ms`
+      `${req.method} ${req.originalUrl} ${res.statusCode} ${timestamp() - start}ms`
     )
   );
 

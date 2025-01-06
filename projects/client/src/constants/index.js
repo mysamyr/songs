@@ -35,6 +35,7 @@ export const API_URLS = {
   RENAME_CATEGORY: id => `/category/${id}`,
   DELETE_CATEGORY: id => `/category/${id}`,
 
+  GET_ALL_SONGS: '/song',
   GET_SONG: id => `/song/${id}`,
   CREATE_SONG: '/song',
   EDIT_SONG: id => `/song/${id}`,

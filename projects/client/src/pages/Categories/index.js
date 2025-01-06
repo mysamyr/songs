@@ -5,7 +5,7 @@ import {
   Header,
   Header1,
   Paragraph,
-  Search,
+  SearchIcon,
   Searchbar,
 } from '../../components';
 import { getCategories as getCategoriesAPI } from '../../api/category';
@@ -22,15 +22,35 @@ import {
 } from './messages';
 import { BACK_HOME } from '../../constants/messages';
 
+const onTypeSearch = e => {
+  const value = e.target.value.toLowerCase().trim();
+  const categories = getCategories();
+
+  if (!categories.length) {
+    return;
+  }
+  const filteredCategories = categories.filter(category =>
+    category.name.includes(value)
+  );
+
+  renderCategories(categoriesBlock(filteredCategories));
+};
+
+const renderCategories = list => {
+  document.getElementById('categories')?.remove();
+  document.querySelector('.category-header-container').after(list);
+};
+
 const headerBlock = onSearch => {
   const container = Div({ className: 'category-header-container' });
 
   const searchContainer = Searchbar({
     container,
     onSearch,
+    onClose: () => renderCategories(categoriesBlock()),
   });
 
-  searchContainer.appendChild(Search({}));
+  searchContainer.appendChild(SearchIcon({}));
 
   container.append(
     Header1({
@@ -43,19 +63,25 @@ const headerBlock = onSearch => {
   return container;
 };
 
-const categoriesBlock = categories => {
+const categoriesBlock = (categories = getCategories()) => {
   const container = Div({
     id: 'categories',
   });
+
+  container.appendChild(
+    Div({
+      className: 'card active link',
+      text: capitalizeFirstLetter('Всі пісні'),
+      onClick: () => navigate(PAGES.CATEGORY_$('all')),
+    })
+  );
 
   if (categories.length) {
     categories.forEach(category => {
       const card = Div({
         className: 'card link',
         text: capitalizeFirstLetter(category.name),
-        onClick: () => {
-          navigate(PAGES.CATEGORY_$(category.id));
-        },
+        onClick: () => navigate(PAGES.CATEGORY_$(category.id)),
       });
       container.appendChild(card);
     });
@@ -72,22 +98,6 @@ const categoriesBlock = categories => {
 
 export default async () => {
   const isAuth = isLoggedIn();
-  const onTypeSearch = e => {
-    const value = e.target.value.toLowerCase().trim();
-    const categories = getCategories();
-
-    if (!categories.length) {
-      return;
-    }
-    const filteredCategories = categories.filter(category =>
-      category.name.includes(value)
-    );
-
-    document.getElementById('categories').remove();
-    document
-      .querySelector('.category-header-container')
-      .after(categoriesBlock(filteredCategories));
-  };
 
   try {
     const categories = await getCategoriesAPI();
@@ -97,7 +107,8 @@ export default async () => {
     setCategories(categories);
   } catch (e) {
     logError(e);
-    return Snackbar.displayMsg(e.message);
+    Snackbar.displayMsg(e.message);
+    return navigate(PAGES.HOME);
   }
 
   const categories = getCategories();
@@ -135,11 +146,9 @@ export default async () => {
     }
   }
 
-  container.append(
-    headerBlock(onTypeSearch),
-    categoriesBlock(categories),
-    buttons
-  );
+  container.append(headerBlock(onTypeSearch), buttons);
 
   document.getElementById('root').append(Header(), container);
+
+  renderCategories(categoriesBlock());
 };
