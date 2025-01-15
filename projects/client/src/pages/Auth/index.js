@@ -17,7 +17,11 @@ import {
 import Snackbar from '../../features/snackbar';
 import { login } from '../../features/auth';
 import { navigate } from '../../utils/navigate';
-import { LOGIN_SUCCESS, REGISTRATION_SUCCESS } from './messages';
+import {
+  LOGIN_SUCCESS,
+  NAME_IS_REQUIRED,
+  REGISTRATION_SUCCESS,
+} from './messages';
 
 const emailLabel = Label({
   className: 'input-field',
@@ -94,10 +98,14 @@ const LoginPage = () => {
 const RegistrationPage = () => {
   const handleRegistration = async e => {
     e.preventDefault();
+    const name = e.target.name.value;
     const email = e.target.email.value;
     const password = e.target.password.value;
     const confirm = e.target.confirm.value;
 
+    if (!name.length) {
+      return Snackbar.displayMsg(NAME_IS_REQUIRED);
+    }
     if (!email.length) {
       return Snackbar.displayMsg(EMPTY_EMAIL);
     }
@@ -109,7 +117,7 @@ const RegistrationPage = () => {
     }
 
     try {
-      await signup({ email, password });
+      await signup({ name, email, password });
       Snackbar.displayMsg(REGISTRATION_SUCCESS);
       navigate(PAGES.HOME);
     } catch (e) {

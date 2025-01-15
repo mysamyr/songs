@@ -37,7 +37,7 @@ services:
     restart: always
     container_name: songpb_client
     ports:
-      - "3000:80"
+      - "3001:80"
     networks:
       - songpb_network
     depends_on:

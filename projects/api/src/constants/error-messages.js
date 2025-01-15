@@ -3,7 +3,6 @@ export const VALIDATE_ACCOUNT =
 export const WRONG_EMAIL_OR_PASSWORD = 'Неправильний email чи пароль';
 export const EXISTING_USER = 'Користувач вже існує';
 export const NOT_EXISTING_USER = 'Такого користувача не існує';
-export const PASSWORDS_NOT_MATCH = 'Паролі мають співпадати';
 export const EXISTING_EMAIL = 'Введіть інший email';
 export const WRONG_PASSWORD = 'Хибний пароль';
 export const PASSWORDS_MATCH = 'Новий та старий пароль не мають співпадати';

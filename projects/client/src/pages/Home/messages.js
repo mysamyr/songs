@@ -1,5 +1,5 @@
 export const CALL_TO_ACTION =
-  'Також Ви можете докластися до спільної справи, додаючи нові пісні та категорії в пісенник.';
+  'Також Ви можете докластися до спільної справи, додаючи нові пісні та категорії в пісенник. ';
 export const CALL_TO_ACTION_YOU_NEED_TO = 'Для цього Вам потрібно ';
 export const CALL_TO_ACTION_REGISTER = 'зареєструватися';
 export const CALL_TO_MAIL =

@@ -2,7 +2,6 @@ import STATUS_CODES from '../../constants/status-codes.js';
 import {
   NOT_EXISTING_USER,
   WRONG_EMAIL_OR_PASSWORD,
-  PASSWORDS_NOT_MATCH,
   EXISTING_USER,
   ALREADY_ACTIVATED,
 } from '../../constants/error-messages.js';
@@ -49,10 +48,7 @@ export const login = async (req, res) => {
 };
 
 export const register = async (req, res) => {
-  const { name, email, password, confirm } = req.body;
-  if (password !== confirm) {
-    throw BadRequest(PASSWORDS_NOT_MATCH);
-  }
+  const { name, email, password } = req.body;
   const candidate = await User.findOne({ email }).exec();
   if (candidate) {
     throw BadRequest(EXISTING_USER);

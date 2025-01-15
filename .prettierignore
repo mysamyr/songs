@@ -1,4 +1,5 @@
-package-lock.json
+.husky
+assets
 node_modules
-public/dist
-views
+package-lock.json
+service-account.json
