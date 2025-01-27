@@ -18,18 +18,39 @@ services:
       - songpb_network
   api:
     build:
-      context: .
+      context: projects/api
       target: dev
     restart: always
     container_name: songpb_api
     ports:
-      - "3000:3000"
+      - "8080:8080"
+      - "9229:9229"
+    volumes:
+      - ./projects/api/src/:/opt/app/src
     environment:
       - NODE_ENV:development
     networks:
       - songpb_network
     depends_on:
       - mongo
+  client:
+    build:
+      context: projects/client
+      target: dev
+    restart: always
+    container_name: songpb_client
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./projects/client/src/:/opt/app/src
+      - ./projects/client/public/:/opt/app/public
+    environment:
+      WATCHPACK_POLLING: true
+      HOST: songpb_api
+    networks:
+      - songpb_network
+    depends_on:
+      - api
 
 networks:
   songpb_network:

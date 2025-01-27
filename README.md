@@ -4,7 +4,6 @@
 
 - express
 - MongoDB
-- handlebars
 
 ## Features
 
@@ -34,3 +33,12 @@
 - new_song `/song/add`
 - edit_song `/song/:id/edit`
 - 404
+
+## TODO
+
+- implement pagination
+- edit `README.md`
+- Abort Controller ???
+- move all messages in client to constants
+- add `service-worker.js` ???
+- 

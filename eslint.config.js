@@ -1,11 +1,6 @@
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-import globals from "globals";
-import js from "@eslint/js";
-import { FlatCompat } from "@eslint/eslintrc";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const globals = require("globals");
+const js = require("@eslint/js");
+const { FlatCompat } = require("@eslint/eslintrc");
 
 const compat = new FlatCompat({
   baseDirectory: __dirname,
@@ -13,7 +8,7 @@ const compat = new FlatCompat({
   allConfig: js.configs.all
 });
 
-export default [{
+module.exports = [{
   ignores: [
     ".env",
     ".env.example",
@@ -22,12 +17,12 @@ export default [{
     "assets",
     ".prettierignore",
     ".prettierrc",
-    ".eslint.config.js",
     "docker-compose.dev.yml",
     "docker-compose.yml",
-    "Dockerfile",
     ".gitignore",
-    ".dockerignore",
+    "projects/**/Dockerfile",
+    "projects/**/.dockerignore",
+    "projects/client/public/index.js",
     "**/*.json",
     "**/*.sh",
   ],

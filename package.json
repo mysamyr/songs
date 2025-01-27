@@ -1,45 +1,21 @@
 {
-  "name": "song-pb-app",
+  "name": "songpb",
   "version": "1.0.0",
   "description": "Song Pocket Book App",
-  "module": "src/index.js",
-  "type": "module",
   "scripts": {
-    "start": "node src/index.js",
-    "start:dev": "nodemon src/index.js",
-    "start:debug": "nodemon --inspect=0.0.0.0:9229 --signal SIGINT --nolazy -L src/index.js",
-    "build": "webpack --config webpack.prod.js",
-    "build:dev": "webpack --config webpack.dev.js",
     "secrets:fetch": "node scripts/fetch.js",
     "secrets:upload": "node scripts/upload.js",
     "setup": "node scripts/copy.js",
-    "check-formatting": "npx prettier -l ./src",
-    "format": "prettier --write ./src public/source/app.js",
-    "check-quality": "eslint src/",
+    "check-formatting": "npx prettier -l projects scripts",
+    "format": "prettier --write projects scripts",
+    "check-quality": "eslint projects",
     "prepare": "husky"
   },
   "keywords": [],
   "author": "Mysamyr",
   "license": "ISC",
-  "browserslist": [
-    ">1%"
-  ],
   "dependencies": {
-    "@google-cloud/storage": "^7.14.0",
-    "compression": "^1.7.5",
-    "connect-flash": "^0.1.1",
-    "connect-mongodb-session": "^5.0.0",
-    "cors": "^2.8.5",
-    "express": "^4.21.2",
-    "express-handlebars": "^8.0.1",
-    "express-session": "^1.18.1",
-    "helmet": "^8.0.0",
-    "joi": "^17.13.3",
-    "mongoose": "^8.9.2",
-    "nodemailer": "^6.9.16",
-    "webpack": "^5.97.1",
-    "webpack-cli": "^6.0.1",
-    "winston": "^3.17.0"
+    "@google-cloud/storage": "^7.14.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
@@ -48,7 +24,6 @@
     "eslint-config-prettier": "^9.1.0",
     "globals": "^15.14.0",
     "husky": "^9.1.7",
-    "nodemon": "^3.1.9",
     "prettier": "^3.4.2"
   },
   "engines": {

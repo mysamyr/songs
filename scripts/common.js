@@ -1,8 +1,7 @@
-import path from 'node:path';
-import { Storage } from '@google-cloud/storage';
+const path = require('node:path');
+const { Storage } = require('@google-cloud/storage');
 
 const storage = new Storage({
   keyFilename: path.join(process.cwd(), 'service-account.json'),
 });
-
-export const bucket = storage.bucket('songpb_secrets');
+module.exports.bucket = storage.bucket('songpb_secrets');

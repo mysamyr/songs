@@ -18,18 +18,30 @@ services:
       - songpb_network
   api:
     build:
-      context: .
+      context: projects/api
       target: prod
     restart: always
     container_name: songpb_api
     ports:
-      - "3001:3000"
+      - "8080:8080"
     environment:
       - NODE_ENV:production
     networks:
       - songpb_network
     depends_on:
       - mongo
+  client:
+    build:
+      context: projects/client
+      target: prod
+    restart: always
+    container_name: songpb_client
+    ports:
+      - "3001:80"
+    networks:
+      - songpb_network
+    depends_on:
+      - api
 
 networks:
   songpb_network:

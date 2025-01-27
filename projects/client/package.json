@@ -1,0 +1,17 @@
+{
+  "name": "songpb-web",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start:dev": "nodemon -L src/server.js",
+    "build": "webpack --config webpack.prod.js",
+    "build:dev": "webpack --watch --config webpack.dev.js"
+  },
+  "dependencies": {
+    "webpack": "^5.97.1",
+    "webpack-cli": "^6.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}
