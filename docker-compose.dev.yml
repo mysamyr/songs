@@ -5,7 +5,7 @@ services:
     image: mongo:latest
     restart: always
     ports:
-      - "27017:27017"
+      - "${DB_PORT}:27017"
     environment:
       - MONGO_INITDB_DATABASE=songs
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
@@ -13,7 +13,7 @@ services:
     volumes:
       - ./assets/database:/data/db
       - ./assets/initdb:/docker-entrypoint-initdb.d/
-    command: [--auth]
+    command: [ --auth ]
     networks:
       - songpb_network
   api:
@@ -40,7 +40,7 @@ services:
     restart: always
     container_name: songpb_client
     ports:
-      - "3000:3000"
+      - "${CLIENT_PORT}:3000"
     volumes:
       - ./projects/client/src/:/opt/app/src
       - ./projects/client/public/:/opt/app/public

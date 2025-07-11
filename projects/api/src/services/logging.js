@@ -1,6 +1,7 @@
 import { format, createLogger, transports } from 'winston';
 import { ApiError } from '../utils/error.js';
 
+// todo normal error logger for development
 const logger = createLogger({
   level: 'http',
   format: format.combine(

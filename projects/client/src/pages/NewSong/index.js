@@ -10,6 +10,7 @@ import {
   Span,
   Select,
   Option,
+  Textarea,
 } from '../../components';
 import { getCategories as getCategoriesAPI } from '../../api/category';
 import { createSong } from '../../api/song';
@@ -92,8 +93,7 @@ const textAreaInput = () => {
     Span({
       text: SONG_TEXT_HEADER,
     }),
-    Input({
-      type: 'textarea',
+    Textarea({
       name: 'text',
       min: SONG_TEXT.MIN,
       max: SONG_TEXT.MAX,

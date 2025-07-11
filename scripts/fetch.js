@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
-const path = require('node:path');
-const fs = require('node:fs');
-const { TransferManager } = require('@google-cloud/storage');
-const { bucket } = require('./common');
+import path from 'node:path';
+import fs from 'node:fs';
+import { TransferManager } from '@google-cloud/storage';
+import { bucket } from './common.js';
 
 const env = process.argv[2];
 if (!env) throw Error("Environment doesn't exist");

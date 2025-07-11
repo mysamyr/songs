@@ -96,7 +96,6 @@ const textAreaInput = text => {
     }),
     Textarea({
       value: text,
-      type: 'textarea',
       name: 'text',
       min: SONG_TEXT.MIN,
       max: SONG_TEXT.MAX,

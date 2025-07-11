@@ -8,10 +8,10 @@
     "build:dev": "webpack --watch --config webpack.dev.js"
   },
   "dependencies": {
-    "webpack": "^5.97.1",
+    "webpack": "^5.100.1",
     "webpack-cli": "^6.0.1"
   },
   "devDependencies": {
-    "nodemon": "^3.1.9"
+    "nodemon": "^3.1.10"
   }
 }

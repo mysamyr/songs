@@ -8,7 +8,15 @@ const validate = (entity, schema) => (req, res, next) => {
     const message = error.details[0].message;
     throw BadRequest(message);
   }
-  req[entity] = value;
+  if (entity === 'body') {
+    // we can replace body entity completely
+    req[entity] = value;
+  } else {
+    // params and query are always objects and it is forbidden to set req.query in Express v5
+    Object.entries(value).forEach(([key, val]) => {
+      req[entity][key] = val;
+    });
+  }
   return next();
 };
 

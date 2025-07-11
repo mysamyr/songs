@@ -1,7 +1,12 @@
-const path = require('node:path');
-const { Storage } = require('@google-cloud/storage');
+import '../projects/api/src/utils/dotenv.js';
+import { Storage } from '@google-cloud/storage';
+
+if (!process.env.PROJECT_ID) {
+  throw new Error('Project ID is required');
+}
 
 const storage = new Storage({
-  keyFilename: path.join(process.cwd(), 'service-account.json'),
+  projectId: process.env.PROJECT_ID,
 });
-module.exports.bucket = storage.bucket('songpb_secrets');
+
+export const bucket = storage.bucket('songpb_secrets');

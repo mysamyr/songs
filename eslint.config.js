@@ -1,54 +1,66 @@
-const globals = require("globals");
-const js = require("@eslint/js");
-const { FlatCompat } = require("@eslint/eslintrc");
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import globals from 'globals';
+import js from '@eslint/js';
+import { FlatCompat } from '@eslint/eslintrc';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const compat = new FlatCompat({
   baseDirectory: __dirname,
   recommendedConfig: js.configs.recommended,
-  allConfig: js.configs.all
+  allConfig: js.configs.all,
 });
 
-module.exports = [{
-  ignores: [
-    ".env",
-    ".env.example",
-    "node_modules",
-    ".husky",
-    "assets",
-    ".prettierignore",
-    ".prettierrc",
-    "docker-compose.dev.yml",
-    "docker-compose.yml",
-    ".gitignore",
-    "projects/**/Dockerfile",
-    "projects/**/.dockerignore",
-    "projects/client/public/index.js",
-    "**/*.json",
-    "**/*.sh",
-  ],
-}, ...compat.extends("eslint:recommended", "prettier"), {
-  languageOptions: {
-    globals: {
-      ...globals.node,
-      ...globals.browser,
+export default [
+  {
+    ignores: [
+      '.env',
+      '.env.example',
+      'node_modules',
+      '.husky',
+      'assets',
+      '.prettierignore',
+      '.prettierrc',
+      'docker-compose.dev.yml',
+      'docker-compose.yml',
+      '.gitignore',
+      'Dockerfile',
+      '.dockerignore',
+      'projects/client/public/index.js',
+      '**/*.json',
+      '**/*.sh',
+    ],
+  },
+  ...compat.extends('eslint:recommended', 'prettier'),
+  {
+    languageOptions: {
+      globals: {
+        ...globals.node,
+        ...globals.browser,
+      },
+
+      ecmaVersion: 12,
+      sourceType: 'module',
     },
 
-    ecmaVersion: 12,
-    sourceType: "module",
+    rules: {
+      'arrow-body-style': ['warn', 'as-needed'],
+      'no-debugger': 'warn',
+      'no-duplicate-imports': 'error',
+      'no-console': 'warn',
+      'no-undef': 'error',
+      semi: 'error',
+      'semi-spacing': 'error',
+      eqeqeq: 'warn',
+      'object-shorthand': 'error',
+      'no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: 'next',
+        },
+      ],
+    },
   },
-
-  rules: {
-    "arrow-body-style": ["warn", "as-needed"],
-    "no-debugger": "warn",
-    "no-duplicate-imports": "error",
-    "no-console": "warn",
-    "no-undef": "error",
-    semi: "error",
-    "semi-spacing": "error",
-    eqeqeq: "warn",
-    "object-shorthand": "error",
-    "no-unused-vars": ["error", {
-      argsIgnorePattern: "next",
-    }],
-  },
-}];
+];
