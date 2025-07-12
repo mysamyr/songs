@@ -1,50 +1,30 @@
-import { dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import globals from 'globals';
 import js from '@eslint/js';
-import { FlatCompat } from '@eslint/eslintrc';
+import { defineConfig, globalIgnores } from 'eslint/config';
+import eslintConfigPrettier from 'eslint-config-prettier';
+import eslintPluginPrettier from 'eslint-plugin-prettier/recommended';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-  allConfig: js.configs.all,
-});
-
-export default [
+export default defineConfig([
+  globalIgnores([
+    '**/node_modules/',
+    '.husky/',
+    '.git',
+    'assets/',
+    'projects/client/public/index.js',
+  ]),
+  js.configs.recommended,
+  eslintPluginPrettier,
   {
-    ignores: [
-      '.env',
-      '.env.example',
-      'node_modules',
-      '.husky',
-      'assets',
-      '.prettierignore',
-      '.prettierrc',
-      'docker-compose.dev.yml',
-      'docker-compose.yml',
-      '.gitignore',
-      'Dockerfile',
-      '.dockerignore',
-      'projects/client/public/index.js',
-      '**/*.json',
-      '**/*.sh',
-    ],
-  },
-  ...compat.extends('eslint:recommended', 'prettier'),
-  {
+    files: ['**/*.js'],
     languageOptions: {
       globals: {
         ...globals.node,
         ...globals.browser,
       },
-
       ecmaVersion: 12,
       sourceType: 'module',
     },
-
+    extends: [eslintConfigPrettier],
     rules: {
       'arrow-body-style': ['warn', 'as-needed'],
       'no-debugger': 'warn',
@@ -63,4 +43,4 @@ export default [
       ],
     },
   },
-];
+]);

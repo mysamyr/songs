@@ -6,16 +6,13 @@
     "secrets:fetch": "node scripts/fetch.js",
     "secrets:upload": "node scripts/upload.js",
     "setup": "node scripts/copy.js",
-    "check-formatting": "prettier -l \"projects/**/*.js\" \"scripts/*.js\"",
-    "format": "prettier --write \"projects/**/*.js\" \"scripts/*.js\"",
-    "check-quality": "eslint \"projects/**/*.js\" \"scripts/*.js\"",
+    "check-formatting": "prettier -l .",
+    "format": "prettier --write .",
+    "check-quality": "eslint .",
     "prepare": "husky"
   },
   "lint-staged": {
-    "*.js": [
-      "npm run format",
-      "npm run check-quality"
-    ]
+    "*.{json,css,md}": ["npm run format", "npm run check-quality"]
   },
   "keywords": [],
   "author": "Mysamyr",
@@ -25,10 +22,10 @@
     "@google-cloud/storage": "^7.16.0"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.30.1",
     "eslint": "^9.30.1",
     "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.5.1",
     "globals": "^16.3.0",
     "husky": "^9.1.7",
     "lint-staged": "^15.5.2",

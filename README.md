@@ -92,28 +92,28 @@ Project uses **MongoDB** as database. You can use it on your host machine, Docke
 ## API
 
 - /auth
-    - POST /auth/signup
-    - POST /auth/login
-    - GET /auth/refresh
-    - GET /auth/logout
-    - GET /auth/activate/:id
+  - POST /auth/signup
+  - POST /auth/login
+  - GET /auth/refresh
+  - GET /auth/logout
+  - GET /auth/activate/:id
 - /cabinet
-    - POST /cabinet/email
-    - POST /cabinet/password
-    - GET /cabinet/validation
-    - DELETE /cabinet
+  - POST /cabinet/email
+  - POST /cabinet/password
+  - GET /cabinet/validation
+  - DELETE /cabinet
 - /category
-    - GET /category
-    - GET /category/:id
-    - POST /category
-    - PUT /category/:id
-    - DELETE /category/:id
+  - GET /category
+  - GET /category/:id
+  - POST /category
+  - PUT /category/:id
+  - DELETE /category/:id
 - /song
-    - GET /song
-    - GET /song/:id
-    - POST /song
-    - PUT /song/:id
-    - DELETE /song/:id
+  - GET /song
+  - GET /song/:id
+  - POST /song
+  - PUT /song/:id
+  - DELETE /song/:id
 
 ## Pages
 
@@ -134,7 +134,6 @@ Project uses **MongoDB** as database. You can use it on your host machine, Docke
 Project uses [Prettier](https://prettier.io/) v3 for code formatting. You can run `npm run format` from the root of the project.
 Project uses [ESLint](https://eslint.org/) v9 for code analyzing. You can run `npm run check-quality` from the root of the project.
 
-
 ## Git
 
 - Prod branch is `master`.
@@ -146,4 +145,3 @@ Project uses [ESLint](https://eslint.org/) v9 for code analyzing. You can run `n
 - Abort Controller ???
 - move all messages in client to constants
 - add `service-worker.js` ???
-- 
