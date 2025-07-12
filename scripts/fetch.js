@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import path from 'node:path';
 import fs from 'node:fs';
 import { TransferManager } from '@google-cloud/storage';
@@ -18,6 +17,6 @@ const transferManager = new TransferManager(bucket);
       destination: 'assets',
     },
   });
-
+  // eslint-disable-next-line no-console
   console.log('Secrets were fetched');
 })();

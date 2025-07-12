@@ -79,10 +79,10 @@ process
   .on('SIGINT', async () => {
     logger.warn('Received SIGINT. Closing connections...');
     await mongoose.disconnect();
-    process.exit(0);
+    process.exit(1);
   })
   .on('SIGTERM', async () => {
     logger.warn('Received SIGTERM. Closing connections...');
     await mongoose.disconnect();
-    process.exit(0);
+    process.exit(1);
   });

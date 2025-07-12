@@ -1,6 +1,6 @@
 import STATUS_CODES from '../constants/status-codes.js';
 
-export class ApiError extends Error {
+export default class ApiError extends Error {
   constructor(status, message) {
     super(message);
     this.status = status;

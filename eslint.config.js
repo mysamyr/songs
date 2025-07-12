@@ -8,8 +8,9 @@ export default defineConfig([
   globalIgnores([
     '**/node_modules/',
     '.husky/',
-    '.git',
+    '.git/',
     'assets/',
+    '**/*.log',
     'projects/client/public/index.js',
   ]),
   js.configs.recommended,
