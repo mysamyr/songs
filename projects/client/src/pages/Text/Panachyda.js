@@ -1,5 +1,5 @@
 import { panachyda } from './source';
-import { ArrowUp, Div } from '../../components';
+import { ArrowUpIcon, Div } from '../../components';
 import { renderPageWithHeader } from '../../utils/dom';
 
 export default () => {
@@ -8,5 +8,5 @@ export default () => {
     text: panachyda,
   });
 
-  renderPageWithHeader('Панахида', container, ArrowUp());
+  renderPageWithHeader('Панахида', container, ArrowUpIcon({}));
 };

@@ -1,5 +1,5 @@
 import { liturgy } from './source';
-import { ArrowUp, ComunionModal, Div } from '../../components';
+import { ArrowUpIcon, ComunionModal, Div } from '../../components';
 import { showModal } from '../../features/modal';
 import { renderPageWithHeader } from '../../utils/dom';
 
@@ -9,7 +9,7 @@ export default () => {
     text: liturgy,
   });
 
-  renderPageWithHeader('Літургія', container, ArrowUp());
+  renderPageWithHeader('Літургія', container, ArrowUpIcon({}));
 
   document.getElementById('modal').addEventListener('click', () => {
     showModal(ComunionModal());

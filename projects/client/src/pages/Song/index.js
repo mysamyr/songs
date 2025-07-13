@@ -91,7 +91,7 @@ export default async () => {
     getCategoriesBlock(categories)
   );
 
-  if (isAuthor) {
+  if (author) {
     const authorBlock = Paragraph({
       className: 'right',
       text: ADDED_BY,

@@ -2,6 +2,7 @@
 :root {
   --white: #fff;
   --black: #000;
+  --light-gray: #f4f4f4;
   --yellow: #edf1d6;
   --light-green: #9dc08b;
   --green: #609966;
@@ -30,7 +31,7 @@
 }
 
 body {
-  background-color: var(--white);
+  background-color: var(--light-gray);
   color: var(--font-color);
   font-size: 12px;
 }
@@ -66,7 +67,6 @@ body {
   right: 50px;
   height: 45px;
   width: 45px;
-  color: var(--light-green);
   border: 2px solid var(--light-green);
   border-radius: 50%;
   text-align: center;
@@ -87,8 +87,8 @@ body {
 }
 
 .card {
-  padding: 24px;
-  margin: 0.5rem 0 1rem;
+  padding: 20px;
+  margin-top: 0.5rem;
   background-color: var(--white);
   border-radius: 2px;
   box-shadow:
@@ -435,7 +435,7 @@ ol {
 }
 
 .active {
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.08);
 }
 
 .show {
