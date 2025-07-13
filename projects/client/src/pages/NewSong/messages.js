@@ -1,3 +1,4 @@
+export const TITLE = 'Нова пісня';
 export const HEADER = 'Додати нову пісню';
 export const NO_CATEGORIES = 'Немає категорій';
 export const CHOOSE_CATEGORIES = 'Виберіть категорії:';

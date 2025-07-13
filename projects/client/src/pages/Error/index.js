@@ -4,6 +4,7 @@ import { Button, Div, Header2, Paragraph } from '../../components';
 import { navigateBack } from '../../utils/navigate';
 import {
   GATEWAY_TIMEOUT,
+  TITLE,
   TOO_MANY_REQUESTS,
   UNEXPECTED_ERROR,
   WAIT,
@@ -51,5 +52,5 @@ export default () => {
     buttons
   );
 
-  renderPageWithHeader(container);
+  renderPageWithHeader(TITLE, container);
 };

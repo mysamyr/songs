@@ -18,6 +18,7 @@ import {
   ADD_NEW_SONG,
   HEADER,
   NO_CATEGORIES,
+  TITLE,
 } from './messages';
 import { BACK_HOME } from '../../constants/messages';
 import { renderPageWithHeader } from '../../utils/dom';
@@ -148,6 +149,6 @@ export default async () => {
 
   container.append(headerBlock(onTypeSearch), buttons);
 
-  renderPageWithHeader(container);
+  renderPageWithHeader(TITLE, container);
   renderCategories(categoriesBlock());
 };

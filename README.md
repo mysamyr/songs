@@ -144,4 +144,4 @@ Project uses [ESLint](https://eslint.org/) v9 for code analyzing. You can run `n
 - implement pagination
 - Abort Controller ???
 - add `service-worker.js` ???
-- add minify css tool
+- review styles

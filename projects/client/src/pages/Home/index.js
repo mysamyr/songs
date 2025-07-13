@@ -80,5 +80,5 @@ export default async () => {
     callToMail
   );
 
-  renderPageWithHeader(container);
+  renderPageWithHeader(undefined, container);
 };

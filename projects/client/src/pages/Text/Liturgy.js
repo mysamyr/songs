@@ -9,7 +9,7 @@ export default () => {
     text: liturgy,
   });
 
-  renderPageWithHeader(container, ArrowUp());
+  renderPageWithHeader('Літургія', container, ArrowUp());
 
   document.getElementById('modal').addEventListener('click', () => {
     showModal(ComunionModal());

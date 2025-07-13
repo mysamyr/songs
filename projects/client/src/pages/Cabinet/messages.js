@@ -1,3 +1,4 @@
+export const TITLE = 'Кабінет';
 export const RESEND_SUCCESS =
   'Інструкція з активації облікового запису надіслана на Вашу електронну пошту';
 export const SAME_EMAIL = 'Введіть нову пошту';

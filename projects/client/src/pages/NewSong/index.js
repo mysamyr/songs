@@ -26,6 +26,7 @@ import {
   SONG_ADDED_$,
   SONG_NAME_HEADER,
   SONG_TEXT_HEADER,
+  TITLE,
 } from './messages';
 import { BACK } from '../../constants/messages';
 import { renderPageWithHeader } from '../../utils/dom';
@@ -182,5 +183,5 @@ export default async () => {
     form
   );
 
-  renderPageWithHeader(container);
+  renderPageWithHeader(TITLE, container);
 };

@@ -5,7 +5,7 @@ import { Button, Div, Form, Input, Label, Span } from '../../components';
 import Snackbar from '../../features/snackbar';
 import { login } from '../../features/auth';
 import { navigate } from '../../utils/navigate';
-import { LOGIN_SUCCESS, REGISTRATION_SUCCESS } from './messages';
+import { LOGIN_SUCCESS, REGISTRATION_SUCCESS, TITLE } from './messages';
 import { getQueryParam, setQueryParam } from '../../utils/query-params';
 import { renderPageWithHeader } from '../../utils/dom';
 import { validateLogin, validateRegistration } from '../../utils/validation';
@@ -205,5 +205,5 @@ export default () => {
     container.append(switchButtons, LoginPage());
   }
 
-  renderPageWithHeader(container);
+  renderPageWithHeader(TITLE, container);
 };

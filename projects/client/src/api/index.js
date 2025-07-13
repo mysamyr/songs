@@ -9,8 +9,7 @@ const API_URL = '/api';
 
 const getAuthHeader = () => {
   const token = getValue('token');
-  if (!token) return {};
-  return { Authorization: `Bearer ${token}` };
+  return token ? { Authorization: `Bearer ${token}` } : {};
 };
 
 const refreshTokens = async (url, options) => {

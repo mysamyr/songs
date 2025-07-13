@@ -1,3 +1,4 @@
+export const TITLE = 'Авторизація';
 export const NAME_IS_REQUIRED = "Введіть ім'я";
 export const NAME_TOO_SHORT = "Занадто коротке ім'я";
 export const NAME_TOO_LONG = "Занадто довге ім'я";

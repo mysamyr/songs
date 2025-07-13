@@ -1,3 +1,4 @@
+export const TITLE = 'Редагування пісні';
 export const HEADER = 'Редагувати пісню';
 export const SAVE = 'Зберегти';
 export const NO_CATEGORIES = 'Немає категорій';

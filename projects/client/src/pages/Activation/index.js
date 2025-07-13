@@ -9,6 +9,7 @@ import {
   HEADER_SUCCESS,
   MESSAGE_FAIL,
   MESSAGE_SUCCESS,
+  TITLE,
 } from './messages';
 import { BACK_HOME } from '../../constants/messages';
 import { renderPageWithHeader } from '../../utils/dom';
@@ -67,5 +68,5 @@ export default async () => {
   }
 
   activationContainer.appendChild(buttons);
-  renderPageWithHeader(activationContainer);
+  renderPageWithHeader(TITLE, activationContainer);
 };

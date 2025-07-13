@@ -8,5 +8,5 @@ export default () => {
     text: panachyda,
   });
 
-  renderPageWithHeader(container, ArrowUp());
+  renderPageWithHeader('Панахида', container, ArrowUp());
 };

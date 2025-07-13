@@ -37,6 +37,7 @@ import {
   RESENT_VERIFICATION_BTN,
   SAME_EMAIL,
   SAME_PASSWORD,
+  TITLE,
 } from './messages';
 import { renderPageWithHeader } from '../../utils/dom';
 
@@ -288,5 +289,5 @@ export default () => {
     AccountDeleteSection()
   );
 
-  renderPageWithHeader(container);
+  renderPageWithHeader(TITLE, container);
 };

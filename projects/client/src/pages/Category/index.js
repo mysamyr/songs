@@ -28,6 +28,7 @@ import {
   DELETE_CATEGORY,
   DELETE_CATEGORY_QUESTION,
   NO_SONGS,
+  TITLE,
 } from './messages';
 import { BACK_TO_CATEGORIES } from '../../constants/messages';
 import { getAllSongs } from '../../api/song';
@@ -56,7 +57,7 @@ const headerBlock = ({ isAdmin, name, onRenameCategory }) => {
   const nameContainer = Div({ className: 'category-header-container' });
   nameContainer.appendChild(
     Header1({
-      text: capitalizeFirstLetter(name),
+      text: name,
       className: 'category-header',
     })
   );
@@ -153,6 +154,8 @@ const renderCategory = async categoryId => {
 
   const { name, songs } = getCategory();
 
+  const categoryName = capitalizeFirstLetter(name);
+
   const container = Div({
     className: 'container',
   });
@@ -194,12 +197,12 @@ const renderCategory = async categoryId => {
   }
 
   container.append(
-    headerBlock({ isAdmin, name, onRenameCategory }),
+    headerBlock({ isAdmin, name: categoryName, onRenameCategory }),
     songsBlock(songs),
     buttons
   );
 
-  renderPageWithHeader(container);
+  renderPageWithHeader(categoryName, container);
 };
 
 const renderAllSongs = async () => {
@@ -242,7 +245,7 @@ const renderAllSongs = async () => {
 
   container.append(headerBlock({ isAdmin, name }), buttons);
 
-  renderPageWithHeader(container);
+  renderPageWithHeader(TITLE, container);
 
   renderSongs(songsBlock());
 };

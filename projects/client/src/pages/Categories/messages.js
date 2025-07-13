@@ -1,3 +1,4 @@
+export const TITLE = 'Категорії';
 export const HEADER = 'Категорії';
 export const NO_CATEGORIES = 'Категорій немає';
 export const ADD_NEW_CATEGORY = 'Додати категорію';

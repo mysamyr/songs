@@ -11,6 +11,7 @@ export default (err, req, res, next) => {
     return res.status(err.status).json({ message: err.message });
   }
   if (err.code === 11000) {
+    logger.error({ ...err, message: 'Element already exists' });
     return res
       .status(STATUS_CODES.BAD_REQUEST)
       .json({ message: 'Element already exists' });

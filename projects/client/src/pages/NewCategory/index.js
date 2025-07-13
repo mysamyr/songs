@@ -3,6 +3,7 @@ import {
   CATEGORY_ADDED_$,
   CATEGORY_HEADER,
   HEADER,
+  TITLE,
 } from './messages';
 import { BACK_TO_CATEGORIES } from '../../constants/messages';
 import {
@@ -92,5 +93,5 @@ export default async () => {
 
   container.append(header, form);
 
-  renderPageWithHeader(container);
+  renderPageWithHeader(TITLE, container);
 };
