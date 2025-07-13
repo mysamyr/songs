@@ -1,7 +1,6 @@
 import {
   Button,
   Div,
-  Header,
   Header1,
   Paragraph,
   Pre,
@@ -11,8 +10,8 @@ import {
 import { navigate, navigateBack } from '../../utils/navigate';
 import { PAGES } from '../../constants';
 import {
-  getSong as getSongAPI,
   deleteSong as deleteSongAPI,
+  getSong as getSongAPI,
 } from '../../api/song';
 import { getSong, setSong } from '../../state';
 import { capitalizeFirstLetter, logError } from '../../utils/helpers';
@@ -21,6 +20,7 @@ import { showModal } from '../../features/modal';
 import { isUserAdmin } from '../../state/user';
 import { ADDED_BY, DELETE, DELETE_SONG_QUESTION, EDIT } from './messages';
 import { BACK, BACK_TO_CATEGORIES } from '../../constants/messages';
+import { renderPageWithHeader } from '../../utils/dom';
 
 export default async () => {
   const songId = window.location.pathname.split('/')[2];
@@ -122,5 +122,5 @@ export default async () => {
 
   container.appendChild(buttons);
 
-  document.getElementById('root').append(Header(), container);
+  renderPageWithHeader(container);
 };

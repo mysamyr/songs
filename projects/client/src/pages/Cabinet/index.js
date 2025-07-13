@@ -1,17 +1,16 @@
 import {
-  Header,
-  Form,
-  Header2,
-  Input,
-  SubmitModal,
   Button,
   Div,
-  Paragraph,
+  Form,
   Header1,
+  Header2,
+  Input,
   Label,
+  Paragraph,
   Span,
+  SubmitModal,
 } from '../../components';
-import { PASSWORD } from '../../constants';
+import { USER_PASSWORD } from '../../constants/validation';
 import {
   ALL_FIELDS_REQUIRED,
   EMPTY_EMAIL,
@@ -22,8 +21,8 @@ import { hideModal, showModal } from '../../features/modal';
 import {
   changeEmail,
   changePassword,
-  resendVerification,
   deleteAccount,
+  resendVerification,
 } from '../../api/cabinet';
 import Snackbar from '../../features/snackbar';
 import { getUserEmail, isVerifiedUser } from '../../state/user';
@@ -39,6 +38,7 @@ import {
   SAME_EMAIL,
   SAME_PASSWORD,
 } from './messages';
+import { renderPageWithHeader } from '../../utils/dom';
 
 const EmailChangeForm = () => {
   const email = getUserEmail();
@@ -144,7 +144,7 @@ const PasswordChangeForm = () => {
     if (oldPassword === newPassword) return Snackbar.displayMsg(SAME_PASSWORD);
     if (newPassword !== repeatNewPassword)
       return Snackbar.displayMsg(NOT_SAME_PASSWORDS);
-    if (newPassword.length < PASSWORD.MIN)
+    if (newPassword.length < USER_PASSWORD.MIN)
       return Snackbar.displayMsg(SHORT_PASSWORD);
     showModal(
       SubmitModal({
@@ -167,8 +167,8 @@ const PasswordChangeForm = () => {
     Input({
       type: 'password',
       name: 'password',
-      min: PASSWORD.MIN,
-      max: PASSWORD.MAX,
+      min: USER_PASSWORD.MIN,
+      max: USER_PASSWORD.MAX,
       required: true,
     })
   );
@@ -180,8 +180,8 @@ const PasswordChangeForm = () => {
     Input({
       type: 'password',
       name: 'newPassword',
-      min: PASSWORD.MIN,
-      max: PASSWORD.MAX,
+      min: USER_PASSWORD.MIN,
+      max: USER_PASSWORD.MAX,
       required: true,
     })
   );
@@ -193,8 +193,8 @@ const PasswordChangeForm = () => {
     Input({
       type: 'password',
       name: 'confirm',
-      min: PASSWORD.MIN,
-      max: PASSWORD.MAX,
+      min: USER_PASSWORD.MIN,
+      max: USER_PASSWORD.MAX,
       required: true,
     })
   );
@@ -287,5 +287,6 @@ export default () => {
     PasswordChangeForm(),
     AccountDeleteSection()
   );
-  document.getElementById('root').append(Header(), container);
+
+  renderPageWithHeader(container);
 };

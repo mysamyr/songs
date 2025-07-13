@@ -2,6 +2,7 @@ import router from './router';
 import { initModal } from './features/modal';
 import { PAGES } from './constants';
 import { navigateBack } from './utils/navigate';
+import { clearPage } from './utils/dom';
 
 document.addEventListener('DOMContentLoaded', () => {
   initModal();
@@ -14,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
       navigateBack();
       return;
     }
-    document.getElementById('root').innerText = '';
+    clearPage();
     document.querySelector('dialog').close();
     router(window.location.pathname);
   });

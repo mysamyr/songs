@@ -1,15 +1,15 @@
-import { PAGES, SONG, SONG_TEXT } from '../../constants';
+import { PAGES } from '../../constants';
+import { SONG_NAME, SONG_TEXT } from '../../constants/validation';
 import {
   Button,
   Div,
   Form,
-  Header,
   Header1,
   Input,
   Label,
-  Span,
-  Select,
   Option,
+  Select,
+  Span,
   Textarea,
 } from '../../components';
 import { getCategories as getCategoriesAPI } from '../../api/category';
@@ -17,7 +17,7 @@ import { createSong } from '../../api/song';
 import Snackbar from '../../features/snackbar';
 import { getCategories, setCategories } from '../../state';
 import { navigate, navigateBack } from '../../utils/navigate';
-import { validateSong } from '../../utils/helpers';
+import { validateSong } from '../../utils/validation';
 import {
   ADD_NEW_SONG,
   CHOOSE_CATEGORIES,
@@ -28,6 +28,7 @@ import {
   SONG_TEXT_HEADER,
 } from './messages';
 import { BACK } from '../../constants/messages';
+import { renderPageWithHeader } from '../../utils/dom';
 
 const categorySelect = activeCategory => {
   const categories = getCategories();
@@ -77,8 +78,8 @@ const nameInput = () => {
     Input({
       type: 'text',
       name: 'name',
-      min: SONG.MIN,
-      max: SONG.MAX,
+      min: SONG_NAME.MIN,
+      max: SONG_NAME.MAX,
       required: true,
     })
   );
@@ -113,11 +114,11 @@ export default async () => {
     const name = e.target.name.value;
     const text = e.target.text.value;
 
-    const validationErr = validateSong(categories, name, text);
-    if (validationErr) return Snackbar.displayMsg(validationErr);
+    const { error, value } = validateSong(categories, name, text);
+    if (error) return Snackbar.displayMsg(error);
 
     try {
-      const { id } = await createSong({ categories, name, text });
+      const { id } = await createSong(value);
       Snackbar.displayMsg(SONG_ADDED_$(name));
       if (history.length > 2) {
         navigateBack();
@@ -129,7 +130,6 @@ export default async () => {
     }
   };
 
-  // todo handle error ???
   try {
     const categories = await getCategoriesAPI();
     setCategories(categories);
@@ -182,5 +182,5 @@ export default async () => {
     form
   );
 
-  document.getElementById('root').append(Header(), container);
+  renderPageWithHeader(container);
 };

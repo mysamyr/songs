@@ -19,7 +19,7 @@ export default ({ container, onSearch, onClose }) => {
         });
         const containerDimensions = searchContainer.getBoundingClientRect();
         dropdown.style.top = `${containerDimensions.bottom}px`;
-        dropdown.style.left = `${containerDimensions.right - 181}px`;
+        dropdown.style.left = `${containerDimensions.right - 180}px`;
         container.after(dropdown);
       }
     },

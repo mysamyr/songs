@@ -2,11 +2,10 @@ import { PAGES } from '../../constants';
 import {
   Button,
   Div,
-  Header,
   Header1,
   Paragraph,
-  SearchIcon,
   Searchbar,
+  SearchIcon,
 } from '../../components';
 import { getCategories as getCategoriesAPI } from '../../api/category';
 import { isLoggedIn } from '../../features/auth';
@@ -21,6 +20,7 @@ import {
   NO_CATEGORIES,
 } from './messages';
 import { BACK_HOME } from '../../constants/messages';
+import { renderPageWithHeader } from '../../utils/dom';
 
 const onTypeSearch = e => {
   const value = e.target.value.toLowerCase().trim();
@@ -148,7 +148,6 @@ export default async () => {
 
   container.append(headerBlock(onTypeSearch), buttons);
 
-  document.getElementById('root').append(Header(), container);
-
+  renderPageWithHeader(container);
   renderCategories(categoriesBlock());
 };

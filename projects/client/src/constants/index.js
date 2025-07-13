@@ -42,26 +42,6 @@ export const API_URLS = {
   DELETE_SONG: id => `/song/${id}`,
 };
 
-export const PASSWORD = {
-  MIN: 8,
-  MAX: 30,
-};
-
-export const CATEGORY = {
-  MIN: 4,
-  MAX: 30,
-};
-
-export const SONG = {
-  MIN: 4,
-  MAX: 30,
-};
-
-export const SONG_TEXT = {
-  MIN: 10,
-  MAX: 4096,
-};
-
 export const STATUS_CODES = {
   OK: 200,
   CREATED: 201,

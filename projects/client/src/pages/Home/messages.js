@@ -3,9 +3,9 @@ export const CALL_TO_ACTION =
 export const CALL_TO_ACTION_YOU_NEED_TO = 'Для цього Вам потрібно ';
 export const CALL_TO_ACTION_REGISTER = 'зареєструватися';
 export const CALL_TO_MAIL =
-  'Якщо у Вас є питання або пропозиції, пишіть на пошту: ';
+  'З питаннями та пропозиціями, звертайтеся на пошту: ';
 export const EMAIL = 'liubomyr.mysak14@gmail.com';
 export const GREETINGS = name => `Вітаємо Вас на сайті${name}!`;
 export const GREETING_INFO =
-  'Тут Ви можете знайти різні пісні, розділені по категоріях, текст Літургії св. Івана Золотоустого та текст Панахиди.';
+  'Тут Ви можете знайти тексти пісень, поділених по категоріях, текст Літургії св. Івана Золотоустого та Панахиди.';
 export const WISH = 'Гарного перебування на сайті!';

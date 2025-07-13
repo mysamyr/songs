@@ -2,12 +2,11 @@ import {
   Button,
   Div,
   EditIcon,
-  Header,
   Header1,
   Paragraph,
   RenameModal,
-  SearchIcon,
   Searchbar,
+  SearchIcon,
   SubmitModal,
 } from '../../components';
 import { navigate } from '../../utils/navigate';
@@ -18,11 +17,8 @@ import {
   renameCategory as renameCategoryAPI,
 } from '../../api/category';
 import { getCategory, setCategory } from '../../state';
-import {
-  capitalizeFirstLetter,
-  logError,
-  validateCategory,
-} from '../../utils/helpers';
+import { capitalizeFirstLetter, logError } from '../../utils/helpers';
+import { validateCategory } from '../../utils/validation';
 import Snackbar from '../../features/snackbar';
 import { isLoggedIn } from '../../features/auth';
 import { showModal } from '../../features/modal';
@@ -35,6 +31,7 @@ import {
 } from './messages';
 import { BACK_TO_CATEGORIES } from '../../constants/messages';
 import { getAllSongs } from '../../api/song';
+import { renderPageWithHeader } from '../../utils/dom';
 
 const onTypeSearch = e => {
   const value = e.target.value.toLowerCase().trim();
@@ -114,7 +111,7 @@ const songsBlock = (songs = getCategory().songs) => {
   return container;
 };
 
-const renderCommonCategory = async categoryId => {
+const renderCategory = async categoryId => {
   const isAuth = isLoggedIn();
   const isAdmin = isUserAdmin();
 
@@ -131,10 +128,10 @@ const renderCommonCategory = async categoryId => {
     e.preventDefault();
     const newName = e.target.name.value;
 
-    const validationErr = validateCategory(newName, name);
-    if (validationErr) return Snackbar.displayMsg(validationErr);
+    const { error, value } = validateCategory(newName, name);
+    if (error) return Snackbar.displayMsg(error);
     try {
-      await renameCategoryAPI(categoryId, { name: newName });
+      await renameCategoryAPI(categoryId, value);
       navigate(PAGES.CATEGORY_$(categoryId));
     } catch (e) {
       logError(e);
@@ -202,18 +199,12 @@ const renderCommonCategory = async categoryId => {
     buttons
   );
 
-  document.getElementById('root').append(Header(), container);
+  renderPageWithHeader(container);
 };
 
-export default async () => {
+const renderAllSongs = async () => {
   const isAuth = isLoggedIn();
   const isAdmin = isUserAdmin();
-  const categoryId = window.location.pathname.split('/')[2];
-
-  if (categoryId !== 'all') {
-    return renderCommonCategory(categoryId);
-  }
-
   try {
     const allSongsCategory = await getAllSongs();
     setCategory(allSongsCategory);
@@ -251,7 +242,13 @@ export default async () => {
 
   container.append(headerBlock({ isAdmin, name }), buttons);
 
-  document.getElementById('root').append(Header(), container);
+  renderPageWithHeader(container);
 
   renderSongs(songsBlock());
+};
+
+export default async () => {
+  const categoryId = window.location.pathname.split('/')[2];
+
+  return categoryId !== 'all' ? renderCategory(categoryId) : renderAllSongs();
 };

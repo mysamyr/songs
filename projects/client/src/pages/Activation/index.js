@@ -1,5 +1,5 @@
 import { PAGES } from '../../constants';
-import { Header, Button, Div, Paragraph, Header1 } from '../../components';
+import { Button, Div, Header1, Paragraph } from '../../components';
 import { activate } from '../../api/auth';
 import { navigate } from '../../utils/navigate';
 import { isLoggedIn } from '../../features/auth';
@@ -11,6 +11,7 @@ import {
   MESSAGE_SUCCESS,
 } from './messages';
 import { BACK_HOME } from '../../constants/messages';
+import { renderPageWithHeader } from '../../utils/dom';
 
 export default async () => {
   const id = window.location.pathname.split('/')[3];
@@ -66,6 +67,5 @@ export default async () => {
   }
 
   activationContainer.appendChild(buttons);
-
-  document.getElementById('root').append(Header(), activationContainer);
+  renderPageWithHeader(activationContainer);
 };

@@ -12,7 +12,7 @@ const validate = (entity, schema) => (req, res, next) => {
     // we can replace body entity completely
     req[entity] = value;
   } else {
-    // params and query are always objects and it is forbidden to set req.query in Express v5
+    // params and query are always objects, and it is forbidden to set req.query in Express v5
     Object.entries(value).forEach(([key, val]) => {
       req[entity][key] = val;
     });

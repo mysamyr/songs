@@ -1,8 +1,9 @@
 import router from '../router';
+import { clearPage } from './dom';
 
 export const navigate = (url, state = {}) => {
   window.history.pushState(state, 'Пісенник', url);
-  document.getElementById('root').innerText = '';
+  clearPage();
   document.querySelector('dialog').close();
   router(url);
 };
@@ -15,7 +16,7 @@ export const replace = (url, state = {}) =>
   window.history.replaceState(state, 'Пісенник', url);
 
 export const compareURL = (url, schema) => {
-  const urlParts = url.split('#')[0].split('/').filter(Boolean);
+  const urlParts = url.split('?')[0].split('/').filter(Boolean);
   const schemaParts = schema.split('/').filter(Boolean);
 
   if (urlParts.length !== schemaParts.length) {

@@ -51,7 +51,7 @@ Project uses **MongoDB** as database. You can use it on your host machine, Docke
 - install [gsutil](https://cloud.google.com/sdk/docs/quickstart)
 - initialize google cloud `gcloud init`
 - (optional) set project `gcloud config set project [project_id]`
-- authenticate with google cloud `gcloud auth application-default login`
+- authenticate with gcloud `gcloud auth application-default login`
 - now you can run `npm run secrets:fetch [env_name]` to fetch secrets from bucket
 - run `npm run secrets:upload [env_name]` to upload secrets to bucket
 - run `npm run setup [env_name]` to set up fetched files from bucket
@@ -60,7 +60,7 @@ Project uses **MongoDB** as database. You can use it on your host machine, Docke
 
 ### Docker
 
-- create `.env` file in the root according to example from `.env.example` or get it from google cloud
+- create `.env` file in the root according to example from `.env.example` or get it from GCP Cloud Storage
 - to set up database you can create folder `initdb` inside `/assets` folder and put there `.js` files to run needed
   migrations. (`npm run setup [env_name]` does it automatically)
 - run `docker-compose up` in the root to start the project in Docker in production mode
@@ -143,5 +143,5 @@ Project uses [ESLint](https://eslint.org/) v9 for code analyzing. You can run `n
 
 - implement pagination
 - Abort Controller ???
-- move all messages in client to constants
 - add `service-worker.js` ???
+- add minify css tool

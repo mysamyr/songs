@@ -1,5 +1,6 @@
 import { panachyda } from './source';
-import { Header, Div, ArrowUp } from '../../components';
+import { ArrowUp, Div } from '../../components';
+import { renderPageWithHeader } from '../../utils/dom';
 
 export default () => {
   const container = Div({
@@ -7,5 +8,5 @@ export default () => {
     text: panachyda,
   });
 
-  document.getElementById('root').append(Header(), container, ArrowUp());
+  renderPageWithHeader(container, ArrowUp());
 };

@@ -334,6 +334,7 @@ ol {
   border: 1px solid var(--light-green);
   background-color: var(--yellow);
   min-height: 2em;
+  width: 180px;
 }
 .rename-icon {
   cursor: pointer;

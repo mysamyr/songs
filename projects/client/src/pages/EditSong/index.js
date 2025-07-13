@@ -1,23 +1,23 @@
-import { PAGES, SONG, SONG_TEXT } from '../../constants';
+import { PAGES } from '../../constants';
+import { SONG_NAME, SONG_TEXT } from '../../constants/validation';
 import {
   Button,
   Div,
   Form,
-  Header,
   Header1,
   Input,
   Label,
-  Span,
-  Select,
-  Textarea,
   Option,
+  Select,
+  Span,
+  Textarea,
 } from '../../components';
 import { getCategories as getCategoriesAPI } from '../../api/category';
 import { editSong, getSong as getSongAPI } from '../../api/song';
 import Snackbar from '../../features/snackbar';
 import { getCategories, getSong, setCategories, setSong } from '../../state';
 import { navigate, navigateBack } from '../../utils/navigate';
-import { validateSong } from '../../utils/helpers';
+import { validateSong } from '../../utils/validation';
 import {
   CHOOSE_CATEGORIES,
   HEADER,
@@ -28,6 +28,7 @@ import {
   SONG_TEXT_HEADER,
 } from './messages';
 import { BACK } from '../../constants/messages';
+import { renderPageWithHeader } from '../../utils/dom';
 
 const categorySelect = selectedCategories => {
   const categories = getCategories();
@@ -78,8 +79,8 @@ const nameInput = name => {
       value: name,
       type: 'text',
       name: 'name',
-      min: SONG.MIN,
-      max: SONG.MAX,
+      min: SONG_NAME.MIN,
+      max: SONG_NAME.MAX,
       required: true,
     })
   );
@@ -115,11 +116,11 @@ export default async () => {
     const name = e.target.name.value;
     const text = e.target.text.value;
 
-    const validationErr = validateSong(categories, name, text);
-    if (validationErr) return Snackbar.displayMsg(validationErr);
+    const { value, error } = validateSong(categories, name, text);
+    if (error) return Snackbar.displayMsg(error);
 
     try {
-      await editSong(songId, { categories, name, text });
+      await editSong(songId, value);
       Snackbar.displayMsg(SONG_CHANGED);
       if (history.length > 2) {
         navigateBack();
@@ -131,7 +132,6 @@ export default async () => {
     }
   };
 
-  // todo handle error ???
   try {
     const song = await getSongAPI(songId);
     setSong(song);
@@ -188,5 +188,5 @@ export default async () => {
     form
   );
 
-  document.getElementById('root').append(Header(), container);
+  renderPageWithHeader(container);
 };

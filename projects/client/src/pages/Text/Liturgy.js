@@ -1,6 +1,7 @@
 import { liturgy } from './source';
-import { Header, Div, ArrowUp, ComunionModal } from '../../components';
+import { ArrowUp, ComunionModal, Div } from '../../components';
 import { showModal } from '../../features/modal';
+import { renderPageWithHeader } from '../../utils/dom';
 
 export default () => {
   const container = Div({
@@ -8,7 +9,7 @@ export default () => {
     text: liturgy,
   });
 
-  document.getElementById('root').append(Header(), container, ArrowUp());
+  renderPageWithHeader(container, ArrowUp());
 
   document.getElementById('modal').addEventListener('click', () => {
     showModal(ComunionModal());

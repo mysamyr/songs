@@ -2,12 +2,10 @@
 .vscode
 .DS_Store
 
+node_modules/
+logs/
+assets
 .env
-service-account.json
-/node_modules
-/assets/**
 
-/projects/*/node_modules
 /projects/client/public/index.js
-/projects/*/.env
-/projects/web/build
+/projects/client/build
