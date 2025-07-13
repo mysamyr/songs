@@ -7,7 +7,7 @@
     "start:dev": "npm run build && vite --config vite.dev.config.js",
     "build": "vite build --config vite.prod.config.js"
   },
-  "devDependencies": {
+  "dependencies": {
     "vite": "^7.0.4"
   }
 }
