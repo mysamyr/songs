@@ -7,9 +7,9 @@
     "secrets:fetch": "node scripts/fetch.js",
     "secrets:upload": "node scripts/upload.js",
     "setup": "node scripts/copy.js",
-    "check-formatting": "prettier -l .",
-    "format": "prettier --write .",
-    "check-quality": "eslint .",
+    "check-formatting": "prettier -l projects scripts",
+    "format": "prettier --write projects scripts",
+    "check-quality": "eslint projects scripts",
     "prepare": "husky"
   },
   "lint-staged": {

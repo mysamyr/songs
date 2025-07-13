@@ -2,18 +2,12 @@
   "name": "songpb-web",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "start": "nodemon -L src/server.js",
-    "start:dev": "concurrently --kill-others --names build,server -c purple,blue \"npm run build:dev\" \"npm run start\"",
-    "build": "webpack --config webpack.prod.js",
-    "build:dev": "webpack --watch --config webpack.dev.js"
-  },
-  "dependencies": {
-    "webpack": "^5.100.1",
-    "webpack-cli": "^6.0.1"
+    "start:dev": "vite --config vite.dev.config.js",
+    "build": "vite build --config vite.prod.config.js"
   },
   "devDependencies": {
-    "concurrently": "^9.2.0",
-    "nodemon": "^3.1.10"
+    "vite": "^7.0.4"
   }
 }
