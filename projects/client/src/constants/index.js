@@ -5,6 +5,7 @@ export const PAGES = {
   PANAKHYDA: '/pan',
   CABINET: '/cabinet',
   CATEGORIES: '/category',
+  ALL_SONGS: '/category/all',
   CATEGORY: '/category/:id',
   CATEGORY_$: id => `/category/${id}`,
   NEW_CATEGORY: '/category/new',

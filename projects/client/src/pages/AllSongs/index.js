@@ -1,35 +1,20 @@
 import {
   Button,
   Div,
-  EditIcon,
   Header1,
   Paragraph,
-  RenameModal,
   Searchbar,
   SearchIcon,
-  SubmitModal,
 } from '../../components';
 import { navigate } from '../../utils/navigate';
 import { PAGES } from '../../constants';
-import {
-  deleteCategory as deleteCategoryAPI,
-  getCategory as getCategoryAPI,
-  renameCategory as renameCategoryAPI,
-} from '../../api/category';
 import { getCategory, setCategory } from '../../state';
 import { capitalizeFirstLetter, logError } from '../../utils/helpers';
-import { validateCategory } from '../../utils/validation';
 import Snackbar from '../../features/snackbar';
 import { isLoggedIn } from '../../features/auth';
-import { showModal } from '../../features/modal';
-import { isUserAdmin } from '../../state/user';
-import {
-  ADD_NEW_SONG,
-  DELETE_CATEGORY,
-  DELETE_CATEGORY_QUESTION,
-  NO_SONGS,
-} from './messages';
+import { ADD_NEW_SONG, NO_SONGS, TITLE } from './messages';
 import { BACK_TO_CATEGORIES } from '../../constants/messages';
+import { getAllSongs } from '../../api/song';
 import { renderPageWithHeader } from '../../utils/dom';
 
 const onTypeSearch = e => {
@@ -45,59 +30,20 @@ const onTypeSearch = e => {
   renderSongs(songsBlock(filteredSongs));
 };
 
-const onDeleteCategory = async id => {
-  try {
-    await deleteCategoryAPI(id);
-    navigate(PAGES.CATEGORIES);
-  } catch (e) {
-    logError(e);
-    Snackbar.displayMsg(e.message);
-  }
-};
-
-const onRenameCategory = (categoryId, name) => async e => {
-  e.preventDefault();
-  const newName = e.target.name.value;
-
-  const { error, value } = validateCategory(newName, name);
-  if (error) return Snackbar.displayMsg(error);
-  try {
-    await renameCategoryAPI(categoryId, value);
-    navigate(PAGES.CATEGORY_$(categoryId));
-  } catch (e) {
-    logError(e);
-    Snackbar.displayMsg(e.message);
-  }
-};
-
 const renderSongs = list => {
   document.getElementById('songs')?.remove();
   document.querySelector('.category-header-container').after(list);
 };
 
-const headerBlock = ({ categoryId, isAdmin = isUserAdmin(), name }) => {
+const headerBlock = () => {
   const container = Div({ className: 'category-header-container' });
   const nameContainer = Div({ className: 'category-header-container' });
   nameContainer.appendChild(
     Header1({
-      text: name,
+      text: TITLE,
       className: 'category-header',
     })
   );
-  if (isAdmin) {
-    nameContainer.appendChild(
-      EditIcon({
-        className: 'rename-icon',
-        onClick: () =>
-          showModal(
-            RenameModal({
-              name,
-              onSubmit: onRenameCategory(categoryId, name),
-            })
-          ),
-      })
-    );
-  }
 
   const searchContainer = Searchbar({
     container,
@@ -135,12 +81,7 @@ const songsBlock = (songs = getCategory().songs) => {
   return container;
 };
 
-const buttonsBlock = ({
-  categoryId,
-  isAdmin = isUserAdmin(),
-  isAuth = isLoggedIn(),
-  songs = getCategory().songs,
-}) => {
+const buttonsBlock = (isAuth = isLoggedIn()) => {
   const container = Div({
     className: 'btns',
   });
@@ -154,60 +95,30 @@ const buttonsBlock = ({
   if (isAuth) {
     container.appendChild(
       Button({
-        onClick: () => navigate(PAGES.NEW_SONG, { categoryId }),
+        onClick: () => navigate(PAGES.NEW_SONG),
         text: ADD_NEW_SONG,
         color: 'green',
       })
     );
   }
-  if (!songs.length && isAdmin) {
-    container.appendChild(
-      Button({
-        onClick: () =>
-          showModal(
-            SubmitModal({
-              onConfirm: () => onDeleteCategory(categoryId),
-              question: DELETE_CATEGORY_QUESTION,
-              inverseColors: true,
-            })
-          ),
-        text: DELETE_CATEGORY,
-        color: 'red',
-      })
-    );
-  }
-
   return container;
 };
 
 export default async () => {
-  const categoryId = window.location.pathname.split('/')[2];
-
   try {
-    const category = await getCategoryAPI(categoryId);
-    if (!category) {
-      return;
-    }
-    setCategory(category);
+    const allSongsCategory = await getAllSongs();
+    setCategory(allSongsCategory);
   } catch (e) {
     logError(e);
     Snackbar.displayMsg(e.message);
     return navigate(PAGES.HOME);
   }
 
-  const { name } = getCategory();
-
-  const categoryName = capitalizeFirstLetter(name);
-
   const container = Div({
     className: 'container',
   });
 
-  container.append(
-    headerBlock({ categoryId, name: categoryName }),
-    songsBlock(),
-    buttonsBlock({ categoryId })
-  );
+  container.append(headerBlock(), songsBlock(), buttonsBlock());
 
-  renderPageWithHeader(categoryName, container);
+  renderPageWithHeader(TITLE, container);
 };

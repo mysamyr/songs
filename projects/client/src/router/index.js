@@ -6,6 +6,7 @@ import PanachydaPage from '../pages/Text/Panachyda';
 import AuthPage from '../pages/Auth';
 import CategoriesPage from '../pages/Categories';
 import CategoryPage from '../pages/Category';
+import AllSongsPage from '../pages/AllSongs';
 import SongPage from '../pages/Song';
 import NewCategoryPage from '../pages/NewCategory';
 import NewSongPage from '../pages/NewSong';
@@ -22,6 +23,7 @@ export default url => {
   if (compareURL(url, PAGES.LITURGY)) return LiturgyPage();
   if (compareURL(url, PAGES.PANAKHYDA)) return PanachydaPage();
   if (compareURL(url, PAGES.CATEGORIES)) return CategoriesPage();
+  if (compareURL(url, PAGES.ALL_SONGS)) return AllSongsPage();
   if (compareURL(url, PAGES.ACTIVATED)) return ActivationPage();
 
   // restricted pages
