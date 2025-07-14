@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Song Pocket Book App",
   "scripts": {
-    "start:dev": "concurrently --kill-others --names api,client -c cyan,magenta \"cd projects/api && npm run start:dev\" \"cd projects/client && npm run start:dev\"",
+    "start:dev": "concurrently -k -n api,client -c cyan,magenta \"cd projects/api && npm run start:dev\" \"cd projects/client && npm run start:dev\"",
     "secrets:fetch": "node scripts/fetch.js",
     "secrets:upload": "node scripts/upload.js",
     "setup": "node scripts/copy.js",

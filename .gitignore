@@ -8,4 +8,6 @@ assets
 .env
 
 /projects/client/public/index.js
-/projects/client/public/styles.min.css
+/projects/client/public/index.js.*
+/projects/client/public/styles.css
+/projects/client/public/styles.css.*

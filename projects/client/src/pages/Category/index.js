@@ -9,13 +9,13 @@ import {
   SubmitModal,
 } from '../../components';
 import { navigate } from '../../utils/navigate';
-import { PAGES } from '../../constants';
+import { PAGES, PAGINATION_LIMIT } from '../../constants';
 import {
   deleteCategory as deleteCategoryAPI,
   getCategory as getCategoryAPI,
   renameCategory as renameCategoryAPI,
 } from '../../api/category';
-import { getCategory, setCategory } from '../../state';
+import { getCategory, setCategories, setCategory } from '../../state';
 import { capitalizeFirstLetter, logError } from '../../utils/helpers';
 import { validateCategory } from '../../utils/validation';
 import Snackbar from '../../features/snackbar';
@@ -47,6 +47,42 @@ const onTypeSearch = searchValue => {
   return navigate(
     getURLWithQueryParams(PAGES.CATEGORY_$(categoryId), { search: value })
   );
+};
+
+const addSongs = list => {
+  document.getElementById('songs').append(...list);
+};
+
+const getSongCard = song =>
+  Div({
+    className: 'card link',
+    text: capitalizeFirstLetter(song.name),
+    onClick: () => navigate(PAGES.SONG_$(song.id)),
+  });
+
+const loadMoreSongs = async () => {
+  const categoryId = window.location.pathname.split('/')[2];
+  const originalSongs = getCategory().songs;
+  try {
+    const { songs } = await getCategoryAPI(categoryId, {
+      skip: originalSongs.length,
+      limit: PAGINATION_LIMIT,
+    });
+
+    if (!songs.length) {
+      document.getElementById('more-btn').remove();
+      return;
+    }
+
+    if (songs.length < PAGINATION_LIMIT) {
+      document.getElementById('more-btn').remove();
+    }
+    setCategories([...originalSongs, ...songs]);
+    addSongs(songs.map(getSongCard));
+  } catch (e) {
+    logError(e);
+    Snackbar.displayMsg(e.message);
+  }
 };
 
 const onDeleteCategory = async id => {
@@ -118,17 +154,31 @@ const songsBlock = (songs = getCategory().songs) => {
 
   if (songs.length) {
     songs.forEach(song => {
-      const card = Div({
-        className: 'card link',
-        text: capitalizeFirstLetter(song.name),
-        onClick: () => navigate(PAGES.SONG_$(song.id)),
-      });
+      const card = getSongCard(song);
       container.appendChild(card);
     });
   } else {
     container.append(
       Paragraph({
         text: NO_SONGS,
+      })
+    );
+  }
+
+  return container;
+};
+
+const loadMoreBtn = (songs = getCategory().songs) => {
+  const container = Div({
+    className: 'btns',
+  });
+
+  if (songs.length === PAGINATION_LIMIT) {
+    container.append(
+      Div({
+        id: 'more-btn',
+        text: 'Показати більше',
+        onClick: loadMoreSongs,
       })
     );
   }
@@ -186,7 +236,11 @@ export default async () => {
   const search = getQueryParam('search');
 
   try {
-    const category = await getCategoryAPI(categoryId, { search });
+    const category = await getCategoryAPI(categoryId, {
+      search,
+      skip: 0,
+      limit: PAGINATION_LIMIT,
+    });
     if (!category) {
       return;
     }
@@ -208,6 +262,7 @@ export default async () => {
   container.append(
     headerBlock({ categoryId, categoryName, searchValue: search }),
     songsBlock(),
+    loadMoreBtn(),
     buttonsBlock({ categoryId })
   );
 

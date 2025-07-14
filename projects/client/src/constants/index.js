@@ -55,3 +55,5 @@ export const STATUS_CODES = {
   INTERNAL_SERVER_ERROR: 500,
   GATEWAY_TIMEOUT: 504,
 };
+
+export const PAGINATION_LIMIT = 15;

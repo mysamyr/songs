@@ -8,11 +8,11 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: 'src/index.js',
-        styles: 'public/styles.css',
+        styles: 'src/styles.css',
       },
       output: {
         entryFileNames: 'index.js',
-        assetFileNames: 'styles.min.css',
+        assetFileNames: 'styles.css',
       },
     },
   },

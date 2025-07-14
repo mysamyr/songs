@@ -268,7 +268,6 @@ span {
   cursor: pointer;
   border: none;
   border-radius: 0.25em;
-  line-height: 36px;
   padding: 0 16px;
   text-transform: uppercase;
   width: fit-content;
@@ -457,6 +456,17 @@ ol {
 
 .hide {
   display: none;
+}
+
+#more-btn {
+  color: var(--green);
+  text-align: center;
+  line-height: 36px;
+  cursor: pointer;
+  border: 1px solid var(--green);
+  border-radius: 0.25em;
+  padding: 0 0.5rem;
+  width: fit-content;
 }
 
 /*KEYFRAMES*/

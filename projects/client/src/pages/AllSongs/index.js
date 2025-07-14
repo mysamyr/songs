@@ -1,7 +1,7 @@
 import { Button, Div, Header1, Paragraph, Searchbar } from '../../components';
 import { navigate } from '../../utils/navigate';
-import { PAGES } from '../../constants';
-import { getCategory, setCategory } from '../../state';
+import { PAGES, PAGINATION_LIMIT } from '../../constants';
+import { getCategory, setCategories, setCategory } from '../../state';
 import { capitalizeFirstLetter, logError } from '../../utils/helpers';
 import Snackbar from '../../features/snackbar';
 import { isLoggedIn } from '../../features/auth';
@@ -23,6 +23,40 @@ const onTypeSearch = searchValue => {
   }
 
   return navigate(getURLWithQueryParams(PAGES.ALL_SONGS, { search: value }));
+};
+
+const addSongs = list => {
+  document.getElementById('songs').append(...list);
+};
+
+const getSongCard = song =>
+  Div({
+    className: 'card link',
+    text: capitalizeFirstLetter(song.name),
+    onClick: () => navigate(PAGES.SONG_$(song.id)),
+  });
+
+const loadMoreSongs = async () => {
+  const originalSongs = getCategory().songs;
+  try {
+    const { songs } = await getAllSongs({
+      skip: originalSongs.length,
+      limit: PAGINATION_LIMIT,
+    });
+
+    if (!songs.length) {
+      document.getElementById('more-btn').remove();
+      return;
+    }
+    if (songs.length < PAGINATION_LIMIT) {
+      document.getElementById('more-btn').remove();
+    }
+    setCategories([...originalSongs, ...songs]);
+    addSongs(songs.map(getSongCard));
+  } catch (e) {
+    logError(e);
+    Snackbar.displayMsg(e.message);
+  }
 };
 
 const headerBlock = value => {
@@ -50,17 +84,31 @@ const songsBlock = (songs = getCategory().songs) => {
 
   if (songs.length) {
     songs.forEach(song => {
-      const card = Div({
-        className: 'card link',
-        text: capitalizeFirstLetter(song.name),
-        onClick: () => navigate(PAGES.SONG_$(song.id)),
-      });
+      const card = getSongCard(song);
       container.appendChild(card);
     });
   } else {
     container.append(
       Paragraph({
         text: NO_SONGS,
+      })
+    );
+  }
+
+  return container;
+};
+
+const loadMoreBtn = (songs = getCategory().songs) => {
+  const container = Div({
+    className: 'btns',
+  });
+
+  if (songs.length === PAGINATION_LIMIT) {
+    container.append(
+      Div({
+        id: 'more-btn',
+        text: 'Показати більше',
+        onClick: loadMoreSongs,
       })
     );
   }
@@ -95,7 +143,11 @@ export default async () => {
   const search = getQueryParam('search');
 
   try {
-    const allSongsCategory = await getAllSongs({ search });
+    const allSongsCategory = await getAllSongs({
+      search,
+      skip: 0,
+      limit: PAGINATION_LIMIT,
+    });
     setCategory(allSongsCategory);
   } catch (e) {
     logError(e);
@@ -107,7 +159,12 @@ export default async () => {
     className: 'container',
   });
 
-  container.append(headerBlock(search), songsBlock(), buttonsBlock());
+  container.append(
+    headerBlock(search),
+    songsBlock(),
+    loadMoreBtn(),
+    buttonsBlock()
+  );
 
   renderPageWithHeader(TITLE, container);
 };

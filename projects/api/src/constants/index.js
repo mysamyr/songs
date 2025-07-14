@@ -6,3 +6,5 @@ export const COLLECTIONS = {
   USER: 'User',
   TOKEN: 'Token',
 };
+
+export const PAGINATION_LIMIT = 15;

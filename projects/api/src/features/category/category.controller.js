@@ -14,14 +14,12 @@ export const getCategories = async (req, res) => {
     query: { skip, limit },
   } = req;
 
-  const categories = limit
-    ? await Category.find()
-        .skip(skip)
-        .limit(limit)
-        .select('name')
-        .sort('name')
-        .exec()
-    : await Category.find().select('name').exec();
+  const categories = await Category.find()
+    .skip(skip)
+    .limit(limit)
+    .select('name')
+    .sort('name')
+    .exec();
 
   return res.status(STATUS_CODES.OK).json(mapCategories(categories));
 };
@@ -40,25 +38,16 @@ export const getCategory = async (req, res) => {
     throw BadRequest(NO_SUCH_CATEGORY);
   }
 
-  // todo
-  const songs = limit
-    ? await Song.find({
-        categories: id,
-        deleted: false,
-        ...(search ? { name: new RegExp(search, 'i') } : {}),
-      })
-        .select('name')
-        .skip(skip)
-        .limit(limit)
-        .sort('name')
-        .exec()
-    : await Song.find({
-        categories: id,
-        deleted: false,
-        ...(search ? { name: new RegExp(search, 'i') } : {}),
-      })
-        .select('name')
-        .exec();
+  const songs = await Song.find({
+    categories: id,
+    deleted: false,
+    ...(search ? { name: new RegExp(search, 'i') } : {}),
+  })
+    .select('name')
+    .skip(skip)
+    .limit(limit)
+    .sort('name')
+    .exec();
 
   return res
     .status(STATUS_CODES.OK)

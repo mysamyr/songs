@@ -1,4 +1,4 @@
-import { PAGES } from '../../constants';
+import { PAGES, PAGINATION_LIMIT } from '../../constants';
 import { Button, Div, Header1, Paragraph } from '../../components';
 import { getCategories as getCategoriesAPI } from '../../api/category';
 import { isLoggedIn } from '../../features/auth';
@@ -15,6 +15,41 @@ import {
 } from './messages';
 import { BACK_HOME } from '../../constants/messages';
 import { renderPageWithHeader } from '../../utils/dom';
+
+const addCategories = list => {
+  document.getElementById('categories').append(...list);
+};
+
+const getCategoryCard = category =>
+  Div({
+    className: 'card link',
+    text: capitalizeFirstLetter(category.name),
+    onClick: () => navigate(PAGES.CATEGORY_$(category.id)),
+  });
+
+const loadMoreCategories = async () => {
+  const originCategories = getCategories();
+  try {
+    const categories = await getCategoriesAPI({
+      skip: originCategories.length,
+      limit: PAGINATION_LIMIT,
+    });
+
+    if (!categories.length) {
+      document.getElementById('more-btn').remove();
+      return;
+    }
+
+    if (categories.length < PAGINATION_LIMIT) {
+      document.getElementById('more-btn').remove();
+    }
+    setCategories([...originCategories, ...categories]);
+    addCategories(categories.map(getCategoryCard));
+  } catch (e) {
+    logError(e);
+    Snackbar.displayMsg(e.message);
+  }
+};
 
 const headerBlock = () => {
   const container = Div({ className: 'category-header-container' });
@@ -44,17 +79,31 @@ const categoriesBlock = (categories = getCategories()) => {
 
   if (categories.length) {
     categories.forEach(category => {
-      const card = Div({
-        className: 'card link',
-        text: capitalizeFirstLetter(category.name),
-        onClick: () => navigate(PAGES.CATEGORY_$(category.id)),
-      });
+      const card = getCategoryCard(category);
       container.appendChild(card);
     });
   } else {
     container.append(
       Paragraph({
         text: NO_CATEGORIES,
+      })
+    );
+  }
+
+  return container;
+};
+
+const loadMoreBtn = (categories = getCategories()) => {
+  const container = Div({
+    className: 'btns',
+  });
+
+  if (categories.length === PAGINATION_LIMIT) {
+    container.append(
+      Div({
+        id: 'more-btn',
+        text: 'Показати більше',
+        onClick: loadMoreCategories,
       })
     );
   }
@@ -98,10 +147,10 @@ const buttonsBlock = (isAuth = isLoggedIn(), categories = getCategories()) => {
 
 export default async () => {
   try {
-    const categories = await getCategoriesAPI();
-    if (!categories) {
-      return;
-    }
+    const categories = await getCategoriesAPI({
+      skip: 0,
+      limit: PAGINATION_LIMIT,
+    });
     setCategories(categories);
   } catch (e) {
     logError(e);
@@ -113,7 +162,12 @@ export default async () => {
     className: 'container',
   });
 
-  container.append(headerBlock(), categoriesBlock(), buttonsBlock());
+  container.append(
+    headerBlock(),
+    categoriesBlock(),
+    loadMoreBtn(),
+    buttonsBlock()
+  );
 
   renderPageWithHeader(TITLE, container);
 };

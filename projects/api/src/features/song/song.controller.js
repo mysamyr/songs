@@ -15,27 +15,17 @@ export const getAllSongs = async (req, res) => {
     query: { skip, limit, search },
   } = req;
 
-  // todo
-  const songs = limit
-    ? await Song.find({
-        deleted: false,
-        ...(search ? { name: new RegExp(search, 'i') } : {}),
-      })
-        .select('name text')
-        .populate('author', 'name')
-        .populate('categories', '_id')
-        .skip(skip)
-        .limit(limit)
-        .sort('name')
-        .exec()
-    : await Song.find({
-        deleted: false,
-        ...(search ? { name: new RegExp(search, 'i') } : {}),
-      })
-        .select('name text')
-        .populate('author', 'name')
-        .populate('categories', '_id')
-        .exec();
+  const songs = await Song.find({
+    deleted: false,
+    ...(search ? { name: new RegExp(search, 'i') } : {}),
+  })
+    .select('name text')
+    .populate('author', 'name')
+    .populate('categories', '_id')
+    .skip(skip)
+    .limit(limit)
+    .sort('name')
+    .exec();
 
   return res.status(STATUS_CODES.OK).json(
     mapCategoryWithSongs(
