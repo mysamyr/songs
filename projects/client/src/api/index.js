@@ -4,6 +4,7 @@ import { navigate } from '../utils/navigate';
 import { deleteUser } from '../state/user';
 import { clearState } from '../state';
 import { isLoggedIn } from '../features/auth';
+import { getURLWithQueryParams } from '../utils/query-params.js';
 
 const API_URL = '/api';
 
@@ -60,7 +61,7 @@ const handleResponse = async (data, url, options) => {
 };
 
 export const getRequest = async (path, params = {}, query = {}) => {
-  const url = API_URL + path + new URLSearchParams(query).toString();
+  const url = getURLWithQueryParams(API_URL + path, query);
   const options = {
     method: 'GET',
     cache: 'no-cache',

@@ -2,10 +2,7 @@ import { deleteRequest, getRequest, postRequest, putRequest } from './index';
 import { API_URLS } from '../constants';
 
 export const getAllSongs = async (queryParams, params) =>
-  getRequest(
-    API_URLS.GET_ALL_SONGS + `?${new URLSearchParams(queryParams).toString()}`,
-    params
-  );
+  getRequest(API_URLS.GET_ALL_SONGS, params, queryParams);
 
 export const getSong = async (id, params) =>
   getRequest(API_URLS.GET_SONG(id), params);

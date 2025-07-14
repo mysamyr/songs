@@ -1,11 +1,4 @@
-import {
-  Button,
-  Div,
-  Header1,
-  Paragraph,
-  Searchbar,
-  SearchIcon,
-} from '../../components';
+import { Button, Div, Header1, Paragraph, Searchbar } from '../../components';
 import { navigate } from '../../utils/navigate';
 import { PAGES } from '../../constants';
 import { getCategory, setCategory } from '../../state';
@@ -16,26 +9,23 @@ import { ADD_NEW_SONG, NO_SONGS, TITLE } from './messages';
 import { BACK_TO_CATEGORIES } from '../../constants/messages';
 import { getAllSongs } from '../../api/song';
 import { renderPageWithHeader } from '../../utils/dom';
+import {
+  getQueryParam,
+  getURLWithQueryParams,
+} from '../../utils/query-params.js';
 
-const onTypeSearch = e => {
-  const value = e.target.value.toLowerCase().trim();
-  const { songs } = getCategory();
-  if (!songs.length) {
+const onTypeSearch = searchValue => {
+  const search = getQueryParam('search');
+  const value = searchValue.toLowerCase().trim();
+
+  if (value === search) {
     return;
   }
-  const filteredSongs = songs.filter(song =>
-    song.name.toLowerCase().includes(value)
-  );
 
-  renderSongs(songsBlock(filteredSongs));
+  return navigate(getURLWithQueryParams(PAGES.ALL_SONGS, { search: value }));
 };
 
-const renderSongs = list => {
-  document.getElementById('songs')?.remove();
-  document.querySelector('.category-header-container').after(list);
-};
-
-const headerBlock = () => {
+const headerBlock = value => {
   const container = Div({ className: 'category-header-container' });
   const nameContainer = Div({ className: 'category-header-container' });
   nameContainer.appendChild(
@@ -46,12 +36,9 @@ const headerBlock = () => {
   );
 
   const searchContainer = Searchbar({
-    container,
+    value,
     onSearch: onTypeSearch,
-    onClose: () => renderSongs(songsBlock()),
   });
-
-  searchContainer.appendChild(SearchIcon({}));
 
   container.append(nameContainer, searchContainer);
 
@@ -105,8 +92,10 @@ const buttonsBlock = (isAuth = isLoggedIn()) => {
 };
 
 export default async () => {
+  const search = getQueryParam('search');
+
   try {
-    const allSongsCategory = await getAllSongs();
+    const allSongsCategory = await getAllSongs({ search });
     setCategory(allSongsCategory);
   } catch (e) {
     logError(e);
@@ -118,7 +107,7 @@ export default async () => {
     className: 'container',
   });
 
-  container.append(headerBlock(), songsBlock(), buttonsBlock());
+  container.append(headerBlock(search), songsBlock(), buttonsBlock());
 
   renderPageWithHeader(TITLE, container);
 };

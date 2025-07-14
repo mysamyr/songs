@@ -29,7 +29,7 @@ export const getCategories = async (req, res) => {
 export const getCategory = async (req, res) => {
   const {
     params: { id },
-    query: { skip, limit },
+    query: { skip, limit, search },
   } = req;
 
   const dbCategory = await Category.findOne({ _id: id })
@@ -40,10 +40,12 @@ export const getCategory = async (req, res) => {
     throw BadRequest(NO_SUCH_CATEGORY);
   }
 
+  // todo
   const songs = limit
     ? await Song.find({
         categories: id,
         deleted: false,
+        ...(search ? { name: new RegExp(search, 'i') } : {}),
       })
         .select('name')
         .skip(skip)
@@ -53,6 +55,7 @@ export const getCategory = async (req, res) => {
     : await Song.find({
         categories: id,
         deleted: false,
+        ...(search ? { name: new RegExp(search, 'i') } : {}),
       })
         .select('name')
         .exec();

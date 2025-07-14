@@ -1,12 +1,5 @@
 import { PAGES } from '../../constants';
-import {
-  Button,
-  Div,
-  Header1,
-  Paragraph,
-  Searchbar,
-  SearchIcon,
-} from '../../components';
+import { Button, Div, Header1, Paragraph } from '../../components';
 import { getCategories as getCategoriesAPI } from '../../api/category';
 import { isLoggedIn } from '../../features/auth';
 import Snackbar from '../../features/snackbar';
@@ -23,42 +16,14 @@ import {
 import { BACK_HOME } from '../../constants/messages';
 import { renderPageWithHeader } from '../../utils/dom';
 
-const onTypeSearch = e => {
-  const value = e.target.value.toLowerCase().trim();
-  const categories = getCategories();
-
-  if (!categories.length) {
-    return;
-  }
-  const filteredCategories = categories.filter(category =>
-    category.name.includes(value)
-  );
-
-  renderCategories(categoriesBlock(filteredCategories));
-};
-
-const renderCategories = list => {
-  document.getElementById('categories')?.remove();
-  document.querySelector('.category-header-container').after(list);
-};
-
-const headerBlock = onSearch => {
+const headerBlock = () => {
   const container = Div({ className: 'category-header-container' });
-
-  const searchContainer = Searchbar({
-    container,
-    onSearch,
-    onClose: () => renderCategories(categoriesBlock()),
-  });
-
-  searchContainer.appendChild(SearchIcon({}));
 
   container.append(
     Header1({
       text: HEADER,
       className: 'category-header',
-    }),
-    searchContainer
+    })
   );
 
   return container;
@@ -97,9 +62,41 @@ const categoriesBlock = (categories = getCategories()) => {
   return container;
 };
 
-export default async () => {
-  const isAuth = isLoggedIn();
+const buttonsBlock = (isAuth = isLoggedIn(), categories = getCategories()) => {
+  const container = Div({
+    className: 'btns',
+  });
 
+  container.append(
+    Button({
+      onClick: () => navigate(PAGES.HOME),
+      text: BACK_HOME,
+      color: 'blue',
+    })
+  );
+  if (isAuth) {
+    container.appendChild(
+      Button({
+        onClick: () => navigate(PAGES.NEW_CATEGORY),
+        text: ADD_NEW_CATEGORY,
+        color: 'green',
+      })
+    );
+    if (categories.length) {
+      container.appendChild(
+        Button({
+          onClick: () => navigate(PAGES.NEW_SONG),
+          text: ADD_NEW_SONG,
+          color: 'green',
+        })
+      );
+    }
+  }
+
+  return container;
+};
+
+export default async () => {
   try {
     const categories = await getCategoriesAPI();
     if (!categories) {
@@ -112,43 +109,11 @@ export default async () => {
     return navigate(PAGES.HOME);
   }
 
-  const categories = getCategories();
-
   const container = Div({
     className: 'container',
   });
 
-  const buttons = Div({
-    className: 'btns',
-  });
-  buttons.append(
-    Button({
-      onClick: () => navigate(PAGES.HOME),
-      text: BACK_HOME,
-      color: 'blue',
-    })
-  );
-  if (isAuth) {
-    buttons.appendChild(
-      Button({
-        onClick: () => navigate(PAGES.NEW_CATEGORY),
-        text: ADD_NEW_CATEGORY,
-        color: 'green',
-      })
-    );
-    if (categories.length) {
-      buttons.appendChild(
-        Button({
-          onClick: () => navigate(PAGES.NEW_SONG),
-          text: ADD_NEW_SONG,
-          color: 'green',
-        })
-      );
-    }
-  }
-
-  container.append(headerBlock(onTypeSearch), buttons);
+  container.append(headerBlock(), categoriesBlock(), buttonsBlock());
 
   renderPageWithHeader(TITLE, container);
-  renderCategories(categoriesBlock());
 };

@@ -6,7 +6,6 @@ import {
   Paragraph,
   RenameModal,
   Searchbar,
-  SearchIcon,
   SubmitModal,
 } from '../../components';
 import { navigate } from '../../utils/navigate';
@@ -31,18 +30,23 @@ import {
 } from './messages';
 import { BACK_TO_CATEGORIES } from '../../constants/messages';
 import { renderPageWithHeader } from '../../utils/dom';
+import {
+  getQueryParam,
+  getURLWithQueryParams,
+} from '../../utils/query-params.js';
 
-const onTypeSearch = e => {
-  const value = e.target.value.toLowerCase().trim();
-  const { songs } = getCategory();
-  if (!songs.length) {
+const onTypeSearch = searchValue => {
+  const categoryId = window.location.pathname.split('/')[2];
+  const search = getQueryParam('search');
+  const value = searchValue.toLowerCase().trim();
+
+  if (value === search) {
     return;
   }
-  const filteredSongs = songs.filter(song =>
-    song.name.toLowerCase().includes(value)
-  );
 
-  renderSongs(songsBlock(filteredSongs));
+  return navigate(
+    getURLWithQueryParams(PAGES.CATEGORY_$(categoryId), { search: value })
+  );
 };
 
 const onDeleteCategory = async id => {
@@ -55,11 +59,11 @@ const onDeleteCategory = async id => {
   }
 };
 
-const onRenameCategory = (categoryId, name) => async e => {
+const onRenameCategory = (categoryId, prevName) => async e => {
   e.preventDefault();
   const newName = e.target.name.value;
 
-  const { error, value } = validateCategory(newName, name);
+  const { error, value } = validateCategory(newName, prevName);
   if (error) return Snackbar.displayMsg(error);
   try {
     await renameCategoryAPI(categoryId, value);
@@ -70,17 +74,17 @@ const onRenameCategory = (categoryId, name) => async e => {
   }
 };
 
-const renderSongs = list => {
-  document.getElementById('songs')?.remove();
-  document.querySelector('.category-header-container').after(list);
-};
-
-const headerBlock = ({ categoryId, isAdmin = isUserAdmin(), name }) => {
+const headerBlock = ({
+  categoryId,
+  isAdmin = isUserAdmin(),
+  categoryName,
+  searchValue,
+}) => {
   const container = Div({ className: 'category-header-container' });
   const nameContainer = Div({ className: 'category-header-container' });
   nameContainer.appendChild(
     Header1({
-      text: name,
+      text: categoryName,
       className: 'category-header',
     })
   );
@@ -91,8 +95,8 @@ const headerBlock = ({ categoryId, isAdmin = isUserAdmin(), name }) => {
         onClick: () =>
           showModal(
             RenameModal({
-              name,
-              onSubmit: onRenameCategory(categoryId, name),
+              name: categoryName,
+              onSubmit: onRenameCategory(categoryId, categoryName),
             })
           ),
       })
@@ -100,12 +104,9 @@ const headerBlock = ({ categoryId, isAdmin = isUserAdmin(), name }) => {
   }
 
   const searchContainer = Searchbar({
-    container,
+    value: searchValue,
     onSearch: onTypeSearch,
-    onClose: () => renderSongs(songsBlock()),
   });
-
-  searchContainer.appendChild(SearchIcon({}));
 
   container.append(nameContainer, searchContainer);
 
@@ -182,9 +183,10 @@ const buttonsBlock = ({
 
 export default async () => {
   const categoryId = window.location.pathname.split('/')[2];
+  const search = getQueryParam('search');
 
   try {
-    const category = await getCategoryAPI(categoryId);
+    const category = await getCategoryAPI(categoryId, { search });
     if (!category) {
       return;
     }
@@ -204,7 +206,7 @@ export default async () => {
   });
 
   container.append(
-    headerBlock({ categoryId, name: categoryName }),
+    headerBlock({ categoryId, categoryName, searchValue: search }),
     songsBlock(),
     buttonsBlock({ categoryId })
   );

@@ -12,11 +12,15 @@ import { mapCategoryWithSongs } from '../category/category.helper.js';
 
 export const getAllSongs = async (req, res) => {
   const {
-    query: { skip, limit },
+    query: { skip, limit, search },
   } = req;
 
+  // todo
   const songs = limit
-    ? await Song.find({ deleted: false })
+    ? await Song.find({
+        deleted: false,
+        ...(search ? { name: new RegExp(search, 'i') } : {}),
+      })
         .select('name text')
         .populate('author', 'name')
         .populate('categories', '_id')
@@ -24,7 +28,10 @@ export const getAllSongs = async (req, res) => {
         .limit(limit)
         .sort('name')
         .exec()
-    : await Song.find({ deleted: false })
+    : await Song.find({
+        deleted: false,
+        ...(search ? { name: new RegExp(search, 'i') } : {}),
+      })
         .select('name text')
         .populate('author', 'name')
         .populate('categories', '_id')

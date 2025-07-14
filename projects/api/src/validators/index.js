@@ -11,6 +11,7 @@ export const defaultParams = Joi.object({
 export const defaultPaginationQuery = Joi.object({
   skip: Joi.number().integer().optional(),
   limit: Joi.number().integer().min(1).optional(),
+  search: Joi.string().optional().allow(''),
 });
 export const email = Joi.string().email().required().messages({
   'any.required': 'Введіть email',
