@@ -4,5 +4,6 @@ export const SAVE = 'Зберегти';
 export const NO_CATEGORIES = 'Немає категорій';
 export const CHOOSE_CATEGORIES = 'Виберіть категорії:';
 export const SONG_NAME_HEADER = 'Назва пісні:';
+export const SONG_AUTHOR_HEADER = 'Автор пісні:';
 export const SONG_TEXT_HEADER = 'Текст пісні:';
 export const SONG_CHANGED = 'Пісню змінено';

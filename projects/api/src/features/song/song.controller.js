@@ -19,12 +19,12 @@ export const getAllSongs = async (req, res) => {
     deleted: false,
     ...(search ? { name: new RegExp(search, 'i') } : {}),
   })
-    .select('name text')
-    .populate('author', 'name')
+    .select('name text author')
+    .populate('owner', 'name')
     .populate('categories', '_id')
     .skip(skip)
     .limit(limit)
-    .sort('name')
+    .sort('name author')
     .exec();
 
   return res.status(STATUS_CODES.OK).json(
@@ -45,8 +45,8 @@ export const getSong = async (req, res) => {
   } = req;
 
   const song = await Song.findById(id)
-    .select('name text')
-    .populate('author', 'name')
+    .select('name text author')
+    .populate('owner', 'name')
     .populate('categories', '_id')
     .exec();
   if (!song) {
@@ -58,7 +58,7 @@ export const getSong = async (req, res) => {
 
 export const addSong = async (req, res) => {
   const {
-    body: { categories, name, text },
+    body: { categories, name, author, text },
     userData,
   } = req;
   const catArray = Array.isArray(categories) ? categories : [categories];
@@ -72,6 +72,7 @@ export const addSong = async (req, res) => {
 
   const isSongExist = await Song.findOne({
     name,
+    author,
     deleted: false,
   });
   if (isSongExist) {
@@ -80,8 +81,9 @@ export const addSong = async (req, res) => {
 
   const song = await Song.create({
     name,
+    author,
     text,
-    author: userData._id,
+    owner: userData._id,
     categories: dbCategories.map(i => i._id),
   });
 
@@ -91,7 +93,7 @@ export const addSong = async (req, res) => {
 export const editSong = async (req, res) => {
   const {
     params: { id },
-    body: { categories, name, text },
+    body: { categories, name, author, text },
     userData,
   } = req;
 
@@ -107,7 +109,8 @@ export const editSong = async (req, res) => {
     {
       name,
       text,
-      author: userData._id,
+      author,
+      owner: userData._id,
       categories: dbCategories.map(c => c._id),
     }
   );
@@ -125,10 +128,7 @@ export const deleteSong = async (req, res) => {
   if (!song) {
     throw BadRequest(NOT_EXISTING_SONG);
   }
-  if (
-    !userData.is_admin &&
-    userData._id.toString() !== song.author.toString()
-  ) {
+  if (!userData.is_admin && userData._id.toString() !== song.owner.toString()) {
     throw BadRequest(NOT_AUTHOR);
   }
 

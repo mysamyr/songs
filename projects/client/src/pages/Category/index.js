@@ -56,7 +56,7 @@ const addSongs = list => {
 const getSongCard = song =>
   Div({
     className: 'card link',
-    text: capitalizeFirstLetter(song.name),
+    text: `${capitalizeFirstLetter(song.name)}${song.author ? ` - ${capitalizeFirstLetter(song.author)}` : ''}`,
     onClick: () => navigate(PAGES.SONG_$(song.id)),
   });
 
@@ -117,7 +117,7 @@ const headerBlock = ({
   searchValue,
 }) => {
   const container = Div({ className: 'category-header-container' });
-  const nameContainer = Div({ className: 'category-header-container' });
+  const nameContainer = Div({ className: 'row' });
   nameContainer.appendChild(
     Header1({
       text: categoryName,

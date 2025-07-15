@@ -52,7 +52,7 @@ const onAddNewCategory = async e => {
 
   try {
     await createCategory(value);
-    Snackbar.displayMsg(CATEGORY_ADDED_$);
+    Snackbar.displayMsg(CATEGORY_ADDED_$(name));
     navigate(PAGES.CATEGORIES);
   } catch (e) {
     Snackbar.displayMsg(e.message);

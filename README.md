@@ -37,7 +37,7 @@
 
 - run `npm run build` in `/projects/client/` folder for building script file once
 - run `npm run build:dev` for building script file in watch mode
-- run `npm run start:dev` to start development server for client
+- run `npm run server` to start development server for client
 - development server exposes on `http://localhost:3000`
 - for production, you can use [nginx](https://www.nginx.com/) to serve static files from `/projects/client/public`
   folder or Docker (see below)
@@ -86,6 +86,7 @@ Project uses **MongoDB** as database. You can use it on your host machine, Docke
   - edit own song
     - name
     - text
+    - author
     - categories
   - delete own song
 
@@ -124,10 +125,16 @@ Project uses **MongoDB** as database. You can use it on your host machine, Docke
 - categories `/category`
 - category `/category/:id`
 - new_category `/category/add`
+- all_songs `/category/all`
 - song `/song/:id`
 - new_song `/song/add`
 - edit_song `/song/:id/edit`
 - 404
+
+## Local Development
+
+Project uses [Vite](https://vitejs.dev/) v7 for development. You can run `npm run start:dev` from the root of the project to start
+the development server (API & Client). It will automatically reload the page when you make changes to the code.
 
 ## Formatting
 
@@ -141,7 +148,6 @@ Project uses [ESLint](https://eslint.org/) v9 for code analyzing. You can run `n
 
 ## TODO
 
-- implement pagination
 - Abort Controller ???
 - add `service-worker.js` ???
 - review styles

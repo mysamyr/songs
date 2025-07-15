@@ -94,6 +94,26 @@ body {
     0 1px 5px 0 rgba(0, 0, 0, 0.2);
 }
 
+.category-header-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.category-header {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
 /*NAVIGATION*/
 .logo {
   font-size: 2.1rem;
@@ -398,6 +418,11 @@ ol {
   border: var(--border);
 }
 
+.song-author {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
 /*SEARCH*/
 .searchbar {
   display: flex;
@@ -405,6 +430,7 @@ ol {
   align-items: center;
   justify-content: center;
 }
+
 .search-input {
   width: 100%;
   padding: 0.5rem;
@@ -412,6 +438,7 @@ ol {
   border-radius: 0.25em;
   font-size: 1rem;
 }
+
 .search-btn {
   background-color: var(--green);
   color: var(--white);
@@ -422,20 +449,6 @@ ol {
 }
 
 /*OTHER*/
-.category-header-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.category-header {
-  font-size: 2rem;
-  margin: 1.5rem 0 1rem;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-}
 
 .dropdown {
   position: absolute;
@@ -551,8 +564,14 @@ ol {
     flex-direction: column;
     align-items: flex-start;
   }
+
   .searchbar {
     width: 100%;
+    margin: -0.75rem 0 1em;
+  }
+
+  .song-author {
+    margin: -1rem 0 1em;
   }
 }
 

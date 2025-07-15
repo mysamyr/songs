@@ -43,10 +43,10 @@ export const getCategory = async (req, res) => {
     deleted: false,
     ...(search ? { name: new RegExp(search, 'i') } : {}),
   })
-    .select('name')
+    .select('name author')
     .skip(skip)
     .limit(limit)
-    .sort('name')
+    .sort('name author')
     .exec();
 
   return res

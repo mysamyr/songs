@@ -28,6 +28,17 @@ export const songBody = Joi.object({
       'string.max': 'Назва пісні занадто довга',
       'string.pattern.base': 'Введено недозволені символи',
     }),
+  author: Joi.string()
+    .trim()
+    .lowercase()
+    .max(SONG_NAME.MAX)
+    .regex(nameRegex)
+    .optional()
+    .allow('')
+    .messages({
+      'string.max': 'Назва пісні занадто довга',
+      'string.pattern.base': 'Введено недозволені символи',
+    }),
   text: Joi.string()
     .trim()
     .min(SONG_TEXT.MIN)

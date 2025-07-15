@@ -32,7 +32,7 @@ const addSongs = list => {
 const getSongCard = song =>
   Div({
     className: 'card link',
-    text: capitalizeFirstLetter(song.name),
+    text: `${capitalizeFirstLetter(song.name)}${song.author ? ` - ${capitalizeFirstLetter(song.author)}` : ''}`,
     onClick: () => navigate(PAGES.SONG_$(song.id)),
   });
 
@@ -61,20 +61,19 @@ const loadMoreSongs = async () => {
 
 const headerBlock = value => {
   const container = Div({ className: 'category-header-container' });
-  const nameContainer = Div({ className: 'category-header-container' });
-  nameContainer.appendChild(
-    Header1({
-      text: TITLE,
-      className: 'category-header',
-    })
-  );
 
   const searchContainer = Searchbar({
     value,
     onSearch: onTypeSearch,
   });
 
-  container.append(nameContainer, searchContainer);
+  container.append(
+    Header1({
+      text: TITLE,
+      className: 'category-header',
+    }),
+    searchContainer
+  );
 
   return container;
 };

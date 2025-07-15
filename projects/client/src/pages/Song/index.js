@@ -23,6 +23,26 @@ import { showModal } from '../../features/modal';
 import { isUserAdmin } from '../../state/user';
 import { renderPageWithHeader } from '../../utils/dom';
 
+const getHeaderBlock = (name, author) => {
+  const container = Div({ className: 'category-header-container' });
+  container.appendChild(
+    Header1({
+      text: name,
+      className: 'category-header',
+    })
+  );
+  if (author) {
+    container.appendChild(
+      Paragraph({
+        text: author,
+        className: 'song-author',
+      })
+    );
+  }
+
+  return container;
+};
+
 const getCategoriesBlock = songCategories => {
   const allCategories = getCategories();
 
@@ -74,7 +94,7 @@ export default async () => {
     return Snackbar.displayMsg(e.message);
   }
 
-  const { name, text, isAuthor, author, categories } = getSong();
+  const { name, text, author, isOwner, owner, categories } = getSong();
 
   const songName = capitalizeFirstLetter(name);
 
@@ -83,20 +103,17 @@ export default async () => {
   });
 
   container.append(
-    Header1({
-      text: songName,
-      className: 'category-header',
-    }),
+    getHeaderBlock(songName, capitalizeFirstLetter(author)),
     Pre({ text }),
     getCategoriesBlock(categories)
   );
 
-  if (author) {
+  if (owner) {
     const authorBlock = Paragraph({
       className: 'right',
       text: ADDED_BY,
     });
-    authorBlock.appendChild(Span({ className: 'bold', text: author }));
+    authorBlock.appendChild(Span({ className: 'bold', text: owner }));
     container.appendChild(authorBlock);
   }
 
@@ -122,7 +139,7 @@ export default async () => {
     })
   );
 
-  if (isAuthor || isAdmin) {
+  if (isOwner || isAdmin) {
     buttons.append(
       Button({
         onClick: () => navigate(PAGES.EDIT_SONG_$(songId)),

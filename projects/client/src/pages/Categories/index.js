@@ -54,7 +54,7 @@ const loadMoreCategories = async () => {
 const headerBlock = () => {
   const container = Div({ className: 'category-header-container' });
 
-  container.append(
+  container.appendChild(
     Header1({
       text: HEADER,
       className: 'category-header',

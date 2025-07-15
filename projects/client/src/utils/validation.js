@@ -4,6 +4,7 @@ import {
   EMPTY_EMAIL,
   LONG_CATEGORY_NAME,
   LONG_PASSWORD,
+  LONG_SONG_AUTHOR,
   LONG_SONG_NAME,
   LONG_SONG_TEXT,
   NO_CATEGORY_SELECTED,
@@ -55,7 +56,7 @@ export const validateCategory = (name, oldName) => {
   };
 };
 
-const getSongError = (categories, name, text) => {
+const getSongError = (categories, name, author, text) => {
   if (!name.length || !text.length) {
     return ALL_FIELDS_REQUIRED;
   }
@@ -70,6 +71,10 @@ const getSongError = (categories, name, text) => {
     return LONG_SONG_NAME;
   }
 
+  if (author.length > SONG_NAME.MAX) {
+    return LONG_SONG_AUTHOR;
+  }
+
   if (text.length < SONG_TEXT.MIN) {
     return SHORT_SONG_TEXT;
   }
@@ -78,13 +83,19 @@ const getSongError = (categories, name, text) => {
   }
 };
 
-export const validateSong = (categories, name, text) => {
-  const validationError = getSongError(categories, name.trim(), text.trim());
+export const validateSong = (categories, name, author, text) => {
+  const validationError = getSongError(
+    categories,
+    name.trim(),
+    author.trim(),
+    text.trim()
+  );
   if (validationError) return { error: validationError };
   return {
     value: {
       categories,
       name: name.trim().toLowerCase(),
+      author: author.trim().toLowerCase(),
       text: text.trim(),
     },
   };

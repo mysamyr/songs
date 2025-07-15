@@ -21,9 +21,11 @@ import { validateSong } from '../../utils/validation';
 import {
   ADD_NEW_SONG,
   CHOOSE_CATEGORIES,
+  CREATE_CATEGORY,
   HEADER,
   NO_CATEGORIES,
   SONG_ADDED_$,
+  SONG_AUTHOR_HEADER,
   SONG_NAME_HEADER,
   SONG_TEXT_HEADER,
   TITLE,
@@ -35,9 +37,16 @@ const categorySelect = activeCategory => {
   const categories = getCategories();
 
   if (!categories.length) {
-    return Div({
-      text: NO_CATEGORIES,
-    });
+    const container = Div({});
+    container.append(
+      Span({ text: NO_CATEGORIES }),
+      Span({
+        text: ' ' + CREATE_CATEGORY,
+        className: 'link',
+        onClick: () => navigate(PAGES.NEW_CATEGORY),
+      })
+    );
+    return container;
   }
   const container = Label({
     className: 'input-field',
@@ -87,6 +96,23 @@ const nameInput = () => {
   return nameLabel;
 };
 
+const authorInput = () => {
+  const nameLabel = Label({
+    className: 'input-field',
+  });
+  nameLabel.append(
+    Span({
+      text: SONG_AUTHOR_HEADER,
+    }),
+    Input({
+      type: 'text',
+      name: 'author',
+      max: SONG_NAME.MAX,
+    })
+  );
+  return nameLabel;
+};
+
 const textAreaInput = () => {
   const textLabel = Label({
     className: 'input-field',
@@ -113,9 +139,10 @@ export default async () => {
       .filter(option => option.selected)
       .map(option => option.value);
     const name = e.target.name.value;
+    const author = e.target.author.value;
     const text = e.target.text.value;
 
-    const { error, value } = validateSong(categories, name, text);
+    const { error, value } = validateSong(categories, name, author, text);
     if (error) return Snackbar.displayMsg(error);
 
     try {
@@ -172,6 +199,7 @@ export default async () => {
   form.append(
     categorySelect(categoryId),
     nameInput(),
+    authorInput(),
     textAreaInput(),
     buttonContainer
   );

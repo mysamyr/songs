@@ -11,6 +11,7 @@ export const ALL_FIELDS_REQUIRED = "Всі поля є обов'язковими
 export const NO_CATEGORY_SELECTED = 'Виберіть щонайменше одну категорію';
 export const SHORT_SONG_NAME = `Назва пісні має містити мінімум ${SONG_NAME.MIN} символів`;
 export const LONG_SONG_NAME = `Назва пісні має містити максимум ${SONG_NAME.MAX} символів`;
+export const LONG_SONG_AUTHOR = `Автор пісні має містити максимум ${SONG_NAME.MAX} символів`;
 export const SHORT_SONG_TEXT = `Текст пісні має містити мінімум ${SONG_TEXT.MIN} символів`;
 export const LONG_SONG_TEXT = `Текст пісні має містити максимум ${SONG_TEXT.MAX} символів`;
 export const EMPTY_EMAIL = 'Електронна пошта не може бути порожньою';
