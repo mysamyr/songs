@@ -1,7 +1,7 @@
 import { Button, Div, Header1, Paragraph, Searchbar } from '../../components';
 import { navigate } from '../../utils/navigate';
 import { PAGES, PAGINATION_LIMIT } from '../../constants';
-import { getCategory, setCategories, setCategory } from '../../state';
+import { getCategory, setCategory } from '../../state';
 import { capitalizeFirstLetter, logError } from '../../utils/helpers';
 import Snackbar from '../../features/snackbar';
 import { isLoggedIn } from '../../features/auth';
@@ -37,10 +37,11 @@ const getSongCard = song =>
   });
 
 const loadMoreSongs = async () => {
-  const originalSongs = getCategory().songs;
+  const originalCategory = getCategory();
+
   try {
     const { songs } = await getAllSongs({
-      skip: originalSongs.length,
+      skip: originalCategory.songs.length,
       limit: PAGINATION_LIMIT,
     });
 
@@ -48,10 +49,15 @@ const loadMoreSongs = async () => {
       document.getElementById('more-btn').remove();
       return;
     }
+
     if (songs.length < PAGINATION_LIMIT) {
       document.getElementById('more-btn').remove();
     }
-    setCategories([...originalSongs, ...songs]);
+
+    setCategory({
+      ...originalCategory,
+      songs: [...originalCategory.songs, ...songs],
+    });
     addSongs(songs.map(getSongCard));
   } catch (e) {
     logError(e);

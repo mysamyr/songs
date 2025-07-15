@@ -62,10 +62,10 @@ const getSongCard = song =>
 
 const loadMoreSongs = async () => {
   const categoryId = window.location.pathname.split('/')[2];
-  const originalSongs = getCategory().songs;
+  const originalCategory = getCategory();
   try {
     const { songs } = await getCategoryAPI(categoryId, {
-      skip: originalSongs.length,
+      skip: originalCategory.songs.length,
       limit: PAGINATION_LIMIT,
     });
 
@@ -77,7 +77,11 @@ const loadMoreSongs = async () => {
     if (songs.length < PAGINATION_LIMIT) {
       document.getElementById('more-btn').remove();
     }
-    setCategories([...originalSongs, ...songs]);
+
+    setCategories({
+      ...originalCategory,
+      songs: [...originalCategory.songs, ...songs],
+    });
     addSongs(songs.map(getSongCard));
   } catch (e) {
     logError(e);
