@@ -14,45 +14,47 @@ const getAuthHeader = () => {
 };
 
 const refreshTokens = async (url, options) => {
-  const data = await fetch(API_URL + API_URLS.REFRESH, {
+  const res = await fetch(API_URL + API_URLS.REFRESH, {
     method: 'GET',
     credentials: 'include',
   });
 
-  if (!data.ok) {
+  if (!res.ok) {
     deleteUser();
     removeValue('token');
     clearState();
     return navigate(PAGES.HOME);
   }
 
-  const { accessToken } = await handleResponse(data);
+  const { accessToken } = await handleResponse(res);
   setValue('token', accessToken);
 
-  return fetch(url, {
+  return await fetch(url, {
     ...options,
     headers: { ...options.headers, ...getAuthHeader() }, // pass new auth token
   }).then(handleResponse);
 };
 
-const handleResponse = async (data, url, options) => {
+const handleResponse = async (response, url, options) => {
   if (
-    [STATUS_CODES.FORBIDDEN, STATUS_CODES.UNAUTHORIZED].includes(data.status) &&
+    [STATUS_CODES.FORBIDDEN, STATUS_CODES.UNAUTHORIZED].includes(
+      response.status
+    ) &&
     url &&
     isLoggedIn()
   ) {
-    return refreshTokens(url, options);
+    return await refreshTokens(url, options);
   }
   if (
     [STATUS_CODES.TOO_MANY_REQUESTS, STATUS_CODES.GATEWAY_TIMEOUT].includes(
-      data.status
+      response.status
     )
   ) {
-    return navigate(PAGES.ERROR, { status: data.status });
+    return navigate(PAGES.ERROR, { status: response.status });
   }
 
-  const json = await data.json().catch(() => null);
-  if (!data.ok) {
+  const json = await response.json().catch(() => null);
+  if (!response.ok) {
     throw new Error(json.message);
   }
   if (json) {
@@ -66,9 +68,7 @@ export const getRequest = async (path, params = {}, query = {}) => {
     method: 'GET',
     cache: 'no-cache',
     credentials: 'include',
-    headers: {
-      ...getAuthHeader(),
-    },
+    headers: getAuthHeader(),
     ...params,
   };
 

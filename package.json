@@ -9,11 +9,11 @@
     "setup": "node scripts/copy.js",
     "check-formatting": "prettier -l projects scripts",
     "format": "prettier --write projects scripts",
-    "check-quality": "eslint projects scripts",
+    "lint": "eslint projects scripts",
     "prepare": "husky"
   },
   "lint-staged": {
-    "*.{json,css,md}": ["npm run format", "npm run check-quality"]
+    "*.{json,css,md}": ["npm run format", "npm run lint"]
   },
   "keywords": [],
   "author": "Mysamyr",

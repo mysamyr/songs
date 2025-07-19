@@ -11,6 +11,7 @@ import { auth, cabinet, category, song } from './routes/index.js';
 import logger from './services/logging.js';
 import errorHandler from './middlewares/error-handler.js';
 import requestLogger from './middlewares/request-logger.js';
+import authMiddleware from './middlewares/auth-check.js';
 
 const PORT = +process.env.PORT || 8080;
 const REQUEST_TIMEOUT = +process.env.REQUEST_TIMEOUT || 5000;
@@ -38,7 +39,7 @@ app.use(requestLogger);
 app.get('/ping', (req, res) => res.status(STATUS_CODES.OK).send());
 
 app.use('/auth', auth);
-app.use('/cabinet', cabinet);
+app.use('/cabinet', authMiddleware, cabinet);
 app.use('/category', category);
 app.use('/song', song);
 
