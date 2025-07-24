@@ -15,7 +15,7 @@ import {
   deleteSong as deleteSongAPI,
   getSong as getSongAPI,
 } from '../../api/song';
-import { getCategories as getCategoriesAPI } from '../../api/category.js';
+import { getCategories as getCategoriesAPI } from '../../api/category';
 import { getCategories, getSong, setCategories, setSong } from '../../state';
 import { capitalizeFirstLetter, logError } from '../../utils/helpers';
 import Snackbar from '../../features/snackbar';

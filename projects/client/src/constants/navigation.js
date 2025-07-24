@@ -3,6 +3,24 @@ import { isLoggedIn, logout } from '../features/auth';
 import Snackbar from '../features/snackbar';
 import { navigate } from '../utils/navigate';
 
+export const textConfigs = [
+  {
+    text: 'Літургія',
+    active: url => url === PAGES.LITURGY,
+    onClick: () => navigate(PAGES.LITURGY),
+  },
+  {
+    text: 'Панахида',
+    active: url => url === PAGES.PANAKHYDA,
+    onClick: () => navigate(PAGES.PANAKHYDA),
+  },
+  {
+    text: 'Вінчання',
+    active: url => url === PAGES.VINCHANNIA,
+    onClick: () => navigate(PAGES.VINCHANNIA),
+  },
+];
+
 export default [
   {
     text: 'Головна',
@@ -14,16 +32,7 @@ export default [
     active: url => [PAGES.CATEGORIES, '/song'].some(i => url.includes(i)),
     onClick: () => navigate(PAGES.CATEGORIES),
   },
-  {
-    text: 'Літургія',
-    active: url => url === PAGES.LITURGY,
-    onClick: () => navigate(PAGES.LITURGY),
-  },
-  {
-    text: 'Панахида',
-    active: url => url === PAGES.PANAKHYDA,
-    onClick: () => navigate(PAGES.PANAKHYDA),
-  },
+  ...textConfigs,
   {
     text: 'Кабінет',
     active: url => url === PAGES.CABINET,

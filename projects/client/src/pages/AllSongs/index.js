@@ -12,7 +12,7 @@ import { renderPageWithHeader } from '../../utils/dom';
 import {
   getQueryParam,
   getURLWithQueryParams,
-} from '../../utils/query-params.js';
+} from '../../utils/query-params';
 
 const onTypeSearch = searchValue => {
   const search = getQueryParam('search');

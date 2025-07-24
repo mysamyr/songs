@@ -1,7 +1,7 @@
 import { PAGES } from '../../constants';
 import { Div, Header1, Paragraph, Span } from '../../components';
+import { textConfigs } from '../../constants/navigation';
 import { isLoggedIn } from '../../features/auth';
-import { navigate } from '../../utils/navigate';
 import { getUserName } from '../../state/user';
 import {
   CALL_TO_ACTION,
@@ -13,12 +13,12 @@ import {
   GREETINGS,
   WISH,
 } from './messages';
+import { navigate } from '../../utils/navigate';
 import { renderPageWithHeader } from '../../utils/dom';
 
 const links = [
-  { href: PAGES.CATEGORIES, text: 'Пісенник' },
-  { href: PAGES.LITURGY, text: 'Літургія' },
-  { href: PAGES.PANAKHYDA, text: 'Панахида' },
+  { text: 'Пісенник', onClick: () => navigate(PAGES.CATEGORIES) },
+  ...textConfigs,
 ];
 
 export default async () => {
@@ -60,7 +60,7 @@ export default async () => {
     const card = Div({
       className: 'card link',
       text: link.text,
-      onClick: () => navigate(link.href),
+      onClick: link.onClick,
     });
     cards.appendChild(card);
   });

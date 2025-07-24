@@ -4,7 +4,7 @@ import { navigate } from '../utils/navigate';
 import { deleteUser } from '../state/user';
 import { clearState } from '../state';
 import { isLoggedIn } from '../features/auth';
-import { getURLWithQueryParams } from '../utils/query-params.js';
+import { getURLWithQueryParams } from '../utils/query-params';
 
 const API_URL = '/api';
 

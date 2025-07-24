@@ -3,6 +3,7 @@ export const PAGES = {
   AUTH: '/auth',
   LITURGY: '/lit',
   PANAKHYDA: '/pan',
+  VINCHANNIA: '/vin',
   CABINET: '/cabinet',
   CATEGORIES: '/category',
   ALL_SONGS: '/category/all',
