@@ -20,7 +20,7 @@ try {
   if (err.code === 'ENOENT') {
     // eslint-disable-next-line no-console
     console.log('.env file not found!');
-    process.exit();
+    process.exit(1);
   } else {
     throw err;
   }

@@ -1,13 +1,15 @@
 import { STATUS_CODES } from '../../constants';
 import { BACK_HOME } from '../../constants/messages';
-import { Header, Header2, Div, Button, Paragraph } from '../../components';
+import { Button, Div, Header2, Paragraph } from '../../components';
 import { navigateBack } from '../../utils/navigate';
 import {
   GATEWAY_TIMEOUT,
+  TITLE,
   TOO_MANY_REQUESTS,
   UNEXPECTED_ERROR,
   WAIT,
 } from './messages';
+import { renderPageWithHeader } from '../../utils/dom';
 
 export default () => {
   const { status } = window.history.state;
@@ -50,5 +52,5 @@ export default () => {
     buttons
   );
 
-  document.getElementById('root').append(Header(), container);
+  renderPageWithHeader(TITLE, container);
 };

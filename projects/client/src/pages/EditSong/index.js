@@ -1,33 +1,36 @@
-import { PAGES, SONG, SONG_TEXT } from '../../constants';
+import { PAGES } from '../../constants';
+import { SONG_NAME, SONG_TEXT } from '../../constants/validation';
 import {
   Button,
   Div,
   Form,
-  Header,
   Header1,
   Input,
   Label,
-  Span,
-  Select,
-  Textarea,
   Option,
+  Select,
+  Span,
+  Textarea,
 } from '../../components';
 import { getCategories as getCategoriesAPI } from '../../api/category';
 import { editSong, getSong as getSongAPI } from '../../api/song';
 import Snackbar from '../../features/snackbar';
 import { getCategories, getSong, setCategories, setSong } from '../../state';
 import { navigate, navigateBack } from '../../utils/navigate';
-import { validateSong } from '../../utils/helpers';
+import { validateSong } from '../../utils/validation';
 import {
   CHOOSE_CATEGORIES,
   HEADER,
   NO_CATEGORIES,
   SAVE,
+  SONG_AUTHOR_HEADER,
   SONG_CHANGED,
   SONG_NAME_HEADER,
   SONG_TEXT_HEADER,
+  TITLE,
 } from './messages';
 import { BACK } from '../../constants/messages';
+import { renderPageWithHeader } from '../../utils/dom';
 
 const categorySelect = selectedCategories => {
   const categories = getCategories();
@@ -78,9 +81,27 @@ const nameInput = name => {
       value: name,
       type: 'text',
       name: 'name',
-      min: SONG.MIN,
-      max: SONG.MAX,
+      min: SONG_NAME.MIN,
+      max: SONG_NAME.MAX,
       required: true,
+    })
+  );
+  return nameLabel;
+};
+
+const authorInput = author => {
+  const nameLabel = Label({
+    className: 'input-field',
+  });
+  nameLabel.append(
+    Span({
+      text: SONG_AUTHOR_HEADER,
+    }),
+    Input({
+      value: author,
+      type: 'text',
+      name: 'author',
+      max: SONG_NAME.MAX,
     })
   );
   return nameLabel;
@@ -96,7 +117,6 @@ const textAreaInput = text => {
     }),
     Textarea({
       value: text,
-      type: 'textarea',
       name: 'text',
       min: SONG_TEXT.MIN,
       max: SONG_TEXT.MAX,
@@ -114,13 +134,14 @@ export default async () => {
       .filter(option => option.selected)
       .map(option => option.value);
     const name = e.target.name.value;
+    const author = e.target.author.value;
     const text = e.target.text.value;
 
-    const validationErr = validateSong(categories, name, text);
-    if (validationErr) return Snackbar.displayMsg(validationErr);
+    const { value, error } = validateSong(categories, name, author, text);
+    if (error) return Snackbar.displayMsg(error);
 
     try {
-      await editSong(songId, { categories, name, text });
+      await editSong(songId, value);
       Snackbar.displayMsg(SONG_CHANGED);
       if (history.length > 2) {
         navigateBack();
@@ -132,7 +153,6 @@ export default async () => {
     }
   };
 
-  // todo handle error ???
   try {
     const song = await getSongAPI(songId);
     setSong(song);
@@ -178,6 +198,7 @@ export default async () => {
   form.append(
     categorySelect(song.categories),
     nameInput(song.name),
+    authorInput(song.author),
     textAreaInput(song.text),
     buttonContainer
   );
@@ -189,5 +210,5 @@ export default async () => {
     form
   );
 
-  document.getElementById('root').append(Header(), container);
+  renderPageWithHeader(TITLE, container);
 };

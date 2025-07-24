@@ -1,6 +1,6 @@
 import logger from '../services/logging.js';
 import STATUS_CODES from '../constants/status-codes.js';
-import { ApiError } from '../utils/error.js';
+import ApiError from '../utils/error.js';
 
 export default (err, req, res, next) => {
   if (!err) {
@@ -11,6 +11,7 @@ export default (err, req, res, next) => {
     return res.status(err.status).json({ message: err.message });
   }
   if (err.code === 11000) {
+    logger.error({ ...err, message: 'Element already exists' });
     return res
       .status(STATUS_CODES.BAD_REQUEST)
       .json({ message: 'Element already exists' });

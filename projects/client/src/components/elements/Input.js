@@ -15,6 +15,7 @@ import { isNil } from '../../utils/helpers';
  * @param {boolean} [props.required]
  * @param {boolean} [props.disabled]
  * @param {boolean} [props.focus]
+ * @param {function} [props.onEnter]
  * @param {function} [props.onClick]
  * @param {function} [props.onChange]
  * @returns {HTMLInputElement}
@@ -51,6 +52,10 @@ export default props => {
     setTimeout(() => {
       input.focus();
     }, 0);
+  if (props.onEnter)
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') props.onEnter(e);
+    });
   if (props.onClick) input.addEventListener('click', props.onClick);
   if (props.onChange) input.addEventListener('keyup', props.onChange);
 

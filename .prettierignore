@@ -1,5 +1,7 @@
-.husky
-assets
-node_modules
+.husky/
+assets/
+node_modules/
 package-lock.json
-service-account.json
+projects/client/public/index.js
+**/*.yml
+**/*.log

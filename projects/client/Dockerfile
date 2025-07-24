@@ -25,8 +25,8 @@ RUN npm ci --omit=dev
 
 COPY public/ public
 COPY src/ src
-COPY webpack.common.js webpack.common.js
-COPY webpack.prod.js webpack.prod.js
+COPY vite.common.js vite.common.js
+COPY vite.prod.config.js vite.prod.config.js
 COPY default.conf default.conf
 
 RUN npm run build

@@ -1,7 +1,6 @@
 import {
   Button,
   Div,
-  Header,
   Header1,
   Paragraph,
   Pre,
@@ -10,25 +9,67 @@ import {
 } from '../../components';
 import { navigate, navigateBack } from '../../utils/navigate';
 import { PAGES } from '../../constants';
+import { ADDED_BY, DELETE, DELETE_SONG_QUESTION, EDIT } from './messages';
+import { BACK, BACK_TO_CATEGORIES } from '../../constants/messages';
 import {
-  getSong as getSongAPI,
   deleteSong as deleteSongAPI,
+  getSong as getSongAPI,
 } from '../../api/song';
-import { getSong, setSong } from '../../state';
+import { getCategories as getCategoriesAPI } from '../../api/category';
+import { getCategories, getSong, setCategories, setSong } from '../../state';
 import { capitalizeFirstLetter, logError } from '../../utils/helpers';
 import Snackbar from '../../features/snackbar';
 import { showModal } from '../../features/modal';
 import { isUserAdmin } from '../../state/user';
-import { ADDED_BY, DELETE, DELETE_SONG_QUESTION, EDIT } from './messages';
-import { BACK, BACK_TO_CATEGORIES } from '../../constants/messages';
+import { renderPageWithHeader } from '../../utils/dom';
+
+const getHeaderBlock = (name, author) => {
+  const container = Div({ className: 'category-header-container' });
+  container.appendChild(
+    Header1({
+      text: name,
+      className: 'category-header',
+    })
+  );
+  if (author) {
+    container.appendChild(
+      Paragraph({
+        text: author,
+        className: 'song-author',
+      })
+    );
+  }
+
+  return container;
+};
+
+const getCategoriesBlock = songCategories => {
+  const allCategories = getCategories();
+
+  const container = Div({
+    className: 'category-tags',
+  });
+  songCategories.forEach(categoryId => {
+    const category = allCategories.find(cat => cat.id === categoryId);
+    if (category) {
+      container.appendChild(
+        Span({
+          className: 'category-tag',
+          text: category.name.toUpperCase(),
+        })
+      );
+    }
+  });
+  return container;
+};
 
 export default async () => {
   const songId = window.location.pathname.split('/')[2];
   const isAdmin = isUserAdmin();
 
-  const onDeleteSong = async id => {
+  const onDeleteSong = async () => {
     try {
-      await deleteSongAPI(id);
+      await deleteSongAPI(songId);
       if (history.length > 2) {
         navigateBack();
       } else {
@@ -41,6 +82,8 @@ export default async () => {
   };
 
   try {
+    const categories = await getCategoriesAPI();
+    setCategories(categories);
     const song = await getSongAPI(songId);
     if (!song) {
       return;
@@ -51,29 +94,27 @@ export default async () => {
     return Snackbar.displayMsg(e.message);
   }
 
-  const song = getSong();
+  const { name, text, author, isOwner, owner, categories } = getSong();
+
+  const songName = capitalizeFirstLetter(name);
 
   const container = Div({
     className: 'container',
   });
 
   container.append(
-    Header1({
-      text: capitalizeFirstLetter(song.name),
-      className: 'category-header',
-    }),
-    Pre({
-      text: song.text,
-    })
+    getHeaderBlock(songName, capitalizeFirstLetter(author)),
+    Pre({ text }),
+    getCategoriesBlock(categories)
   );
 
-  if (song.isAuthor) {
-    const author = Paragraph({
+  if (owner) {
+    const authorBlock = Paragraph({
       className: 'right',
       text: ADDED_BY,
     });
-    author.appendChild(Span({ className: 'bold', text: song.author }));
-    container.appendChild(author);
+    authorBlock.appendChild(Span({ className: 'bold', text: owner }));
+    container.appendChild(authorBlock);
   }
 
   const buttons = Div({
@@ -98,7 +139,7 @@ export default async () => {
     })
   );
 
-  if (song.isAuthor || isAdmin) {
+  if (isOwner || isAdmin) {
     buttons.append(
       Button({
         onClick: () => navigate(PAGES.EDIT_SONG_$(songId)),
@@ -109,7 +150,7 @@ export default async () => {
         onClick: () =>
           showModal(
             SubmitModal({
-              onConfirm: () => onDeleteSong(songId),
+              onConfirm: onDeleteSong,
               question: DELETE_SONG_QUESTION,
               inverseColors: true,
             })
@@ -122,5 +163,5 @@ export default async () => {
 
   container.appendChild(buttons);
 
-  document.getElementById('root').append(Header(), container);
+  renderPageWithHeader(songName, container);
 };

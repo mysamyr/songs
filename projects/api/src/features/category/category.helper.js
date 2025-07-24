@@ -1,7 +1,7 @@
 const sortByName = arr =>
   arr.sort((x, y) => {
-    if (x.name < y.name) return -1;
-    if (x.name > y.name) return 1;
+    if (x.name + x.author < y.name + y.author) return -1;
+    if (x.name + x.author > y.name + y.author) return 1;
     return 0;
   });
 
@@ -18,6 +18,7 @@ const mapSongs = songs => {
   return sortedSongs.map(s => ({
     id: s.id,
     name: s.name,
+    author: s.author,
   }));
 };
 

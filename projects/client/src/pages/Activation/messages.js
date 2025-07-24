@@ -1,3 +1,4 @@
+export const TITLE = 'Активація';
 export const HEADER_SUCCESS = 'Вітаємо!';
 export const HEADER_FAIL = 'Помилка при активації!';
 export const MESSAGE_SUCCESS =

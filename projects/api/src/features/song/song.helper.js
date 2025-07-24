@@ -1,8 +1,9 @@
 export const mapSong = (song, user) => ({
   id: song._id.toString(),
   name: song.name,
+  author: song.author,
   text: song.text,
   categories: song.categories.map(category => category._id.toString()),
-  author: song.author?.name,
-  isAuthor: song.author?._id?.toString() === user.id,
+  owner: song.owner?.name,
+  isOwner: song.owner?._id?.toString() === user.id,
 });

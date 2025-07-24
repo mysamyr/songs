@@ -15,7 +15,7 @@ export { default as UList } from './elements/UList';
 export { default as OList } from './elements/OList';
 export { default as ListItem } from './elements/ListItem';
 export { default as Header } from './Header';
-export { default as ArrowUp } from './Buttons/ArrowUp';
+export { default as ArrowUpIcon } from './icons/ArrowUp';
 export { default as MenuIcon } from './icons/Menu';
 export { default as EditIcon } from './icons/Edit';
 export { default as SearchIcon } from './icons/Search';

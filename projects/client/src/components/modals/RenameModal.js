@@ -1,4 +1,4 @@
-import { CATEGORY } from '../../constants';
+import { CATEGORY } from '../../constants/validation';
 import { Button, Div, Paragraph, Form, Input } from '../';
 import { hideModal } from '../../features/modal';
 

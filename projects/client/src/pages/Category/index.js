@@ -2,27 +2,22 @@ import {
   Button,
   Div,
   EditIcon,
-  Header,
   Header1,
   Paragraph,
   RenameModal,
-  SearchIcon,
   Searchbar,
   SubmitModal,
 } from '../../components';
 import { navigate } from '../../utils/navigate';
-import { PAGES } from '../../constants';
+import { PAGES, PAGINATION_LIMIT } from '../../constants';
 import {
   deleteCategory as deleteCategoryAPI,
   getCategory as getCategoryAPI,
   renameCategory as renameCategoryAPI,
 } from '../../api/category';
-import { getCategory, setCategory } from '../../state';
-import {
-  capitalizeFirstLetter,
-  logError,
-  validateCategory,
-} from '../../utils/helpers';
+import { getCategory, setCategories, setCategory } from '../../state';
+import { capitalizeFirstLetter, logError } from '../../utils/helpers';
+import { validateCategory } from '../../utils/validation';
 import Snackbar from '../../features/snackbar';
 import { isLoggedIn } from '../../features/auth';
 import { showModal } from '../../features/modal';
@@ -34,44 +29,114 @@ import {
   NO_SONGS,
 } from './messages';
 import { BACK_TO_CATEGORIES } from '../../constants/messages';
-import { getAllSongs } from '../../api/song';
+import { renderPageWithHeader } from '../../utils/dom';
+import {
+  getQueryParam,
+  getURLWithQueryParams,
+} from '../../utils/query-params';
 
-const onTypeSearch = e => {
-  const value = e.target.value.toLowerCase().trim();
-  const { songs } = getCategory();
-  if (!songs.length) {
+const onTypeSearch = searchValue => {
+  const categoryId = window.location.pathname.split('/')[2];
+  const search = getQueryParam('search');
+  const value = searchValue.toLowerCase().trim();
+
+  if (value === search) {
     return;
   }
-  const filteredSongs = songs.filter(song =>
-    song.name.toLowerCase().includes(value)
+
+  return navigate(
+    getURLWithQueryParams(PAGES.CATEGORY_$(categoryId), { search: value })
   );
-
-  renderSongs(songsBlock(filteredSongs));
 };
 
-const renderSongs = list => {
-  document.getElementById('songs')?.remove();
-  document.querySelector('.category-header-container').after(list);
+const addSongs = list => {
+  document.getElementById('songs').append(...list);
 };
 
-const headerBlock = ({ isAdmin, name, onRenameCategory }) => {
+const getSongCard = song =>
+  Div({
+    className: 'card link',
+    text: `${capitalizeFirstLetter(song.name)}${song.author ? ` - ${capitalizeFirstLetter(song.author)}` : ''}`,
+    onClick: () => navigate(PAGES.SONG_$(song.id)),
+  });
+
+const loadMoreSongs = async () => {
+  const categoryId = window.location.pathname.split('/')[2];
+  const originalCategory = getCategory();
+  try {
+    const { songs } = await getCategoryAPI(categoryId, {
+      skip: originalCategory.songs.length,
+      limit: PAGINATION_LIMIT,
+    });
+
+    if (!songs.length) {
+      document.getElementById('more-btn').remove();
+      return;
+    }
+
+    if (songs.length < PAGINATION_LIMIT) {
+      document.getElementById('more-btn').remove();
+    }
+
+    setCategories({
+      ...originalCategory,
+      songs: [...originalCategory.songs, ...songs],
+    });
+    addSongs(songs.map(getSongCard));
+  } catch (e) {
+    logError(e);
+    Snackbar.displayMsg(e.message);
+  }
+};
+
+const onDeleteCategory = async id => {
+  try {
+    await deleteCategoryAPI(id);
+    navigate(PAGES.CATEGORIES);
+  } catch (e) {
+    logError(e);
+    Snackbar.displayMsg(e.message);
+  }
+};
+
+const onRenameCategory = (categoryId, prevName) => async e => {
+  e.preventDefault();
+  const newName = e.target.name.value;
+
+  const { error, value } = validateCategory(newName, prevName);
+  if (error) return Snackbar.displayMsg(error);
+  try {
+    await renameCategoryAPI(categoryId, value);
+    navigate(PAGES.CATEGORY_$(categoryId));
+  } catch (e) {
+    logError(e);
+    Snackbar.displayMsg(e.message);
+  }
+};
+
+const headerBlock = ({
+  categoryId,
+  isAdmin = isUserAdmin(),
+  categoryName,
+  searchValue,
+}) => {
   const container = Div({ className: 'category-header-container' });
-  const nameContainer = Div({ className: 'category-header-container' });
+  const nameContainer = Div({ className: 'row' });
   nameContainer.appendChild(
     Header1({
-      text: capitalizeFirstLetter(name),
+      text: categoryName,
       className: 'category-header',
     })
   );
-  if (isAdmin && onRenameCategory) {
+  if (isAdmin) {
     nameContainer.appendChild(
       EditIcon({
         className: 'rename-icon',
         onClick: () =>
           showModal(
             RenameModal({
-              name,
-              onSubmit: onRenameCategory(name),
+              name: categoryName,
+              onSubmit: onRenameCategory(categoryId, categoryName),
             })
           ),
       })
@@ -79,12 +144,9 @@ const headerBlock = ({ isAdmin, name, onRenameCategory }) => {
   }
 
   const searchContainer = Searchbar({
-    container,
+    value: searchValue,
     onSearch: onTypeSearch,
-    onClose: () => renderSongs(songsBlock()),
   });
-
-  searchContainer.appendChild(SearchIcon({}));
 
   container.append(nameContainer, searchContainer);
 
@@ -96,11 +158,7 @@ const songsBlock = (songs = getCategory().songs) => {
 
   if (songs.length) {
     songs.forEach(song => {
-      const card = Div({
-        className: 'card link',
-        text: capitalizeFirstLetter(song.name),
-        onClick: () => navigate(PAGES.SONG_$(song.id)),
-      });
+      const card = getSongCard(song);
       container.appendChild(card);
     });
   } else {
@@ -114,56 +172,34 @@ const songsBlock = (songs = getCategory().songs) => {
   return container;
 };
 
-const renderCommonCategory = async categoryId => {
-  const isAuth = isLoggedIn();
-  const isAdmin = isUserAdmin();
-
-  const onDeleteCategory = async id => {
-    try {
-      await deleteCategoryAPI(id);
-      navigate(PAGES.CATEGORIES);
-    } catch (e) {
-      logError(e);
-      Snackbar.displayMsg(e.message);
-    }
-  };
-  const onRenameCategory = name => async e => {
-    e.preventDefault();
-    const newName = e.target.name.value;
-
-    const validationErr = validateCategory(newName, name);
-    if (validationErr) return Snackbar.displayMsg(validationErr);
-    try {
-      await renameCategoryAPI(categoryId, { name: newName });
-      navigate(PAGES.CATEGORY_$(categoryId));
-    } catch (e) {
-      logError(e);
-      Snackbar.displayMsg(e.message);
-    }
-  };
-
-  try {
-    const category = await getCategoryAPI(categoryId);
-    if (!category) {
-      return;
-    }
-    setCategory(category);
-  } catch (e) {
-    logError(e);
-    Snackbar.displayMsg(e.message);
-    return navigate(PAGES.HOME);
-  }
-
-  const { name, songs } = getCategory();
-
+const loadMoreBtn = (songs = getCategory().songs) => {
   const container = Div({
-    className: 'container',
-  });
-
-  const buttons = Div({
     className: 'btns',
   });
-  buttons.appendChild(
+
+  if (songs.length === PAGINATION_LIMIT) {
+    container.append(
+      Div({
+        id: 'more-btn',
+        text: 'Показати більше',
+        onClick: loadMoreSongs,
+      })
+    );
+  }
+
+  return container;
+};
+
+const buttonsBlock = ({
+  categoryId,
+  isAdmin = isUserAdmin(),
+  isAuth = isLoggedIn(),
+  songs = getCategory().songs,
+}) => {
+  const container = Div({
+    className: 'btns',
+  });
+  container.appendChild(
     Button({
       onClick: () => navigate(PAGES.CATEGORIES),
       text: BACK_TO_CATEGORIES,
@@ -171,7 +207,7 @@ const renderCommonCategory = async categoryId => {
     })
   );
   if (isAuth) {
-    buttons.appendChild(
+    container.appendChild(
       Button({
         onClick: () => navigate(PAGES.NEW_SONG, { categoryId }),
         text: ADD_NEW_SONG,
@@ -180,7 +216,7 @@ const renderCommonCategory = async categoryId => {
     );
   }
   if (!songs.length && isAdmin) {
-    buttons.appendChild(
+    container.appendChild(
       Button({
         onClick: () =>
           showModal(
@@ -196,27 +232,23 @@ const renderCommonCategory = async categoryId => {
     );
   }
 
-  container.append(
-    headerBlock({ isAdmin, name, onRenameCategory }),
-    songsBlock(songs),
-    buttons
-  );
-
-  document.getElementById('root').append(Header(), container);
+  return container;
 };
 
 export default async () => {
-  const isAuth = isLoggedIn();
-  const isAdmin = isUserAdmin();
   const categoryId = window.location.pathname.split('/')[2];
-
-  if (categoryId !== 'all') {
-    return renderCommonCategory(categoryId);
-  }
+  const search = getQueryParam('search');
 
   try {
-    const allSongsCategory = await getAllSongs();
-    setCategory(allSongsCategory);
+    const category = await getCategoryAPI(categoryId, {
+      search,
+      skip: 0,
+      limit: PAGINATION_LIMIT,
+    });
+    if (!category) {
+      return;
+    }
+    setCategory(category);
   } catch (e) {
     logError(e);
     Snackbar.displayMsg(e.message);
@@ -225,33 +257,18 @@ export default async () => {
 
   const { name } = getCategory();
 
+  const categoryName = capitalizeFirstLetter(name);
+
   const container = Div({
     className: 'container',
   });
 
-  const buttons = Div({
-    className: 'btns',
-  });
-  buttons.appendChild(
-    Button({
-      onClick: () => navigate(PAGES.CATEGORIES),
-      text: BACK_TO_CATEGORIES,
-      color: 'blue',
-    })
+  container.append(
+    headerBlock({ categoryId, categoryName, searchValue: search }),
+    songsBlock(),
+    loadMoreBtn(),
+    buttonsBlock({ categoryId })
   );
-  if (isAuth) {
-    buttons.appendChild(
-      Button({
-        onClick: () => navigate(PAGES.NEW_SONG),
-        text: ADD_NEW_SONG,
-        color: 'green',
-      })
-    );
-  }
 
-  container.append(headerBlock({ isAdmin, name }), buttons);
-
-  document.getElementById('root').append(Header(), container);
-
-  renderSongs(songsBlock());
+  renderPageWithHeader(categoryName, container);
 };

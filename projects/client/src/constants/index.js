@@ -3,8 +3,10 @@ export const PAGES = {
   AUTH: '/auth',
   LITURGY: '/lit',
   PANAKHYDA: '/pan',
+  VINCHANNIA: '/vin',
   CABINET: '/cabinet',
   CATEGORIES: '/category',
+  ALL_SONGS: '/category/all',
   CATEGORY: '/category/:id',
   CATEGORY_$: id => `/category/${id}`,
   NEW_CATEGORY: '/category/new',
@@ -42,26 +44,6 @@ export const API_URLS = {
   DELETE_SONG: id => `/song/${id}`,
 };
 
-export const PASSWORD = {
-  MIN: 8,
-  MAX: 30,
-};
-
-export const CATEGORY = {
-  MIN: 4,
-  MAX: 30,
-};
-
-export const SONG = {
-  MIN: 4,
-  MAX: 30,
-};
-
-export const SONG_TEXT = {
-  MIN: 10,
-  MAX: 4096,
-};
-
 export const STATUS_CODES = {
   OK: 200,
   CREATED: 201,
@@ -74,3 +56,5 @@ export const STATUS_CODES = {
   INTERNAL_SERVER_ERROR: 500,
   GATEWAY_TIMEOUT: 504,
 };
+
+export const PAGINATION_LIMIT = 15;

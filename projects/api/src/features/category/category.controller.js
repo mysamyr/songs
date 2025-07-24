@@ -14,14 +14,12 @@ export const getCategories = async (req, res) => {
     query: { skip, limit },
   } = req;
 
-  const categories = limit
-    ? await Category.find()
-        .skip(skip)
-        .limit(limit)
-        .select('name')
-        .sort('name')
-        .exec()
-    : await Category.find().select('name').exec();
+  const categories = await Category.find()
+    .skip(skip)
+    .limit(limit)
+    .select('name')
+    .sort('name')
+    .exec();
 
   return res.status(STATUS_CODES.OK).json(mapCategories(categories));
 };
@@ -29,7 +27,7 @@ export const getCategories = async (req, res) => {
 export const getCategory = async (req, res) => {
   const {
     params: { id },
-    query: { skip, limit },
+    query: { skip, limit, search },
   } = req;
 
   const dbCategory = await Category.findOne({ _id: id })
@@ -40,22 +38,16 @@ export const getCategory = async (req, res) => {
     throw BadRequest(NO_SUCH_CATEGORY);
   }
 
-  const songs = limit
-    ? await Song.find({
-        categories: id,
-        deleted: false,
-      })
-        .select('name')
-        .skip(skip)
-        .limit(limit)
-        .sort('name')
-        .exec()
-    : await Song.find({
-        categories: id,
-        deleted: false,
-      })
-        .select('name')
-        .exec();
+  const songs = await Song.find({
+    categories: id,
+    deleted: false,
+    ...(search ? { name: new RegExp(search, 'i') } : {}),
+  })
+    .select('name author')
+    .skip(skip)
+    .limit(limit)
+    .sort('name author')
+    .exec();
 
   return res
     .status(STATUS_CODES.OK)

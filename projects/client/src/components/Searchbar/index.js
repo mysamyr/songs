@@ -1,28 +1,24 @@
-import { CancelIcon, SearchIcon, Div } from '../';
-import Dropdown from './Dropdown';
+import { SearchIcon, Div, Input } from '../';
 
-export default ({ container, onSearch, onClose }) => {
-  const searchContainer = Div({
-    className: 'link',
-    onClick: () => {
-      const dropdown = document.querySelector('.dropdown');
-      if (dropdown) {
-        onClose();
-        document.querySelector('.dropdown').remove();
-        searchContainer.innerText = '';
-        searchContainer.appendChild(SearchIcon({}));
-      } else {
-        searchContainer.innerText = '';
-        searchContainer.appendChild(CancelIcon({}));
-        const dropdown = Dropdown({
-          onSearch,
-        });
-        const containerDimensions = searchContainer.getBoundingClientRect();
-        dropdown.style.top = `${containerDimensions.bottom}px`;
-        dropdown.style.left = `${containerDimensions.right - 181}px`;
-        container.after(dropdown);
-      }
-    },
+export default ({ value, onSearch }) => {
+  const container = Div({
+    className: 'searchbar',
   });
-  return searchContainer;
+  const input = Input({
+    type: 'text',
+    placeholder: 'Search songs...',
+    value,
+    className: 'search-input',
+    onEnter: e => onSearch(e.target.value),
+  });
+
+  const searchBtn = Div({
+    className: 'search-btn',
+    onClick: () => onSearch(input.value),
+  });
+  searchBtn.appendChild(SearchIcon({}));
+
+  container.append(input, searchBtn);
+
+  return container;
 };

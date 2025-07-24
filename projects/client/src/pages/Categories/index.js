@@ -1,13 +1,5 @@
-import { PAGES } from '../../constants';
-import {
-  Button,
-  Div,
-  Header,
-  Header1,
-  Paragraph,
-  SearchIcon,
-  Searchbar,
-} from '../../components';
+import { PAGES, PAGINATION_LIMIT } from '../../constants';
+import { Button, Div, Header1, Paragraph } from '../../components';
 import { getCategories as getCategoriesAPI } from '../../api/category';
 import { isLoggedIn } from '../../features/auth';
 import Snackbar from '../../features/snackbar';
@@ -19,45 +11,54 @@ import {
   ADD_NEW_SONG,
   HEADER,
   NO_CATEGORIES,
+  TITLE,
 } from './messages';
 import { BACK_HOME } from '../../constants/messages';
+import { renderPageWithHeader } from '../../utils/dom';
 
-const onTypeSearch = e => {
-  const value = e.target.value.toLowerCase().trim();
-  const categories = getCategories();
-
-  if (!categories.length) {
-    return;
-  }
-  const filteredCategories = categories.filter(category =>
-    category.name.includes(value)
-  );
-
-  renderCategories(categoriesBlock(filteredCategories));
+const addCategories = list => {
+  document.getElementById('categories').append(...list);
 };
 
-const renderCategories = list => {
-  document.getElementById('categories')?.remove();
-  document.querySelector('.category-header-container').after(list);
-};
-
-const headerBlock = onSearch => {
-  const container = Div({ className: 'category-header-container' });
-
-  const searchContainer = Searchbar({
-    container,
-    onSearch,
-    onClose: () => renderCategories(categoriesBlock()),
+const getCategoryCard = category =>
+  Div({
+    className: 'card link',
+    text: capitalizeFirstLetter(category.name),
+    onClick: () => navigate(PAGES.CATEGORY_$(category.id)),
   });
 
-  searchContainer.appendChild(SearchIcon({}));
+const loadMoreCategories = async () => {
+  const originCategories = getCategories();
+  try {
+    const categories = await getCategoriesAPI({
+      skip: originCategories.length,
+      limit: PAGINATION_LIMIT,
+    });
 
-  container.append(
+    if (!categories.length) {
+      document.getElementById('more-btn').remove();
+      return;
+    }
+
+    if (categories.length < PAGINATION_LIMIT) {
+      document.getElementById('more-btn').remove();
+    }
+    setCategories([...originCategories, ...categories]);
+    addCategories(categories.map(getCategoryCard));
+  } catch (e) {
+    logError(e);
+    Snackbar.displayMsg(e.message);
+  }
+};
+
+const headerBlock = () => {
+  const container = Div({ className: 'category-header-container' });
+
+  container.appendChild(
     Header1({
       text: HEADER,
       className: 'category-header',
-    }),
-    searchContainer
+    })
   );
 
   return container;
@@ -78,11 +79,7 @@ const categoriesBlock = (categories = getCategories()) => {
 
   if (categories.length) {
     categories.forEach(category => {
-      const card = Div({
-        className: 'card link',
-        text: capitalizeFirstLetter(category.name),
-        onClick: () => navigate(PAGES.CATEGORY_$(category.id)),
-      });
+      const card = getCategoryCard(category);
       container.appendChild(card);
     });
   } else {
@@ -96,31 +93,30 @@ const categoriesBlock = (categories = getCategories()) => {
   return container;
 };
 
-export default async () => {
-  const isAuth = isLoggedIn();
-
-  try {
-    const categories = await getCategoriesAPI();
-    if (!categories) {
-      return;
-    }
-    setCategories(categories);
-  } catch (e) {
-    logError(e);
-    Snackbar.displayMsg(e.message);
-    return navigate(PAGES.HOME);
-  }
-
-  const categories = getCategories();
-
+const loadMoreBtn = (categories = getCategories()) => {
   const container = Div({
-    className: 'container',
-  });
-
-  const buttons = Div({
     className: 'btns',
   });
-  buttons.append(
+
+  if (categories.length === PAGINATION_LIMIT) {
+    container.append(
+      Div({
+        id: 'more-btn',
+        text: 'Показати більше',
+        onClick: loadMoreCategories,
+      })
+    );
+  }
+
+  return container;
+};
+
+const buttonsBlock = (isAuth = isLoggedIn(), categories = getCategories()) => {
+  const container = Div({
+    className: 'btns',
+  });
+
+  container.append(
     Button({
       onClick: () => navigate(PAGES.HOME),
       text: BACK_HOME,
@@ -128,7 +124,7 @@ export default async () => {
     })
   );
   if (isAuth) {
-    buttons.appendChild(
+    container.appendChild(
       Button({
         onClick: () => navigate(PAGES.NEW_CATEGORY),
         text: ADD_NEW_CATEGORY,
@@ -136,7 +132,7 @@ export default async () => {
       })
     );
     if (categories.length) {
-      buttons.appendChild(
+      container.appendChild(
         Button({
           onClick: () => navigate(PAGES.NEW_SONG),
           text: ADD_NEW_SONG,
@@ -146,9 +142,32 @@ export default async () => {
     }
   }
 
-  container.append(headerBlock(onTypeSearch), buttons);
+  return container;
+};
 
-  document.getElementById('root').append(Header(), container);
+export default async () => {
+  try {
+    const categories = await getCategoriesAPI({
+      skip: 0,
+      limit: PAGINATION_LIMIT,
+    });
+    setCategories(categories);
+  } catch (e) {
+    logError(e);
+    Snackbar.displayMsg(e.message);
+    return navigate(PAGES.HOME);
+  }
 
-  renderCategories(categoriesBlock());
+  const container = Div({
+    className: 'container',
+  });
+
+  container.append(
+    headerBlock(),
+    categoriesBlock(),
+    loadMoreBtn(),
+    buttonsBlock()
+  );
+
+  renderPageWithHeader(TITLE, container);
 };

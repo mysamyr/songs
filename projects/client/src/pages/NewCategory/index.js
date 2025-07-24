@@ -3,23 +3,25 @@ import {
   CATEGORY_ADDED_$,
   CATEGORY_HEADER,
   HEADER,
+  TITLE,
 } from './messages';
 import { BACK_TO_CATEGORIES } from '../../constants/messages';
 import {
   Button,
   Div,
   Form,
-  Header,
   Header1,
   Input,
   Label,
   Span,
 } from '../../components';
 import { navigate } from '../../utils/navigate';
-import { CATEGORY, PAGES } from '../../constants';
+import { PAGES } from '../../constants';
+import { CATEGORY } from '../../constants/validation';
 import { createCategory } from '../../api/category';
 import Snackbar from '../../features/snackbar';
-import { validateCategory } from '../../utils/helpers';
+import { validateCategory } from '../../utils/validation';
+import { renderPageWithHeader } from '../../utils/dom';
 
 const nameInput = () => {
   const nameLabel = Label({
@@ -41,23 +43,23 @@ const nameInput = () => {
   return nameLabel;
 };
 
+const onAddNewCategory = async e => {
+  e.preventDefault();
+  const name = e.target.name.value.toLowerCase();
+
+  const { error, value } = validateCategory(name);
+  if (error) return Snackbar.displayMsg(error);
+
+  try {
+    await createCategory(value);
+    Snackbar.displayMsg(CATEGORY_ADDED_$(name));
+    navigate(PAGES.CATEGORIES);
+  } catch (e) {
+    Snackbar.displayMsg(e.message);
+  }
+};
+
 export default async () => {
-  const onAddNewCategory = async e => {
-    e.preventDefault();
-    const name = e.target.name.value;
-
-    const errors = validateCategory(name);
-    if (errors) return Snackbar.displayMsg(errors);
-
-    try {
-      await createCategory({ name });
-      Snackbar.displayMsg(CATEGORY_ADDED_$);
-      navigate(PAGES.CATEGORIES);
-    } catch (e) {
-      Snackbar.displayMsg(e.message);
-    }
-  };
-
   const container = Div({
     className: 'container',
   });
@@ -91,5 +93,5 @@ export default async () => {
 
   container.append(header, form);
 
-  document.getElementById('root').append(Header(), container);
+  renderPageWithHeader(TITLE, container);
 };

@@ -1,40 +1,52 @@
-import { PAGES, SONG, SONG_TEXT } from '../../constants';
+import { PAGES } from '../../constants';
+import { SONG_NAME, SONG_TEXT } from '../../constants/validation';
 import {
   Button,
   Div,
   Form,
-  Header,
   Header1,
   Input,
   Label,
-  Span,
-  Select,
   Option,
+  Select,
+  Span,
+  Textarea,
 } from '../../components';
 import { getCategories as getCategoriesAPI } from '../../api/category';
 import { createSong } from '../../api/song';
 import Snackbar from '../../features/snackbar';
 import { getCategories, setCategories } from '../../state';
 import { navigate, navigateBack } from '../../utils/navigate';
-import { validateSong } from '../../utils/helpers';
+import { validateSong } from '../../utils/validation';
 import {
   ADD_NEW_SONG,
   CHOOSE_CATEGORIES,
+  CREATE_CATEGORY,
   HEADER,
   NO_CATEGORIES,
   SONG_ADDED_$,
+  SONG_AUTHOR_HEADER,
   SONG_NAME_HEADER,
   SONG_TEXT_HEADER,
+  TITLE,
 } from './messages';
 import { BACK } from '../../constants/messages';
+import { renderPageWithHeader } from '../../utils/dom';
 
 const categorySelect = activeCategory => {
   const categories = getCategories();
 
   if (!categories.length) {
-    return Div({
-      text: NO_CATEGORIES,
-    });
+    const container = Div({});
+    container.append(
+      Span({ text: NO_CATEGORIES }),
+      Span({
+        text: ' ' + CREATE_CATEGORY,
+        className: 'link',
+        onClick: () => navigate(PAGES.NEW_CATEGORY),
+      })
+    );
+    return container;
   }
   const container = Label({
     className: 'input-field',
@@ -76,9 +88,26 @@ const nameInput = () => {
     Input({
       type: 'text',
       name: 'name',
-      min: SONG.MIN,
-      max: SONG.MAX,
+      min: SONG_NAME.MIN,
+      max: SONG_NAME.MAX,
       required: true,
+    })
+  );
+  return nameLabel;
+};
+
+const authorInput = () => {
+  const nameLabel = Label({
+    className: 'input-field',
+  });
+  nameLabel.append(
+    Span({
+      text: SONG_AUTHOR_HEADER,
+    }),
+    Input({
+      type: 'text',
+      name: 'author',
+      max: SONG_NAME.MAX,
     })
   );
   return nameLabel;
@@ -92,8 +121,7 @@ const textAreaInput = () => {
     Span({
       text: SONG_TEXT_HEADER,
     }),
-    Input({
-      type: 'textarea',
+    Textarea({
       name: 'text',
       min: SONG_TEXT.MIN,
       max: SONG_TEXT.MAX,
@@ -111,13 +139,14 @@ export default async () => {
       .filter(option => option.selected)
       .map(option => option.value);
     const name = e.target.name.value;
+    const author = e.target.author.value;
     const text = e.target.text.value;
 
-    const validationErr = validateSong(categories, name, text);
-    if (validationErr) return Snackbar.displayMsg(validationErr);
+    const { error, value } = validateSong(categories, name, author, text);
+    if (error) return Snackbar.displayMsg(error);
 
     try {
-      const { id } = await createSong({ categories, name, text });
+      const { id } = await createSong(value);
       Snackbar.displayMsg(SONG_ADDED_$(name));
       if (history.length > 2) {
         navigateBack();
@@ -129,7 +158,6 @@ export default async () => {
     }
   };
 
-  // todo handle error ???
   try {
     const categories = await getCategoriesAPI();
     setCategories(categories);
@@ -171,6 +199,7 @@ export default async () => {
   form.append(
     categorySelect(categoryId),
     nameInput(),
+    authorInput(),
     textAreaInput(),
     buttonContainer
   );
@@ -182,5 +211,5 @@ export default async () => {
     form
   );
 
-  document.getElementById('root').append(Header(), container);
+  renderPageWithHeader(TITLE, container);
 };

@@ -10,3 +10,10 @@ export const setQueryParam = (key, value) => {
   url.searchParams.set(key, value);
   replace(url);
 };
+
+export const getURLWithQueryParams = (baseUrl, params) =>
+  baseUrl +
+  '?' +
+  new URLSearchParams(
+    Object.fromEntries(Object.entries(params).filter(([, v]) => v))
+  ).toString();

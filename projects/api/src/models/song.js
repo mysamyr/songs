@@ -8,6 +8,11 @@ const songSchema = new Schema(
       required: true,
     },
     author: {
+      type: String,
+      required: false,
+      default: '',
+    },
+    owner: {
       type: Schema.Types.ObjectId,
       ref: COLLECTIONS.USER,
       required: true,

@@ -1,7 +1,6 @@
-const path = require('node:path');
-const { Storage } = require('@google-cloud/storage');
+import { Storage } from '@google-cloud/storage';
 
-const storage = new Storage({
-  keyFilename: path.join(process.cwd(), 'service-account.json'),
-});
-module.exports.bucket = storage.bucket('songpb_secrets');
+// use the default project and credentials otherwise set the environment variable GOOGLE_APPLICATION_CREDENTIALS
+const storage = new Storage();
+
+export const bucket = storage.bucket('songpb_secrets');

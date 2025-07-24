@@ -19,7 +19,6 @@ const router = Router();
 router.get(
   '/',
   validateQuery(defaultPaginationQuery),
-  getUserMiddleware,
   promisify(songController.getAllSongs)
 );
 
