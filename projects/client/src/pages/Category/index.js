@@ -30,10 +30,7 @@ import {
 } from './messages';
 import { BACK_TO_CATEGORIES } from '../../constants/messages';
 import { renderPageWithHeader } from '../../utils/dom';
-import {
-  getQueryParam,
-  getURLWithQueryParams,
-} from '../../utils/query-params';
+import { getQueryParam, getURLWithQueryParams } from '../../utils/query-params';
 
 const onTypeSearch = searchValue => {
   const categoryId = window.location.pathname.split('/')[2];

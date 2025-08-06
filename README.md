@@ -119,7 +119,7 @@ Project uses **MongoDB** as database. You can use it on your host machine, Docke
 ## Pages
 
 - index `/`
-- text `/lit, /pan`
+- text `/lit, /pan, /vin`
 - auth `/auth`
 - cabinet `/cabinet`
 - categories `/category`
