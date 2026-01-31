@@ -9,10 +9,7 @@ import { ADD_NEW_SONG, NO_SONGS, TITLE } from './messages';
 import { BACK_TO_CATEGORIES } from '../../constants/messages';
 import { getAllSongs } from '../../api/song';
 import { renderPageWithHeader } from '../../utils/dom';
-import {
-  getQueryParam,
-  getURLWithQueryParams,
-} from '../../utils/query-params';
+import { getQueryParam, getURLWithQueryParams } from '../../utils/query-params';
 
 const onTypeSearch = searchValue => {
   const search = getQueryParam('search');
