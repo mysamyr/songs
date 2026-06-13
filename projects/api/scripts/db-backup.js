@@ -46,6 +46,7 @@ async function backupCollections() {
   const compressed = await gzip(json);
 
   await fs.writeFile(path.join(BACKUP_DIR, filename), compressed);
+  // eslint-disable-next-line no-console
   console.log(`[backup] saved`);
 }
 
@@ -53,6 +54,7 @@ cron.schedule(
   '0 0 * * *',
   () => {
     backupCollections().catch(err => {
+      // eslint-disable-next-line no-console
       console.error('[backup] failed', err);
     });
   },
@@ -64,5 +66,6 @@ cron.schedule(
 
 // Optional: run once on startup
 backupCollections().catch(err => {
+  // eslint-disable-next-line no-console
   console.error('[backup] startup run failed', err);
 });

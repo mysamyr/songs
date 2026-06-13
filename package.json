@@ -1,9 +1,17 @@
 {
   "name": "songpb",
   "version": "1.0.0",
+  "private": true,
+  "workspaces": ["projects/api", "projects/client"],
   "description": "Song Pocket Book App",
   "scripts": {
-    "start:dev": "concurrently -k -n api,client -c cyan,magenta \"cd projects/api && npm run start:dev\" \"cd projects/client && npm run start:dev\"",
+    "start:dev": "concurrently -k -n api,client -c cyan,magenta \"npm run start:dev -w projects/api\" \"npm run start:dev -w projects/client\"",
+    "start:api": "npm run start -w projects/api",
+    "start:api:dev": "npm run start:dev -w projects/api",
+    "start:api:debug": "npm run start:debug -w projects/api",
+    "start:client": "npm run server -w projects/client",
+    "build:client": "npm run build -w projects/client",
+    "build:client:dev": "npm run build:dev -w projects/client",
     "secrets:fetch": "node scripts/fetch.js",
     "secrets:upload": "node scripts/upload.js",
     "setup": "node scripts/copy.js",
@@ -12,28 +20,29 @@
     "lint": "eslint projects scripts",
     "prepare": "husky"
   },
-  "lint-staged": {
-    "*.{json,css,md}": ["npm run format", "npm run lint"]
-  },
   "keywords": [],
   "author": "Mysamyr",
   "license": "ISC",
   "type": "module",
   "dependencies": {
-    "@google-cloud/storage": "^7.18.0"
+    "@google-cloud/storage": "^7.21.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.2",
-    "concurrently": "^9.2.1",
-    "eslint": "^9.39.2",
+    "@eslint/js": "^9.39.4",
+    "concurrently": "^10.0.3",
+    "eslint": "^9.39.4",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.5",
-    "globals": "^17.2.0",
+    "eslint-plugin-prettier": "^5.5.6",
+    "globals": "^17.6.0",
     "husky": "^9.1.7",
-    "lint-staged": "^16.2.7",
-    "prettier": "^3.8.1"
+    "lint-staged": "^17.0.7",
+    "prettier": "^3.8.4"
   },
   "engines": {
     "node": ">=22"
+  },
+  "lint-staged": {
+    "*.js": ["eslint --fix"],
+    "*.{js,css,json,md}": ["prettier --write"]
   }
 }

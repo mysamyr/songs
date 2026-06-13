@@ -1,27 +1,11 @@
-import fs from 'node:fs';
-import path from 'node:path';
+import { join } from 'node:path';
+import { loadEnvFile } from 'node:process';
+
+import logger from '../services/logging.js';
 
 try {
-  const data = fs.readFileSync(path.join(process.cwd(), '.env'), 'utf8');
-  data.split(/\r?\n/).forEach(line => {
-    line = line.trim();
-    if (line[0] === '#') return;
-    if (!line.length) return;
-
-    if (line.includes('=')) {
-      const [name, ...value] = line.split('=');
-
-      if (!process.env[name]) {
-        process.env[name] = value.join('=');
-      }
-    }
-  });
-} catch (err) {
-  if (err.code === 'ENOENT') {
-    // eslint-disable-next-line no-console
-    console.log('.env file not found!');
-    process.exit(1);
-  } else {
-    throw err;
-  }
+  loadEnvFile(join(import.meta.dirname, '..', '..', '.env'));
+} catch (e) {
+  if (e.code === 'ENOENT')
+    logger.warn('No .env file found or could not be loaded.');
 }

@@ -24,20 +24,20 @@
 - install [Node.js](https://nodejs.org/) v22.14.0 or higher
 - install and setup [gsutil tool](#google-cloud)
 - clone the repository
-- install dependencies by running `npm install` in root, `/projects/api/` and `/projects/client/` folders
+- install dependencies by running `npm install` in the root folder (npm workspaces will install API and Client dependencies)
 - create `.env` file in `/projects/api/` folder according to example from `/projects/api/.env.example`
 
 ### API
 
-- run `npm run start` in `/projects/api/` folder for production
-- run `npm run start:dev` or `npm run start:debug` for development
+- run `npm run start:api` from the root folder for production
+- run `npm run start:api:dev` or `npm run start:api:debug` from the root folder for development
 - by default API server exposes on `http://localhost:8080`
 
 ### Client
 
-- run `npm run build` in `/projects/client/` folder for building script file once
-- run `npm run build:dev` for building script file in watch mode
-- run `npm run server` to start development server for client
+- run `npm run build:client` from the root folder for building script file once
+- run `npm run build:client:dev` from the root folder for building script file in watch mode
+- run `npm run start:client` from the root folder to start development server for client
 - development server exposes on `http://localhost:3000`
 - for production, you can use [nginx](https://www.nginx.com/) to serve static files from `/projects/client/public`
   folder or Docker (see below)
@@ -139,7 +139,7 @@ the development server (API & Client). It will automatically reload the page whe
 ## Formatting
 
 Project uses [Prettier](https://prettier.io/) v3 for code formatting. You can run `npm run format` from the root of the project.
-Project uses [ESLint](https://eslint.org/) v9 for code analyzing. You can run `npm run check-quality` from the root of the project.
+Project uses [ESLint](https://eslint.org/) v9 for code analyzing. You can run `npm run lint` from the root of the project.
 
 ## Git
 
