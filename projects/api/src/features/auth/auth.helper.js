@@ -1,8 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { Token } from '../../models/index.js';
 import { UnauthorizedError } from '../../utils/error.js';
-
-const { JWT_ACCESS_KEY, JWT_REFRESH_KEY } = process.env;
+import { JWT_ACCESS_KEY, JWT_REFRESH_KEY } from '../../config/index.js';
 
 const generateAccessToken = data =>
   jwt.sign(data, JWT_ACCESS_KEY, { expiresIn: '5m' });

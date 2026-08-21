@@ -5,38 +5,31 @@
   "workspaces": ["projects/api", "projects/client"],
   "description": "Song Pocket Book App",
   "scripts": {
-    "start:dev": "concurrently -k -n api,client -c cyan,magenta \"npm run start:dev -w projects/api\" \"npm run start:dev -w projects/client\"",
-    "start:api": "npm run start -w projects/api",
-    "start:api:dev": "npm run start:dev -w projects/api",
-    "start:api:debug": "npm run start:debug -w projects/api",
-    "start:client": "npm run server -w projects/client",
-    "build:client": "npm run build -w projects/client",
-    "build:client:dev": "npm run build:dev -w projects/client",
-    "secrets:fetch": "node scripts/fetch.js",
-    "secrets:upload": "node scripts/upload.js",
-    "setup": "node scripts/copy.js",
-    "check-formatting": "prettier -l projects scripts",
-    "format": "prettier --write projects scripts",
-    "lint": "eslint projects scripts",
+    "start:dev": "concurrently -k -n api,client -c cyan,magenta \"npm run start:api:dev\" \"npm run start:client\"",
+    "start:api": "npm -w projects/api run start",
+    "start:api:dev": "npm -w projects/api run start:dev",
+    "start:client": "npm -w projects/client run server",
+    "build:client": "npm -w projects/client run build",
+    "build:client:dev": "npm -w projects/client run build:dev",
+    "format": "prettier --write .",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
     "prepare": "husky"
   },
   "keywords": [],
   "author": "Mysamyr",
   "license": "ISC",
   "type": "module",
-  "dependencies": {
-    "@google-cloud/storage": "^7.21.0"
-  },
   "devDependencies": {
-    "@eslint/js": "^9.39.4",
-    "concurrently": "^10.0.3",
-    "eslint": "^9.39.4",
+    "@eslint/js": "^9.39.5",
+    "concurrently": "^10.0.5",
+    "eslint": "^9.39.5",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.6",
-    "globals": "^17.6.0",
+    "globals": "^17.11.0",
     "husky": "^9.1.7",
-    "lint-staged": "^17.0.7",
-    "prettier": "^3.8.4"
+    "lint-staged": "^17.3.0",
+    "prettier": "^3.9.6"
   },
   "engines": {
     "node": ">=22"

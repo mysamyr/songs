@@ -17,11 +17,11 @@
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "express": "^5.2.1",
-    "helmet": "^8.2.0",
-    "joi": "^18.2.1",
+    "helmet": "^8.3.0",
+    "joi": "^18.2.5",
     "jsonwebtoken": "^9.0.3",
-    "mongoose": "^9.7.0",
-    "nodemailer": "^7.0.13",
+    "mongoose": "^9.9.3",
+    "nodemailer": "^9.0.5",
     "winston": "^3.19.0"
   },
   "devDependencies": {

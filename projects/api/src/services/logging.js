@@ -1,11 +1,12 @@
 import { format, createLogger, transports } from 'winston';
 import { PRODUCTION } from '../constants/index.js';
+import { NODE_ENV } from '../config/index.js';
 
 const logger = createLogger({
   level: 'http',
   format: format.combine(
     format.errors({ stack: true }),
-    ...(process.env.NODE_ENV !== PRODUCTION ? [format.colorize()] : []),
+    ...(NODE_ENV !== PRODUCTION ? [format.colorize()] : []),
     format.timestamp(),
     format.printf(
       ({ level, message, timestamp, stack }) =>
@@ -15,7 +16,7 @@ const logger = createLogger({
   transports: [new transports.Console()],
 });
 
-if (process.env.NODE_ENV !== PRODUCTION) {
+if (NODE_ENV !== PRODUCTION) {
   logger.add(
     new transports.File({
       format: format.combine(

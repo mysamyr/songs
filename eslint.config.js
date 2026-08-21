@@ -7,10 +7,7 @@ import eslintPluginPrettier from 'eslint-plugin-prettier/recommended';
 export default defineConfig([
   globalIgnores([
     '**/node_modules/',
-    '.husky/',
-    '.git/',
     'assets/',
-    '**/*.log',
     'projects/client/public/index.js',
   ]),
   js.configs.recommended,
