@@ -57,7 +57,13 @@ app.use('/api/cabinet', authMiddleware, cabinet);
 app.use('/api/category', category);
 app.use('/api/song', song);
 
-const clientPath = path.join(process.cwd(), '..', 'client', 'public');
+const clientPath = path.join(
+  import.meta.dirname,
+  '..',
+  '..',
+  'client',
+  'public'
+);
 app.use(express.static(clientPath));
 
 app.get(/^\/(?!api(?:\/|$)).*/, (_req, res) => {
