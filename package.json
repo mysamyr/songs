@@ -5,10 +5,8 @@
   "workspaces": ["projects/api", "projects/client"],
   "description": "Song Pocket Book App",
   "scripts": {
-    "start:dev": "concurrently -k -n api,client -c cyan,magenta \"npm run start:api:dev\" \"npm run start:client\"",
-    "start:api": "npm -w projects/api run start",
-    "start:api:dev": "npm -w projects/api run start:dev",
-    "start:client": "npm -w projects/client run server",
+    "start": "npm -w projects/api run start",
+    "dev": "npm -w projects/api run start:dev",
     "build:client": "npm -w projects/client run build",
     "build:client:dev": "npm -w projects/client run build:dev",
     "format": "prettier --write .",

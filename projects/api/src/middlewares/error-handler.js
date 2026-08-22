@@ -2,7 +2,7 @@ import logger from '../services/logging.js';
 import STATUS_CODES from '../constants/status-codes.js';
 import ApiError from '../utils/error.js';
 
-export default (err, req, res, next) => {
+export default (err, req, res, _next) => {
   if (!err) {
     return res.status(STATUS_CODES.NOT_FOUND).send();
   }

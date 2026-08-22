@@ -30,8 +30,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(helmet());
 app.use(
   cors({
-    origin: true,
-    credentials: true,
+    origin: '*',
   })
 );
 app.use(compression());
@@ -72,7 +71,6 @@ const start = async () => {
 start();
 
 process
-  // eslint-disable-next-line no-unused-vars
   .on('unhandledRejection', (err, _p) => {
     logger.error(err);
   })
