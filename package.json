@@ -5,10 +5,10 @@
   "workspaces": ["projects/api", "projects/client"],
   "description": "Song Pocket Book App",
   "scripts": {
-    "start": "npm -w projects/api run start",
+    "start": "node projects/api/src/index.js",
     "dev": "npm -w projects/api run start:dev",
-    "build:client": "npm -w projects/client run build",
-    "build:client:dev": "npm -w projects/client run build:dev",
+    "build": "npm -w projects/client run build",
+    "build:dev": "npm -w projects/client run build:dev",
     "format": "prettier --write .",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
