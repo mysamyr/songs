@@ -19,29 +19,31 @@ export const PAGES = {
   ERROR: '/error',
 };
 
+const API_PREFIX = '/api';
+
 export const API_URLS = {
-  ACTIVATE_$: id => `/auth/activate/${id}`,
-  LOGIN: '/auth/login',
-  SIGNUP: '/auth/signup',
-  REFRESH: '/auth/refresh',
-  LOGOUT: '/auth/logout',
+  ACTIVATE_$: id => `${API_PREFIX}/auth/activate/${id}`,
+  LOGIN: `${API_PREFIX}/auth/login`,
+  SIGNUP: `${API_PREFIX}/auth/signup`,
+  REFRESH: `${API_PREFIX}/auth/refresh`,
+  LOGOUT: `${API_PREFIX}/auth/logout`,
 
-  CHANGE_EMAIL: '/cabinet/email',
-  CHANGE_PASSWORD: '/cabinet/password',
-  RESEND_VALIDATION: '/cabinet/validation',
-  DELETE_ACCOUNT: '/cabinet',
+  CHANGE_EMAIL: `${API_PREFIX}/cabinet/email`,
+  CHANGE_PASSWORD: `${API_PREFIX}/cabinet/password`,
+  RESEND_VALIDATION: `${API_PREFIX}/cabinet/validation`,
+  DELETE_ACCOUNT: `${API_PREFIX}/cabinet`,
 
-  GET_CATEGORIES: '/category',
-  GET_CATEGORY: id => `/category/${id}`,
-  CREATE_CATEGORY: '/category',
-  RENAME_CATEGORY: id => `/category/${id}`,
-  DELETE_CATEGORY: id => `/category/${id}`,
+  GET_CATEGORIES: `${API_PREFIX}/category`,
+  GET_CATEGORY: id => `${API_PREFIX}/category/${id}`,
+  CREATE_CATEGORY: `${API_PREFIX}/category`,
+  RENAME_CATEGORY: id => `${API_PREFIX}/category/${id}`,
+  DELETE_CATEGORY: id => `${API_PREFIX}/category/${id}`,
 
-  GET_ALL_SONGS: '/song',
-  GET_SONG: id => `/song/${id}`,
-  CREATE_SONG: '/song',
-  EDIT_SONG: id => `/song/${id}`,
-  DELETE_SONG: id => `/song/${id}`,
+  GET_ALL_SONGS: `${API_PREFIX}/song`,
+  GET_SONG: id => `${API_PREFIX}/song/${id}`,
+  CREATE_SONG: `${API_PREFIX}/song`,
+  EDIT_SONG: id => `${API_PREFIX}/song/${id}`,
+  DELETE_SONG: id => `${API_PREFIX}/song/${id}`,
 };
 
 export const STATUS_CODES = {
