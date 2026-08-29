@@ -3,7 +3,7 @@ import commonConfig from './vite.common.js';
 
 export default mergeConfig(commonConfig, {
   build: {
-    minify: 'esbuild',
+    minify: 'oxc',
     sourcemap: false,
   },
 });

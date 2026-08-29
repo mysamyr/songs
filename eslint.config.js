@@ -5,14 +5,7 @@ import eslintConfigPrettier from 'eslint-config-prettier';
 import eslintPluginPrettier from 'eslint-plugin-prettier/recommended';
 
 export default defineConfig([
-  globalIgnores([
-    '**/node_modules/',
-    '.husky/',
-    '.git/',
-    'assets/',
-    '**/*.log',
-    'projects/client/public/index.js',
-  ]),
+  globalIgnores(['node_modules', 'assets', 'projects/client/public/index.js']),
   js.configs.recommended,
   eslintPluginPrettier,
   {
@@ -36,12 +29,7 @@ export default defineConfig([
       'semi-spacing': 'error',
       eqeqeq: 'warn',
       'object-shorthand': 'error',
-      'no-unused-vars': [
-        'error',
-        {
-          argsIgnorePattern: 'next',
-        },
-      ],
+      'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     },
   },
 ]);

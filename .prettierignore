@@ -1,7 +1,3 @@
-.husky/
-assets/
-node_modules/
+.husky
 package-lock.json
 projects/client/public/index.js
-**/*.yml
-**/*.log

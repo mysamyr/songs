@@ -5,8 +5,7 @@ import {
 } from 'nodemailer';
 import logger from './logging.js';
 import { PRODUCTION } from '../constants/index.js';
-
-const { SEND_EMAIL, EMAIL_API_KEY, NODE_ENV } = process.env;
+import { SEND_EMAIL, EMAIL_API_KEY, NODE_ENV } from '../config/index.js';
 
 let transporter;
 

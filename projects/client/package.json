@@ -4,12 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start:dev": "concurrently -k -n build,server -c yellow,blue \"npm run build:dev\" \"npm run server\"",
-    "server": "vite serve --config vite.server.config.js",
     "build": "vite build --config vite.prod.config.js",
     "build:dev": "vite build --config vite.dev.config.js"
   },
   "dependencies": {
-    "vite": "^8.0.16"
+    "vite": "^8.2.2"
   }
 }

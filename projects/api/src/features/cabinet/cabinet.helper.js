@@ -1,2 +1,3 @@
-export const getLinkForVerification = id =>
-  `${process.env.URL}auth/verify/${id}`;
+import { URL } from '../../config/index.js';
+
+export const getLinkForVerification = id => `${URL}auth/verify/${id}`;
